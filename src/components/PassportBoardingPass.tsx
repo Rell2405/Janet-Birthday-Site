@@ -20,9 +20,24 @@ const PAGE_H = 470;
 
 export default function PassportBoardingPass() {
   const [open, setOpen] = useState(false);
+  const [scale, setScale] = useState(1);
   const shineRef = useRef<HTMLDivElement>(null);
   const floatRef = useRef<HTMLDivElement>(null);
   const playedRef = useRef(false);
+
+  // Size the passport to fill most of the screen on any device: fit against
+  // both viewport width and height so the open two-page spread stays visible.
+  useEffect(() => {
+    const compute = () => {
+      const availW = Math.min(window.innerWidth - 32, 1100);
+      const availH = window.innerHeight * 0.8;
+      const s = Math.min(availW / (PAGE_W * 2), availH / PAGE_H);
+      setScale(Math.max(0.42, Math.min(1.9, s)));
+    };
+    compute();
+    window.addEventListener("resize", compute);
+    return () => window.removeEventListener("resize", compute);
+  }, []);
 
   // GSAP: idle float + repeating shine sweep on the closed cover.
   useEffect(() => {
@@ -72,63 +87,80 @@ export default function PassportBoardingPass() {
   return (
     <div className="flex flex-col items-center gap-8">
       <div
-        className="perspective select-none"
-        style={{ width: PAGE_W * 2, maxWidth: "100%" }}
+        className="relative mx-auto"
+        style={{ width: PAGE_W * 2 * scale, height: PAGE_H * scale }}
       >
-        <motion.div
-          ref={floatRef}
-          className="relative mx-auto"
-          style={{ width: PAGE_W * 2, height: PAGE_H }}
-          animate={{ x: open ? 0 : PAGE_W / 2 }}
-          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        <div
+          className="perspective select-none absolute top-0 left-0"
+          style={{
+            width: PAGE_W * 2,
+            height: PAGE_H,
+            transform: `scale(${scale})`,
+            transformOrigin: "top left",
+          }}
         >
-          {/* Boarding pass sits under the cover, on the right page. */}
+          {/* GSAP idle float lives on its own element so it doesn't fight
+              with Motion's x-offset transform below. */}
           <div
-            className="absolute top-0 right-0"
-            style={{ width: PAGE_W, height: PAGE_H }}
-          >
-            <BoardingPass open={open} />
-          </div>
-
-          {/* The passport cover, hinged at the centre spine. */}
-          <div
-            className="absolute top-0 left-1/2 preserve-3d cursor-pointer"
-            style={{
-              width: PAGE_W,
-              height: PAGE_H,
-              transformStyle: "preserve-3d",
-            }}
-            onClick={handleOpen}
-            role="button"
-            tabIndex={0}
-            aria-label="Open passport"
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                handleOpen();
-              }
-            }}
+            ref={floatRef}
+            className="relative mx-auto"
+            style={{ width: PAGE_W * 2, height: PAGE_H }}
           >
             <motion.div
-              className="absolute inset-0 preserve-3d"
-              style={{ transformOrigin: "left center", transformStyle: "preserve-3d" }}
-              animate={{ rotateY: open ? -178 : 0 }}
-              transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
+              className="relative"
+              style={{ width: PAGE_W * 2, height: PAGE_H }}
+              animate={{ x: open ? 0 : -PAGE_W / 2 }}
+              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
             >
-              {/* FRONT: US passport cover */}
-              <div className="absolute inset-0 backface-hidden">
-                <PassportCover shineRef={shineRef} pulsing={!open} />
-              </div>
-              {/* BACK: inside cover / left page */}
+              {/* Boarding pass sits under the cover, on the right page. */}
               <div
-                className="absolute inset-0 backface-hidden"
-                style={{ transform: "rotateY(180deg)" }}
+                className="absolute top-0 right-0"
+                style={{ width: PAGE_W, height: PAGE_H }}
               >
-                <InsideCover />
+                <BoardingPass open={open} />
+              </div>
+
+              {/* The passport cover, hinged at the centre spine. */}
+              <div
+                className="absolute top-0 left-1/2 preserve-3d cursor-pointer"
+                style={{
+                  width: PAGE_W,
+                  height: PAGE_H,
+                  transformStyle: "preserve-3d",
+                }}
+                onClick={handleOpen}
+                role="button"
+                tabIndex={0}
+                aria-label="Open passport"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    handleOpen();
+                  }
+                }}
+              >
+                <motion.div
+                  className="absolute inset-0 preserve-3d"
+                  style={{ transformOrigin: "left center", transformStyle: "preserve-3d" }}
+                  animate={{ rotateY: open ? -178 : 0 }}
+                  transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  {/* FRONT: US passport cover */}
+                  <div className="absolute inset-0 backface-hidden">
+                    <PassportCover shineRef={shineRef} pulsing={!open} />
+                  </div>
+                  {/* BACK: inside cover / left page */}
+                  <div
+                    className="absolute inset-0 backface-hidden"
+                    style={{ transform: "rotateY(180deg)" }}
+                  >
+                    <InsideCover />
+                  </div>
+                </motion.div>
               </div>
             </motion.div>
           </div>
-        </motion.div>
+        </div>
       </div>
 
       <AnimatePresence>
