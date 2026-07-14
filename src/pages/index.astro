@@ -1,0 +1,40 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import PassportBoardingPass from "@/components/PassportBoardingPass.tsx";
+import SmoothScroll from "@/components/SmoothScroll.tsx";
+---
+
+<Layout>
+  <SmoothScroll client:load />
+
+  <main class="relative flex min-h-screen flex-col overflow-x-hidden">
+    <!-- ambient background -->
+    <div class="aurora pointer-events-none absolute inset-0 -z-10"></div>
+    <div
+      class="pointer-events-none absolute inset-0 -z-10 opacity-[0.04]"
+      style="background-image: radial-gradient(hsl(0 0% 100%) 1px, transparent 1px); background-size: 26px 26px;"
+    >
+    </div>
+
+    <!-- minimal top bar -->
+    <header class="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-6">
+      <div class="flex items-center gap-2 font-semibold tracking-tight">
+        <span
+          class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-primary/15 text-primary"
+        >
+          ✈
+        </span>
+        <span>Wanderlust Air</span>
+      </div>
+      <span class="hidden items-center gap-1 text-sm text-muted-foreground sm:inline-flex">
+        <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
+        Secure check-in
+      </span>
+    </header>
+
+    <!-- passport is the whole experience -->
+    <section class="relative z-10 flex flex-1 items-center justify-center px-4 py-6">
+      <PassportBoardingPass client:load />
+    </section>
+  </main>
+</Layout>
