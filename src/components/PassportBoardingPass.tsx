@@ -73,11 +73,11 @@ export default function PassportBoardingPass() {
     };
   }, [open]);
 
-  const handleOpen = () => {
-    if (open) return;
-    setOpen(true);
-    // The click is the user gesture that unlocks audio playback.
-    if (!playedRef.current) {
+  const handleToggle = () => {
+    const next = !open;
+    setOpen(next);
+    // The first open is the user gesture that unlocks audio playback.
+    if (next && !playedRef.current) {
       playedRef.current = true;
       void playTakeoffSequence();
     }
@@ -111,10 +111,12 @@ export default function PassportBoardingPass() {
               animate={{ x: open ? 0 : -PAGE_W / 2 }}
               transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
             >
-              {/* Boarding pass sits under the cover, on the right page. */}
+              {/* Boarding pass sits under the cover, on the right page.
+                  When open, clicking it closes the passport again. */}
               <div
-                className="absolute top-0 right-0"
+                className={`absolute top-0 right-0 ${open ? "cursor-pointer" : ""}`}
                 style={{ width: PAGE_W, height: PAGE_H }}
+                onClick={() => open && setOpen(false)}
               >
                 <BoardingPass open={open} />
               </div>
@@ -127,14 +129,14 @@ export default function PassportBoardingPass() {
                   height: PAGE_H,
                   transformStyle: "preserve-3d",
                 }}
-                onClick={handleOpen}
+                onClick={handleToggle}
                 role="button"
                 tabIndex={0}
-                aria-label="Open passport"
+                aria-label={open ? "Close passport" : "Open passport"}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" || e.key === " ") {
                     e.preventDefault();
-                    handleOpen();
+                    handleToggle();
                   }
                 }}
               >
@@ -225,8 +227,8 @@ function OpenPulse() {
         {[0, 0.6].map((delay) => (
           <motion.span
             key={delay}
-            className="absolute h-24 w-24 rounded-full border-2 border-amber-200/70"
-            initial={{ scale: 0.7, opacity: 0.6 }}
+            className="absolute h-24 w-24 rounded-full border border-amber-200/40"
+            initial={{ scale: 0.7, opacity: 0.4 }}
             animate={{ scale: 1.9, opacity: 0 }}
             transition={{
               duration: 1.8,
@@ -236,10 +238,13 @@ function OpenPulse() {
             }}
           />
         ))}
-        {/* pulsing badge */}
+        {/* pulsing badge — translucent so the passport shows through */}
         <motion.div
-          className="flex h-24 w-24 items-center justify-center rounded-full bg-amber-300/95 text-[15px] font-bold uppercase tracking-[0.25em] text-[#0e1c44] shadow-[0_0_30px_rgba(252,211,77,0.55)]"
-          animate={{ scale: [1, 1.12, 1] }}
+          className="flex h-24 w-24 items-center justify-center rounded-full border border-amber-200/50 bg-amber-200/15 text-[15px] font-bold uppercase tracking-[0.25em] text-amber-100 backdrop-blur-[1px]"
+          animate={{
+            scale: [1, 1.12, 1],
+            opacity: [0.55, 0.9, 0.55],
+          }}
           transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
         >
           Open
