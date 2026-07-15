@@ -69,16 +69,25 @@ export function playCaptainAnnouncement(): void {
 
   const speak = () => {
     const msg = new SpeechSynthesisUtterance(
-      "Ladies and gentlemen, this is your captain speaking. Cabin crew, please prepare for takeoff."
+      "Ladies and gentlemen, this is your captain speaking. Welcome aboard. Cabin crew, please prepare for takeoff."
     );
-    msg.rate = 0.92;
-    msg.pitch = 0.85;
+    // Natural cadence: near-normal rate/pitch. Extreme values are what make
+    // the built-in engine sound robotic.
+    msg.rate = 0.98;
+    msg.pitch = 1;
     msg.volume = 1;
 
     const voices = window.speechSynthesis.getVoices();
-    // Prefer a deeper / English male-sounding voice when available.
+    const byName = (re: RegExp) => voices.find((v) => re.test(v.name));
+    // Prefer high-quality neural/enhanced voices first, then good platform
+    // defaults, then any English voice. These sound far more human than the
+    // legacy compact voices the browser falls back to.
     const preferred =
-      voices.find((v) => /daniel|alex|fred|google uk english male/i.test(v.name)) ||
+      byName(/natural|neural|enhanced|premium/i) ||
+      byName(/google us english/i) ||
+      byName(/samantha|aaron|arthur|matthew|guy|ryan|tom/i) ||
+      byName(/daniel|alex/i) ||
+      voices.find((v) => v.lang?.toLowerCase() === "en-us") ||
       voices.find((v) => v.lang?.toLowerCase().startsWith("en"));
     if (preferred) msg.voice = preferred;
 
