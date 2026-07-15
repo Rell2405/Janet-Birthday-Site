@@ -227,8 +227,8 @@ function OpenPulse() {
         {[0, 0.6].map((delay) => (
           <motion.span
             key={delay}
-            className="absolute h-24 w-24 rounded-full border border-amber-200/40"
-            initial={{ scale: 0.7, opacity: 0.4 }}
+            className="absolute h-24 w-24 rounded-full border border-amber-200/25"
+            initial={{ scale: 0.7, opacity: 0.3 }}
             animate={{ scale: 1.9, opacity: 0 }}
             transition={{
               duration: 1.8,
@@ -240,10 +240,10 @@ function OpenPulse() {
         ))}
         {/* pulsing badge — translucent so the passport shows through */}
         <motion.div
-          className="flex h-24 w-24 items-center justify-center rounded-full border border-amber-200/50 bg-amber-200/15 text-[15px] font-bold uppercase tracking-[0.25em] text-amber-100 backdrop-blur-[1px]"
+          className="flex h-24 w-24 items-center justify-center rounded-full border border-amber-200/30 bg-amber-200/[0.06] text-[15px] font-bold uppercase tracking-[0.25em] text-amber-100/80"
           animate={{
             scale: [1, 1.12, 1],
-            opacity: [0.55, 0.9, 0.55],
+            opacity: [0.35, 0.6, 0.35],
           }}
           transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
         >

@@ -1,7 +1,9 @@
 /**
- * Self-contained cabin audio: the classic two-tone boarding chime synthesized
- * with the Web Audio API, followed by a captain announcement via the browser's
- * SpeechSynthesis engine. No external/copyrighted audio files required.
+ * Cabin takeoff audio. Primary path plays a single pre-rendered clip that
+ * contains the boarding chime followed by the captain's welcome (a natural
+ * neural-TTS voice), so it plays as one seamless announcement for every
+ * visitor. If that file can't be played, we fall back to a synthesized chime
+ * plus the browser SpeechSynthesis engine.
  */
 
 let ctx: AudioContext | null = null;
@@ -18,12 +20,7 @@ function getCtx(): AudioContext | null {
 }
 
 /** Play a single soft "bong" tone at the given frequency and start time. */
-function tone(
-  audio: AudioContext,
-  freq: number,
-  startAt: number,
-  duration = 1.6
-) {
+function tone(audio: AudioContext, freq: number, startAt: number, duration = 1.6) {
   const osc = audio.createOscillator();
   const gain = audio.createGain();
   const filter = audio.createBiquadFilter();
@@ -34,7 +31,6 @@ function tone(
   filter.type = "lowpass";
   filter.frequency.value = 2600;
 
-  // Bell-like envelope
   gain.gain.setValueAtTime(0.0001, startAt);
   gain.gain.exponentialRampToValueAtTime(0.35, startAt + 0.02);
   gain.gain.exponentialRampToValueAtTime(0.0001, startAt + duration);
@@ -63,35 +59,13 @@ export async function playBoardingChime(): Promise<void> {
   tone(audio, 523.25, now + 0.55); // low (C5)
 }
 
-/** Captain announcement. Plays a pre-rendered natural (neural TTS) voice file
- * so every visitor hears the same human-sounding captain regardless of the
- * voices their browser/OS happens to expose. Falls back to SpeechSynthesis
- * only if the audio file can't be played. */
-export function playCaptainAnnouncement(): void {
-  if (typeof window === "undefined") return;
-
-  const base = import.meta.env.BASE_URL || "/";
-  const src = `${base.replace(/\/$/, "")}/audio/captain.m4a`;
-
-  try {
-    const audio = new Audio(src);
-    audio.volume = 1;
-    const p = audio.play();
-    if (p && typeof p.catch === "function") {
-      p.catch(() => speakFallback());
-    }
-  } catch {
-    speakFallback();
-  }
-}
-
 /** Last-resort browser speech if the audio file fails (e.g. blocked/offline). */
 function speakFallback(): void {
-  if (!("speechSynthesis" in window)) return;
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
 
   const speak = () => {
     const msg = new SpeechSynthesisUtterance(
-      "Ladies and gentlemen, this is your captain speaking. Welcome aboard. Cabin crew, please prepare for takeoff."
+      "Ladies and gentlemen, this is your captain speaking. Welcome aboard, and thank you for flying with us today."
     );
     msg.rate = 0.98;
     msg.pitch = 1;
@@ -113,17 +87,37 @@ function speakFallback(): void {
   };
 
   if (window.speechSynthesis.getVoices().length === 0) {
-    window.speechSynthesis.addEventListener("voiceschanged", speak, {
-      once: true,
-    });
+    window.speechSynthesis.addEventListener("voiceschanged", speak, { once: true });
     setTimeout(speak, 350);
   } else {
     speak();
   }
 }
 
-/** Chime, then the captain announcement shortly after. */
-export async function playTakeoffSequence(): Promise<void> {
+/** Synthesized chime + spoken captain, used only if the clip can't play. */
+async function playFallbackSequence(): Promise<void> {
   await playBoardingChime();
-  setTimeout(playCaptainAnnouncement, 1400);
+  setTimeout(speakFallback, 1400);
+}
+
+/**
+ * Play the seamless takeoff clip (chime -> captain welcome). Triggered by the
+ * user's click on the passport, which unlocks audio playback.
+ */
+export async function playTakeoffSequence(): Promise<void> {
+  if (typeof window === "undefined") return;
+
+  const base = import.meta.env.BASE_URL || "/";
+  const src = `${base.replace(/\/$/, "")}/audio/takeoff.m4a`;
+
+  try {
+    const audio = new Audio(src);
+    audio.volume = 1;
+    const p = audio.play();
+    if (p && typeof p.catch === "function") {
+      await p.catch(() => playFallbackSequence());
+    }
+  } catch {
+    await playFallbackSequence();
+  }
 }
