@@ -19,25 +19,41 @@ const PAGE_H = 470;
 
 export default function PassportBoardingPass() {
   const [open, setOpen] = useState(false);
-  // Two fits: closed shows a single cover (fill the width), open shows the
-  // two-page spread (must fit width). We animate between them on toggle so the
-  // closed passport stays large — especially on phones.
-  const [scales, setScales] = useState({ open: 1, closed: 1 });
+  // Layout adapts to the viewport. On wide screens we show the full two-page
+  // spread when open. On narrow/portrait screens a side-by-side spread would be
+  // tiny (lots of empty space), so we instead keep the passport at full size
+  // and let the boarding pass slide into focus as the cover swings away.
+  const [layout, setLayout] = useState({
+    closedScale: 1,
+    openScale: 1,
+    openX: 0,
+    reserveW: PAGE_W * 2,
+    reserveH: PAGE_H,
+  });
   const shineRef = useRef<HTMLDivElement>(null);
   const floatRef = useRef<HTMLDivElement>(null);
   const playedRef = useRef(false);
 
-  // Size the passport to fill most of the screen on any device. Closed, we fit
-  // a single page to the viewport; open, we fit the two-page spread. On phones
-  // this keeps the closed cover large instead of half-width.
+  // Size the passport to fill most of the screen on any device. Closed always
+  // fits a single page. Open either shows the spread (wide screens) or focuses
+  // the boarding pass at full size (narrow/portrait screens) to avoid the empty
+  // space a shrunken side-by-side spread would leave.
   useEffect(() => {
     const compute = () => {
       const availW = Math.min(window.innerWidth - 24, 1280);
       const availH = window.innerHeight * 0.92;
       const clamp = (s: number) => Math.max(0.42, Math.min(2.6, s));
-      setScales({
-        open: clamp(Math.min(availW / (PAGE_W * 2), availH / PAGE_H)),
-        closed: clamp(Math.min(availW / PAGE_W, availH / PAGE_H)),
+      const onePage = clamp(Math.min(availW / PAGE_W, availH / PAGE_H));
+      const twoPage = clamp(Math.min(availW / (PAGE_W * 2), availH / PAGE_H));
+      // If the spread would be width-limited (and therefore short), focus the
+      // boarding pass instead of shrinking to fit both pages.
+      const focusPass = availW / (PAGE_W * 2) < availH / PAGE_H;
+      setLayout({
+        closedScale: onePage,
+        openScale: focusPass ? onePage : twoPage,
+        openX: focusPass ? -PAGE_W / 2 : 0,
+        reserveW: focusPass ? PAGE_W * onePage : PAGE_W * 2 * twoPage,
+        reserveH: PAGE_H * onePage,
       });
     };
     compute();
@@ -90,16 +106,13 @@ export default function PassportBoardingPass() {
     }
   };
 
-  const scale = open ? scales.open : scales.closed;
-  // Reserve a stable box: as wide as the open spread (fits the screen) and as
-  // tall as the closed cover (the taller state), so toggling only scales.
-  const reserveW = PAGE_W * 2 * scales.open;
-  const reserveH = PAGE_H * scales.closed;
+  const scale = open ? layout.openScale : layout.closedScale;
+  const x = open ? layout.openX : -PAGE_W / 2;
 
   return (
     <div
       className="relative flex items-center justify-center"
-      style={{ width: reserveW, height: reserveH }}
+      style={{ width: layout.reserveW, height: layout.reserveH }}
     >
       <motion.div
         className="perspective select-none"
@@ -121,7 +134,7 @@ export default function PassportBoardingPass() {
           <motion.div
             className="relative"
             style={{ width: PAGE_W * 2, height: PAGE_H }}
-            animate={{ x: open ? 0 : -PAGE_W / 2 }}
+            animate={{ x }}
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           >
               {/* Boarding pass sits under the cover, on the right page.
