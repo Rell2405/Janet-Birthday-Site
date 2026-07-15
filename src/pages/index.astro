@@ -16,24 +16,8 @@ import SmoothScroll from "@/components/SmoothScroll.tsx";
     >
     </div>
 
-    <!-- minimal top bar -->
-    <header class="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-6">
-      <div class="flex items-center gap-2 font-semibold tracking-tight">
-        <span
-          class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-primary/15 text-primary"
-        >
-          ✈
-        </span>
-        <span>Wanderlust Air</span>
-      </div>
-      <span class="hidden items-center gap-1 text-sm text-muted-foreground sm:inline-flex">
-        <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
-        Secure check-in
-      </span>
-    </header>
-
     <!-- passport is the whole experience -->
-    <section class="relative z-10 flex flex-1 items-center justify-center px-4 py-6">
+    <section class="relative z-10 flex flex-1 items-center justify-center px-4 py-4">
       <PassportBoardingPass client:load />
     </section>
   </main>

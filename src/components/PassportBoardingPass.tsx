@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import gsap from "gsap";
 import {
   Plane,
@@ -9,7 +9,6 @@ import {
   Clock,
   Ticket,
   ShieldCheck,
-  Volume2,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -29,10 +28,10 @@ export default function PassportBoardingPass() {
   // both viewport width and height so the open two-page spread stays visible.
   useEffect(() => {
     const compute = () => {
-      const availW = Math.min(window.innerWidth - 32, 1100);
-      const availH = window.innerHeight * 0.8;
+      const availW = Math.min(window.innerWidth - 24, 1280);
+      const availH = window.innerHeight * 0.92;
       const s = Math.min(availW / (PAGE_W * 2), availH / PAGE_H);
-      setScale(Math.max(0.42, Math.min(1.9, s)));
+      setScale(Math.max(0.42, Math.min(2.4, s)));
     };
     compute();
     window.addEventListener("resize", compute);
@@ -85,7 +84,7 @@ export default function PassportBoardingPass() {
   };
 
   return (
-    <div className="flex flex-col items-center gap-8">
+    <div className="flex flex-col items-center">
       <div
         className="relative mx-auto"
         style={{ width: PAGE_W * 2 * scale, height: PAGE_H * scale }}
@@ -162,31 +161,6 @@ export default function PassportBoardingPass() {
           </div>
         </div>
       </div>
-
-      <AnimatePresence>
-        {!open ? (
-          <motion.p
-            key="hint"
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            className="flex items-center gap-2 text-sm text-muted-foreground"
-          >
-            <Volume2 className="h-4 w-4" />
-            Tap the passport to open — sound on for takeoff
-          </motion.p>
-        ) : (
-          <motion.button
-            key="reset"
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            onClick={() => setOpen(false)}
-            className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-          >
-            Close passport
-          </motion.button>
-        )}
-      </AnimatePresence>
     </div>
   );
 }
@@ -199,60 +173,85 @@ function PassportCover({
   pulsing: boolean;
 }) {
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-l-md rounded-r-2xl border border-emerald-950 bg-gradient-to-br from-[#123524] via-[#0f2e1f] to-[#0a2317] shadow-2xl">
+    <div className="relative h-full w-full overflow-hidden rounded-l-md rounded-r-2xl border border-[#0a1531] bg-gradient-to-br from-[#14275a] via-[#0e1c44] to-[#0a1531] shadow-2xl">
       {/* gold foil frame */}
       <div className="absolute inset-3 rounded-[10px] border border-amber-300/40" />
 
       <div className="flex h-full flex-col items-center justify-between px-6 py-10 text-amber-200/90">
-        <div className="text-center">
-          <p className="text-[11px] font-semibold tracking-[0.35em]">UNITED STATES</p>
-          <p className="text-[11px] font-semibold tracking-[0.35em]">OF AMERICA</p>
-        </div>
+        {/* PASSPORT title */}
+        <p className="font-serif text-2xl font-semibold tracking-[0.2em] text-amber-200">
+          PASSPORT
+        </p>
 
         {/* eagle emblem */}
-        <div className="flex flex-col items-center gap-3">
-          <div className="flex h-24 w-24 items-center justify-center rounded-full border-2 border-amber-300/50 bg-amber-300/5">
-            <Plane className="h-12 w-12 -rotate-45 text-amber-200/90" />
-          </div>
-          <p className="text-lg font-semibold tracking-[0.3em]">PASSPORT</p>
+        <div className="flex h-28 w-28 items-center justify-center rounded-full border-2 border-amber-300/50 bg-amber-300/5">
+          <Plane className="h-14 w-14 -rotate-45 text-amber-200/90" />
         </div>
 
+        {/* country */}
+        <p className="text-center font-serif text-lg italic leading-tight text-amber-200/90">
+          United States
+          <br />
+          of America
+        </p>
+
+        {/* e-passport chip */}
         <div className="flex flex-col items-center gap-2">
           <div className="flex items-center gap-1 text-amber-300/70">
             <span className="h-[2px] w-6 bg-amber-300/40" />
             <div className="h-3 w-3 rounded-full border border-amber-300/60" />
             <span className="h-[2px] w-6 bg-amber-300/40" />
           </div>
-          <p className="text-[10px] tracking-[0.3em] text-amber-200/60">
-            E-PASSPORT
-          </p>
         </div>
       </div>
 
       {/* animated shine sweep */}
       <div
         ref={shineRef}
-        className="pointer-events-none absolute inset-y-0 left-0 w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/25 to-transparent"
+        className="pointer-events-none absolute inset-y-0 left-0 w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/20 to-transparent"
       />
 
-      {pulsing ? (
+      {/* pulsing OPEN call-to-action on top of the passport */}
+      {pulsing ? <OpenPulse /> : null}
+    </div>
+  );
+}
+
+function OpenPulse() {
+  return (
+    <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+      <div className="relative flex items-center justify-center">
+        {/* expanding rings */}
+        {[0, 0.6].map((delay) => (
+          <motion.span
+            key={delay}
+            className="absolute h-24 w-24 rounded-full border-2 border-amber-200/70"
+            initial={{ scale: 0.7, opacity: 0.6 }}
+            animate={{ scale: 1.9, opacity: 0 }}
+            transition={{
+              duration: 1.8,
+              repeat: Infinity,
+              ease: "easeOut",
+              delay,
+            }}
+          />
+        ))}
+        {/* pulsing badge */}
         <motion.div
-          className="pointer-events-none absolute inset-0 rounded-r-2xl ring-2 ring-amber-300/0"
-          animate={{ boxShadow: [
-            "0 0 0px 0px rgba(252,211,77,0.0)",
-            "0 0 26px 4px rgba(252,211,77,0.35)",
-            "0 0 0px 0px rgba(252,211,77,0.0)",
-          ] }}
-          transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
-        />
-      ) : null}
+          className="flex h-24 w-24 items-center justify-center rounded-full bg-amber-300/95 text-[15px] font-bold uppercase tracking-[0.25em] text-[#0e1c44] shadow-[0_0_30px_rgba(252,211,77,0.55)]"
+          animate={{ scale: [1, 1.12, 1] }}
+          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+        >
+          Open
+        </motion.div>
+      </div>
     </div>
   );
 }
 
 function InsideCover() {
   return (
-    <div className="h-full w-full overflow-hidden rounded-l-2xl rounded-r-md border border-emerald-950 bg-gradient-to-br from-[#f5f1e6] to-[#e7dfca] p-6 shadow-inner">
+    <div className="h-full w-full overflow-hidden rounded-l-2xl rounded-r-md border border-[#0a1531] bg-gradient-to-br from-[#f5f1e6] to-[#e7dfca] p-6 shadow-inner">
       <div className="flex h-full flex-col justify-between text-emerald-950/80">
         <div>
           <p className="text-[10px] font-semibold tracking-[0.3em] text-emerald-900/60">
@@ -283,7 +282,7 @@ function InsideCover() {
 
 function BoardingPass({ open }: { open: boolean }) {
   const rows = [
-    { icon: MapPin, label: "From", value: "JFK · New York" },
+    { icon: MapPin, label: "From", value: "ATL · Atlanta" },
     { icon: MapPin, label: "To", value: "MBJ · Montego Bay" },
     { icon: CalendarDays, label: "Date", value: "24 MAY" },
     { icon: Clock, label: "Boarding", value: "10:45 AM" },
