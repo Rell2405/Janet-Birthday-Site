@@ -63,25 +63,42 @@ export async function playBoardingChime(): Promise<void> {
   tone(audio, 523.25, now + 0.55); // low (C5)
 }
 
-/** Captain announcement using the browser speech engine. */
+/** Captain announcement. Plays a pre-rendered natural (neural TTS) voice file
+ * so every visitor hears the same human-sounding captain regardless of the
+ * voices their browser/OS happens to expose. Falls back to SpeechSynthesis
+ * only if the audio file can't be played. */
 export function playCaptainAnnouncement(): void {
-  if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+  if (typeof window === "undefined") return;
+
+  const base = import.meta.env.BASE_URL || "/";
+  const src = `${base.replace(/\/$/, "")}/audio/captain.m4a`;
+
+  try {
+    const audio = new Audio(src);
+    audio.volume = 1;
+    const p = audio.play();
+    if (p && typeof p.catch === "function") {
+      p.catch(() => speakFallback());
+    }
+  } catch {
+    speakFallback();
+  }
+}
+
+/** Last-resort browser speech if the audio file fails (e.g. blocked/offline). */
+function speakFallback(): void {
+  if (!("speechSynthesis" in window)) return;
 
   const speak = () => {
     const msg = new SpeechSynthesisUtterance(
       "Ladies and gentlemen, this is your captain speaking. Welcome aboard. Cabin crew, please prepare for takeoff."
     );
-    // Natural cadence: near-normal rate/pitch. Extreme values are what make
-    // the built-in engine sound robotic.
     msg.rate = 0.98;
     msg.pitch = 1;
     msg.volume = 1;
 
     const voices = window.speechSynthesis.getVoices();
     const byName = (re: RegExp) => voices.find((v) => re.test(v.name));
-    // Prefer high-quality neural/enhanced voices first, then good platform
-    // defaults, then any English voice. These sound far more human than the
-    // legacy compact voices the browser falls back to.
     const preferred =
       byName(/natural|neural|enhanced|premium/i) ||
       byName(/google us english/i) ||
@@ -95,12 +112,10 @@ export function playCaptainAnnouncement(): void {
     window.speechSynthesis.speak(msg);
   };
 
-  // Voices may load asynchronously.
   if (window.speechSynthesis.getVoices().length === 0) {
     window.speechSynthesis.addEventListener("voiceschanged", speak, {
       once: true,
     });
-    // Fallback in case the event never fires.
     setTimeout(speak, 350);
   } else {
     speak();
