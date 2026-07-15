@@ -19,19 +19,26 @@ const PAGE_H = 470;
 
 export default function PassportBoardingPass() {
   const [open, setOpen] = useState(false);
-  const [scale, setScale] = useState(1);
+  // Two fits: closed shows a single cover (fill the width), open shows the
+  // two-page spread (must fit width). We animate between them on toggle so the
+  // closed passport stays large — especially on phones.
+  const [scales, setScales] = useState({ open: 1, closed: 1 });
   const shineRef = useRef<HTMLDivElement>(null);
   const floatRef = useRef<HTMLDivElement>(null);
   const playedRef = useRef(false);
 
-  // Size the passport to fill most of the screen on any device: fit against
-  // both viewport width and height so the open two-page spread stays visible.
+  // Size the passport to fill most of the screen on any device. Closed, we fit
+  // a single page to the viewport; open, we fit the two-page spread. On phones
+  // this keeps the closed cover large instead of half-width.
   useEffect(() => {
     const compute = () => {
       const availW = Math.min(window.innerWidth - 24, 1280);
       const availH = window.innerHeight * 0.92;
-      const s = Math.min(availW / (PAGE_W * 2), availH / PAGE_H);
-      setScale(Math.max(0.42, Math.min(2.4, s)));
+      const clamp = (s: number) => Math.max(0.42, Math.min(2.6, s));
+      setScales({
+        open: clamp(Math.min(availW / (PAGE_W * 2), availH / PAGE_H)),
+        closed: clamp(Math.min(availW / PAGE_W, availH / PAGE_H)),
+      });
     };
     compute();
     window.addEventListener("resize", compute);
@@ -83,34 +90,40 @@ export default function PassportBoardingPass() {
     }
   };
 
+  const scale = open ? scales.open : scales.closed;
+  // Reserve a stable box: as wide as the open spread (fits the screen) and as
+  // tall as the closed cover (the taller state), so toggling only scales.
+  const reserveW = PAGE_W * 2 * scales.open;
+  const reserveH = PAGE_H * scales.closed;
+
   return (
-    <div className="flex flex-col items-center">
-      <div
-        className="relative mx-auto"
-        style={{ width: PAGE_W * 2 * scale, height: PAGE_H * scale }}
+    <div
+      className="relative flex items-center justify-center"
+      style={{ width: reserveW, height: reserveH }}
+    >
+      <motion.div
+        className="perspective select-none"
+        style={{
+          width: PAGE_W * 2,
+          height: PAGE_H,
+          transformOrigin: "center center",
+        }}
+        animate={{ scale }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
       >
+        {/* GSAP idle float lives on its own element so it doesn't fight
+            with Motion's x-offset transform below. */}
         <div
-          className="perspective select-none absolute top-0 left-0"
-          style={{
-            width: PAGE_W * 2,
-            height: PAGE_H,
-            transform: `scale(${scale})`,
-            transformOrigin: "top left",
-          }}
+          ref={floatRef}
+          className="relative mx-auto"
+          style={{ width: PAGE_W * 2, height: PAGE_H }}
         >
-          {/* GSAP idle float lives on its own element so it doesn't fight
-              with Motion's x-offset transform below. */}
-          <div
-            ref={floatRef}
-            className="relative mx-auto"
+          <motion.div
+            className="relative"
             style={{ width: PAGE_W * 2, height: PAGE_H }}
+            animate={{ x: open ? 0 : -PAGE_W / 2 }}
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           >
-            <motion.div
-              className="relative"
-              style={{ width: PAGE_W * 2, height: PAGE_H }}
-              animate={{ x: open ? 0 : -PAGE_W / 2 }}
-              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-            >
               {/* Boarding pass sits under the cover, on the right page.
                   When open, clicking it closes the passport again. */}
               <div
@@ -161,9 +174,8 @@ export default function PassportBoardingPass() {
               </div>
             </motion.div>
           </div>
-        </div>
+        </motion.div>
       </div>
-    </div>
   );
 }
 

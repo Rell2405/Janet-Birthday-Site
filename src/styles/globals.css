@@ -102,6 +102,34 @@
     radial-gradient(50% 60% at 60% 90%, hsl(43 96% 56% / 0.12), transparent 60%);
 }
 
+/* Travel background: drifting clouds */
+.tb-cloud {
+  position: absolute;
+  border-radius: 9999px;
+  background: radial-gradient(
+    50% 60% at 50% 50%,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0) 70%
+  );
+  filter: blur(6px);
+  animation: tb-drift linear infinite alternate;
+}
+
+@keyframes tb-drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(64px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tb-cloud {
+    animation: none;
+  }
+}
+
 .text-shimmer {
   background: linear-gradient(
     90deg,

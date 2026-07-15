@@ -1,0 +1,120 @@
+---
+// Static, JS-free travel-themed backdrop: night-sky gradient, faint globe
+// grid, dashed flight routes with little planes, glowing route pins, a warm
+// focus glow behind the passport, and slowly drifting clouds. Pure inline SVG
+// + CSS so it stays within the site's strict CSP (no external images).
+---
+
+<div class="travel-bg pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+  <svg
+    class="h-full w-full"
+    viewBox="0 0 1440 900"
+    preserveAspectRatio="xMidYMid slice"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <defs>
+      <radialGradient id="tb-sky" cx="50%" cy="36%" r="90%">
+        <stop offset="0%" stop-color="#16305f"></stop>
+        <stop offset="46%" stop-color="#0c1d40"></stop>
+        <stop offset="100%" stop-color="#050d20"></stop>
+      </radialGradient>
+      <radialGradient id="tb-glow" cx="50%" cy="50%" r="42%">
+        <stop offset="0%" stop-color="#f6c65b" stop-opacity="0.18"></stop>
+        <stop offset="55%" stop-color="#f6c65b" stop-opacity="0.05"></stop>
+        <stop offset="100%" stop-color="#f6c65b" stop-opacity="0"></stop>
+      </radialGradient>
+      <pattern
+        id="tb-dots"
+        width="34"
+        height="34"
+        patternUnits="userSpaceOnUse"
+      >
+        <circle cx="2" cy="2" r="1.1" fill="#9fc2ff" fill-opacity="0.12"></circle>
+      </pattern>
+      <linearGradient id="tb-route" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#f6c65b" stop-opacity="0"></stop>
+        <stop offset="50%" stop-color="#f6c65b" stop-opacity="0.85"></stop>
+        <stop offset="100%" stop-color="#f6c65b" stop-opacity="0"></stop>
+      </linearGradient>
+    </defs>
+
+    <rect width="1440" height="900" fill="url(#tb-sky)"></rect>
+    <rect width="1440" height="900" fill="url(#tb-dots)"></rect>
+
+    <!-- faint globe latitude / longitude lines -->
+    <g fill="none" stroke="#8fb5ff" stroke-opacity="0.06" stroke-width="1">
+      <ellipse cx="720" cy="450" rx="640" ry="640"></ellipse>
+      <ellipse cx="720" cy="450" rx="640" ry="300"></ellipse>
+      <ellipse cx="720" cy="450" rx="640" ry="140"></ellipse>
+      <ellipse cx="720" cy="450" rx="300" ry="640"></ellipse>
+      <ellipse cx="720" cy="450" rx="140" ry="640"></ellipse>
+      <line x1="80" y1="450" x2="1360" y2="450"></line>
+      <line x1="720" y1="-190" x2="720" y2="1090"></line>
+    </g>
+
+    <!-- flight routes -->
+    <path
+      id="tb-arc1"
+      d="M170,300 C 520,70 940,70 1290,250"
+      fill="none"
+      stroke="url(#tb-route)"
+      stroke-width="2"
+      stroke-dasharray="2 10"
+      stroke-linecap="round"
+    ></path>
+    <path
+      id="tb-arc2"
+      d="M210,690 C 560,905 900,885 1250,655"
+      fill="none"
+      stroke="url(#tb-route)"
+      stroke-width="2"
+      stroke-dasharray="2 10"
+      stroke-linecap="round"
+    ></path>
+
+    <!-- route endpoint pins -->
+    <g fill="#f6c65b">
+      <circle cx="170" cy="300" r="4" fill-opacity="0.85"></circle>
+      <circle cx="1290" cy="250" r="4" fill-opacity="0.85"></circle>
+      <circle cx="210" cy="690" r="4" fill-opacity="0.7"></circle>
+      <circle cx="1250" cy="655" r="4" fill-opacity="0.7"></circle>
+    </g>
+
+    <!-- little planes traveling the routes -->
+    <g fill="#ffe6a8">
+      <path d="M15,0 L-12,-7 L-4,0 L-12,7 Z">
+        <animateMotion dur="17s" repeatCount="indefinite" rotate="auto">
+          <mpath href="#tb-arc1"></mpath>
+        </animateMotion>
+      </path>
+    </g>
+    <g fill="#ffe6a8" opacity="0.85">
+      <path d="M15,0 L-12,-7 L-4,0 L-12,7 Z">
+        <animateMotion
+          dur="23s"
+          begin="-7s"
+          repeatCount="indefinite"
+          rotate="auto"
+        >
+          <mpath href="#tb-arc2"></mpath>
+        </animateMotion>
+      </path>
+    </g>
+
+    <!-- warm focus glow behind the passport -->
+    <rect width="1440" height="900" fill="url(#tb-glow)"></rect>
+  </svg>
+
+  <!-- slowly drifting clouds -->
+  <div
+    class="tb-cloud"
+    style="top:15%; left:-6%; width:340px; height:120px; animation-duration:44s;"
+  >
+  </div>
+  <div
+    class="tb-cloud"
+    style="top:66%; right:-8%; width:430px; height:150px; opacity:0.5; animation-duration:58s; animation-direction:reverse;"
+  >
+  </div>
+</div>

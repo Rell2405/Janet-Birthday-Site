@@ -1,6 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import PassportBoardingPass from "@/components/PassportBoardingPass.tsx";
+import TravelBackground from "@/components/TravelBackground.astro";
 import SmoothScroll from "@/components/SmoothScroll.tsx";
 ---
 
@@ -8,13 +9,8 @@ import SmoothScroll from "@/components/SmoothScroll.tsx";
   <SmoothScroll client:load />
 
   <main class="relative flex min-h-screen flex-col overflow-x-hidden">
-    <!-- ambient background -->
-    <div class="aurora pointer-events-none absolute inset-0 -z-10"></div>
-    <div
-      class="pointer-events-none absolute inset-0 -z-10 opacity-[0.04]"
-      style="background-image: radial-gradient(hsl(0 0% 100%) 1px, transparent 1px); background-size: 26px 26px;"
-    >
-    </div>
+    <!-- travel-themed backdrop -->
+    <TravelBackground />
 
     <!-- passport is the whole experience -->
     <section class="relative z-10 flex flex-1 items-center justify-center px-4 py-4">
