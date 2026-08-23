@@ -52,7 +52,7 @@ test("renders all five navigation tabs and official weekend events", async ({
   await page.goto("./what-to-wear/");
   await expect(page.getByRole("tab")).toHaveCount(0);
   const fridayDay = page.getByRole("article", {
-    name: /Friday, June 18, Morning & afternoon/i,
+    name: /Friday, June 18, Daytime/i,
   });
   await expect(fridayDay).toBeVisible();
   await fridayDay.focus();
@@ -67,7 +67,7 @@ test("renders all five navigation tabs and official weekend events", async ({
     page.getByRole("img", { name: /White Lights all-white attire/i }),
   ).toBeVisible();
   const saturdayDay = page.getByRole("article", {
-    name: /Saturday, June 19, Morning & afternoon/i,
+    name: /Saturday, June 19, Daytime/i,
   });
   await saturdayDay.focus();
   await expect(
@@ -80,6 +80,16 @@ test("renders all five navigation tabs and official weekend events", async ({
   await expect(
     page.getByRole("img", { name: /Island in Bloom tropical cocktail attire/i }),
   ).toBeVisible();
+  const thursday = page.getByRole("article", {
+    name: /Thursday, June 17, Arrival day/i,
+  });
+  await thursday.focus();
+  await expect(page.getByText("Resort chic", { exact: true })).toBeVisible();
+  const sunday = page.getByRole("article", {
+    name: /Sunday, June 20, Daytime/i,
+  });
+  await sunday.focus();
+  await expect(page.getByText("Resort wear", { exact: true })).toBeVisible();
 
   const dimensions = await page.evaluate(() => ({
     clientWidth: document.documentElement.clientWidth,
