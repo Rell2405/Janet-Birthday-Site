@@ -15,6 +15,7 @@ into a **Jamaica boarding pass**, complete with a cabin **boarding chime** and a
 | Animation          | [Motion](https://motion.dev) + [GSAP](https://gsap.com) |
 | Smooth scrolling   | [Lenis](https://lenis.darkroom.engineering) (Smooth UI) |
 | Audio              | Web Audio API chime + SpeechSynthesis captain voice |
+| RSVP API foundation | Cloudflare Worker + D1 + Turnstile |
 
 ## How the experience works
 
@@ -27,14 +28,34 @@ into a **Jamaica boarding pass**, complete with a cabin **boarding chime** and a
 
 ## Local development
 
-Requires Node.js 22+.
+Requires Node.js 22.12 or later in the Node 22 release line.
 
 ```bash
-npm install
+npm ci
 npm run dev      # start the dev server
+npm run check    # Astro, TypeScript, and Worker configuration checks
+npm run test     # unit tests
 npm run build    # build the static site to dist/
 npm run preview  # preview the production build
 ```
+
+Client-controlled event content and feature flags live in
+`src/config/event.ts`; visual tokens live in `src/config/theme.ts`. The RSVP
+feature is disabled until production infrastructure and client requirements are
+approved.
+
+For local RSVP API work:
+
+```bash
+cp .env.example .env
+cp worker/.dev.vars.example worker/.dev.vars
+npm run worker:types
+npm run worker:migrate:local
+npm run worker:dev
+```
+
+The committed Turnstile values are Cloudflare's public test keys. Production
+secrets must be set with Wrangler and must never be committed.
 
 ## Deployment (GitHub Pages)
 
@@ -54,8 +75,11 @@ The live URL will be: `https://rell2405.github.io/Janet-Birthday-Site/`
 
 ## Security notes
 
-- Fully static output — no server runtime, no user input, no third-party trackers.
+- The deployed frontend remains static. RSVP processing is isolated in a
+  separately deployed Worker and is disabled by default.
 - Hardened response via a Content-Security-Policy meta tag (`object-src 'none'`,
-  `frame-ancestors 'none'`, `base-uri 'self'`, `upgrade-insecure-requests`) plus a
-  strict referrer policy.
-- `npm audit` reports **0 vulnerabilities**.
+  `base-uri 'self'`, `upgrade-insecure-requests`) plus a strict referrer policy.
+- Production response headers will be applied through Cloudflare after the
+  custom domain is configured.
+- D1 migrations, request limits, server-side validation, Turnstile verification,
+  and no-store API responses are included in the Worker foundation.

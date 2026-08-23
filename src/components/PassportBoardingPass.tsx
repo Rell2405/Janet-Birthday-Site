@@ -12,12 +12,13 @@ import {
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
+import type { EventConfig } from "@/config/event";
 import { playTakeoffSequence } from "@/lib/cabinAudio";
 
 const PAGE_W = 340;
 const PAGE_H = 470;
 
-export default function PassportBoardingPass() {
+export default function PassportBoardingPass({ event }: { event: EventConfig }) {
   const [open, setOpen] = useState(false);
   // Layout adapts to the viewport. On wide screens we show the full two-page
   // spread when open. On narrow/portrait screens a side-by-side spread would be
@@ -144,7 +145,7 @@ export default function PassportBoardingPass() {
                 style={{ width: PAGE_W, height: PAGE_H }}
                 onClick={() => open && setOpen(false)}
               >
-                <BoardingPass open={open} />
+                <BoardingPass event={event} open={open} />
               </div>
 
               {/* The passport cover, hinged at the centre spine. */}
@@ -174,14 +175,18 @@ export default function PassportBoardingPass() {
                 >
                   {/* FRONT: US passport cover */}
                   <div className="absolute inset-0 backface-hidden">
-                    <PassportCover shineRef={shineRef} pulsing={!open} />
+                    <PassportCover
+                      event={event}
+                      shineRef={shineRef}
+                      pulsing={!open}
+                    />
                   </div>
                   {/* BACK: inside cover / left page */}
                   <div
                     className="absolute inset-0 backface-hidden"
                     style={{ transform: "rotateY(180deg)" }}
                   >
-                    <InsideCover />
+                    <InsideCover event={event} />
                   </div>
                 </motion.div>
               </div>
@@ -193,9 +198,11 @@ export default function PassportBoardingPass() {
 }
 
 function PassportCover({
+  event,
   shineRef,
   pulsing,
 }: {
+  event: EventConfig;
   shineRef: React.RefObject<HTMLDivElement>;
   pulsing: boolean;
 }) {
@@ -207,7 +214,7 @@ function PassportCover({
       <div className="flex h-full flex-col items-center justify-between px-6 py-10 text-amber-200/90">
         {/* PASSPORT title */}
         <p className="font-serif text-2xl font-semibold tracking-[0.2em] text-amber-200">
-          PASSPORT
+          {event.experience.passportTitle}
         </p>
 
         {/* eagle emblem */}
@@ -217,9 +224,7 @@ function PassportCover({
 
         {/* country */}
         <p className="text-center font-serif text-lg italic leading-tight text-amber-200/90">
-          United States
-          <br />
-          of America
+          {event.experience.passportCountry}
         </p>
 
         {/* e-passport chip */}
@@ -279,7 +284,11 @@ function OpenPulse() {
   );
 }
 
-function InsideCover() {
+function InsideCover({ event }: { event: EventConfig }) {
+  const machineName = event.identity.honoree
+    .toUpperCase()
+    .replace(/[^A-Z]/g, "<");
+
   return (
     <div className="h-full w-full overflow-hidden rounded-l-2xl rounded-r-md border border-[#0a1531] bg-gradient-to-br from-[#f5f1e6] to-[#e7dfca] p-6 shadow-inner">
       <div className="flex h-full flex-col justify-between text-emerald-950/80">
@@ -298,9 +307,9 @@ function InsideCover() {
           <p className="text-[10px] font-semibold tracking-[0.3em] text-emerald-900/60">
             AUTHORITY
           </p>
-          <p className="font-mono text-xs">Ministry of Wanderlust</p>
+          <p className="font-mono text-xs">{event.experience.authority}</p>
           <div className="mt-3 border-t border-dashed border-emerald-900/20 pt-3 font-mono text-[10px] leading-relaxed text-emerald-900/50">
-            P&lt;USADOE&lt;&lt;JANET&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+            P&lt;USA&lt;&lt;{machineName}&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
             <br />
             3141592653USA9001019F3012254&lt;&lt;&lt;&lt;&lt;&lt;06
           </div>
@@ -310,12 +319,18 @@ function InsideCover() {
   );
 }
 
-function BoardingPass({ open }: { open: boolean }) {
+function BoardingPass({
+  event,
+  open,
+}: {
+  event: EventConfig;
+  open: boolean;
+}) {
   const rows = [
-    { icon: MapPin, label: "From", value: "ATL · Atlanta" },
-    { icon: MapPin, label: "To", value: "MBJ · Montego Bay" },
-    { icon: CalendarDays, label: "Date", value: "24 MAY" },
-    { icon: Clock, label: "Boarding", value: "10:45 AM" },
+    { icon: MapPin, label: "From", value: event.experience.origin },
+    { icon: MapPin, label: "To", value: event.experience.destination },
+    { icon: CalendarDays, label: "Date", value: event.experience.dateLabel },
+    { icon: Clock, label: "Boarding", value: event.experience.boardingTime },
   ];
 
   return (
@@ -350,7 +365,7 @@ function BoardingPass({ open }: { open: boolean }) {
           }}
           className="flex flex-col gap-4"
         >
-          <Field delay label="Passenger" value="JANET" big />
+          <Field delay label="Passenger" value={event.experience.passenger} big />
 
           <div className="grid grid-cols-2 gap-3">
             {rows.map((r) => (
@@ -362,9 +377,9 @@ function BoardingPass({ open }: { open: boolean }) {
             variants={itemVariants}
             className="flex items-center justify-between rounded-lg border border-dashed border-border bg-secondary/40 px-4 py-3"
           >
-            <Meta label="Flight" value="JB 246" />
-            <Meta label="Gate" value="B7" />
-            <Meta label="Seat" value="1A" />
+            <Meta label="Flight" value={event.experience.flight} />
+            <Meta label="Gate" value={event.experience.gate} />
+            <Meta label="Seat" value={event.experience.seat} />
           </motion.div>
 
           <motion.div
@@ -375,7 +390,7 @@ function BoardingPass({ open }: { open: boolean }) {
               <ShieldCheck className="h-4 w-4" />
               <span>TSA PreCheck · Verified</span>
             </div>
-            <Badge variant="accent">FIRST CLASS</Badge>
+            <Badge variant="accent">{event.experience.cabin}</Badge>
           </motion.div>
 
           {/* barcode */}

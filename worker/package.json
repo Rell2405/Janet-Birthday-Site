@@ -1,0 +1,21 @@
+{
+  "name": "@janet-birthday-site/rsvp-worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --local",
+    "check": "wrangler types --check && tsc --noEmit",
+    "types": "wrangler types",
+    "migrate:local": "wrangler d1 migrations apply DB --local",
+    "migrate:staging": "wrangler d1 migrations apply DB --remote --env staging",
+    "migrate:production": "wrangler d1 migrations apply DB --remote --env production",
+    "deploy:dry-run": "wrangler deploy --dry-run --env ''",
+    "deploy:staging": "wrangler deploy --env staging",
+    "deploy:production": "wrangler deploy --env production"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0",
+    "wrangler": "4.125.0"
+  }
+}

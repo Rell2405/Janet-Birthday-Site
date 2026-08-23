@@ -3,9 +3,19 @@ import Layout from "@/layouts/Layout.astro";
 import PassportBoardingPass from "@/components/PassportBoardingPass.tsx";
 import TravelBackground from "@/components/TravelBackground.astro";
 import SmoothScroll from "@/components/SmoothScroll.tsx";
+import { eventConfig } from "@/config/event";
+import { publicRsvpRuntimeConfig } from "@/config/runtime";
+import RsvpForm from "@/components/RsvpForm";
+
+const rsvpRuntime = publicRsvpRuntimeConfig(eventConfig.features.rsvp);
 ---
 
-<Layout>
+<Layout
+  title={eventConfig.identity.title}
+  description={eventConfig.identity.description}
+  socialImageAlt={eventConfig.identity.socialImageAlt}
+  rsvpEnabled={eventConfig.features.rsvp}
+>
   <SmoothScroll client:load />
 
   <main class="relative flex min-h-screen flex-col overflow-x-hidden">
@@ -14,7 +24,26 @@ import SmoothScroll from "@/components/SmoothScroll.tsx";
 
     <!-- passport is the whole experience -->
     <section class="relative z-10 flex flex-1 items-center justify-center px-4 py-4">
-      <PassportBoardingPass client:load />
+      <PassportBoardingPass event={eventConfig} client:load />
     </section>
+
+    {
+      rsvpRuntime ? (
+        <section class="relative z-10 px-4 py-16" id="rsvp">
+          <RsvpForm
+            apiBase={rsvpRuntime.apiBase}
+            maximumPartySize={eventConfig.rsvp.maxPartySize}
+            turnstileSiteKey={rsvpRuntime.turnstileSiteKey}
+            client:load
+          />
+          <script
+            is:inline
+            src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+            async
+            defer
+          />
+        </section>
+      ) : null
+    }
   </main>
 </Layout>

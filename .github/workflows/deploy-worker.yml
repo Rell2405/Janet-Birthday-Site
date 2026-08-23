@@ -1,0 +1,62 @@
+name: Deploy RSVP Worker
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Cloudflare environment to deploy
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rsvp-worker-${{ inputs.environment }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    env:
+      CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+
+      - name: Setup Node
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check Worker types and configuration
+        run: npm run check:worker
+
+      - name: Run unit tests
+        run: npm run test:unit
+
+      - name: Apply staging migrations
+        if: inputs.environment == 'staging'
+        run: npm --workspace worker run migrate:staging
+
+      - name: Deploy staging Worker
+        if: inputs.environment == 'staging'
+        run: npm --workspace worker run deploy:staging
+
+      - name: Apply production migrations
+        if: inputs.environment == 'production'
+        run: npm --workspace worker run migrate:production
+
+      - name: Deploy production Worker
+        if: inputs.environment == 'production'
+        run: npm --workspace worker run deploy:production
+

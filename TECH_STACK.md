@@ -42,6 +42,34 @@ Guest browser
 `www.example.com` and `api.example.com` are placeholders until the production
 domain is selected.
 
+## Implementation status
+
+| Capability | Status | Remaining production decision |
+| --- | --- | --- |
+| Static Astro frontend | Implemented | Client content and visual approval |
+| Typed event and theme configuration | Implemented | Final event values and theme |
+| Feature flags | Implemented, disabled by default | Approved optional capabilities |
+| Accessible RSVP form scaffold | Implemented, disabled by default | Client fields and production enablement |
+| Worker API and validation | Implemented locally | Cloudflare account and production hostname |
+| D1 schema and migration | Implemented locally | Staging and production database provisioning |
+| Turnstile verification | Implemented with public local test keys | Production widget and secret provisioning |
+| Rate limiting | Configured | Production thresholds and namespace confirmation |
+| Type, unit, browser, accessibility, and build checks | Implemented | Branch-protection enforcement |
+| GitHub Pages deployment | Implemented | Custom domain |
+| Worker production deployment | Workflow scaffold implemented | Domain, D1 resources, secrets, and environment approval |
+| Security response headers | Defined | Cloudflare zone and production CSP domains |
+
+Client requirements are collected through [`CLIENT_INTAKE.md`](./CLIENT_INTAKE.md).
+Production RSVP and invitation-only features remain disabled until the required
+client and infrastructure decisions are complete.
+
+Before RSVP is enabled, provision the staging and production D1 databases,
+record their generated `database_id` values in `worker/wrangler.jsonc`, replace
+all `example.com` placeholders, create the Turnstile widget, set its Worker
+secret, and configure the `PUBLIC_API_BASE` and `PUBLIC_TURNSTILE_SITE_KEY`
+GitHub Actions variables. Remote Worker deployment is intentionally incomplete
+until those resources exist.
+
 ## 1. Static-first frontend
 
 ### Approved technologies
@@ -379,6 +407,26 @@ Recommended hostnames:
 GitHub Pages serves only static files. It cannot access D1 directly. All
 database operations, Turnstile validation, secret use, and privileged logic
 must remain in the Worker.
+
+### Cost guardrails
+
+The target operating model uses free and open-source software where practical.
+At expected birthday-party traffic, the Namecheap domain is the only mandatory
+paid item.
+
+| Service | Initial policy | Upgrade trigger |
+| --- | --- | --- |
+| Namecheap domain | Paid annual registration | Required |
+| GitHub Pages and standard Actions | Free public-repository usage | Private hosting or paid runner requirement |
+| Cloudflare DNS, CDN, SSL, and Transform Rules | Free plan | Demonstrated need for advanced WAF or support |
+| Workers | Free plan | Measured limit pressure or reliability requirement |
+| D1 | Free plan | Measured reads, writes, or storage exceed included capacity |
+| Turnstile | Free plan | Enterprise widget-management requirement |
+| Cloudflare Access | Free organizer tier | Organizer count exceeds the free allowance |
+
+Budget against the normal domain renewal price rather than a first-year
+promotion. Paid Cloudflare upgrades, email, SMS, premium media, or analytics
+require an approved requirement and cost review.
 
 ## 10. Reproducible development and builds
 
