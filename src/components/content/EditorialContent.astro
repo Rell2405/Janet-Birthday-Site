@@ -1,0 +1,17 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+---
+
+<article
+  class:list={[
+    "editorial-content mx-auto w-full max-w-4xl px-5 py-20 sm:px-8 sm:py-28",
+    className,
+  ]}
+>
+  <slot />
+</article>
+

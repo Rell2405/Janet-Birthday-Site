@@ -1,0 +1,57 @@
+---
+import { render, type CollectionEntry } from "astro:content";
+
+interface Props {
+  entries: CollectionEntry<"faq">[];
+}
+
+const { entries } = Astro.props;
+const renderedEntries = await Promise.all(
+  entries.map(async (entry) => ({
+    entry,
+    Content: (await render(entry)).Content,
+  })),
+);
+---
+
+<section
+  aria-labelledby="faq-heading"
+  class="relative z-10 bg-[#f2eee5] px-5 py-24 text-emerald-950 sm:px-8 sm:py-32 lg:px-12 lg:py-40"
+  id="faq"
+>
+  <div class="mx-auto max-w-[1100px]">
+    <div class="mb-14 text-center">
+      <p class="luxury-kicker">The finer details</p>
+      <h2
+        class="mt-5 font-display text-[clamp(3.5rem,7vw,6.5rem)] leading-[0.9] tracking-[-0.045em]"
+        id="faq-heading"
+      >
+        Good questions,
+        <span class="italic text-amber-700">answered.</span>
+      </h2>
+    </div>
+
+    <div class="border-t border-emerald-950/25">
+      {
+        renderedEntries.map(({ entry, Content }) => (
+          <details class="group border-b border-emerald-950/25 py-2">
+            <summary class="cursor-pointer list-none py-6 font-display text-2xl marker:hidden sm:text-3xl">
+            <span class="flex items-center justify-between gap-4">
+              {entry.data.question}
+              <span
+                aria-hidden="true"
+                class="text-amber-700 transition-transform group-open:rotate-45"
+              >
+                +
+              </span>
+            </span>
+          </summary>
+            <div class="content-copy max-w-2xl pb-7">
+              <Content />
+            </div>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>

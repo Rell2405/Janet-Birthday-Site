@@ -1,20 +1,69 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import PassportBoardingPass from "@/components/PassportBoardingPass.tsx";
-import TravelBackground from "@/components/TravelBackground.astro";
 import SmoothScroll from "@/components/SmoothScroll.tsx";
+import { eventConfig } from "@/config/event";
+import { publicRsvpRuntimeConfig } from "@/config/runtime";
+import RsvpForm from "@/components/RsvpForm";
+import ItinerarySection from "@/components/content/ItinerarySection.astro";
+import { getCollection, getEntry, render } from "astro:content";
+import { sortItinerary } from "@/lib/content";
+import SiteHeader from "@/components/home/SiteHeader.astro";
+import LuxuryHero from "@/components/home/LuxuryHero.astro";
+import StorySection from "@/components/home/StorySection.astro";
+import JourneyFeature from "@/components/home/JourneyFeature.astro";
+import SiteFooter from "@/components/home/SiteFooter.astro";
+import EditorialContent from "@/components/content/EditorialContent.astro";
+
+const rsvpRuntime = publicRsvpRuntimeConfig(eventConfig.features.rsvp);
+const itinerary = (await getCollection("itinerary", ({ data }) => !data.draft)).sort(
+  sortItinerary,
+);
+const welcomeEntry = await getEntry("tabPages", "welcome");
+if (!welcomeEntry) throw new Error("Welcome tab content is missing.");
+const { Content: WelcomeContent } = await render(welcomeEntry);
 ---
 
-<Layout>
+<Layout
+  title={eventConfig.identity.title}
+  description={eventConfig.identity.description}
+  socialImageAlt={eventConfig.identity.socialImageAlt}
+  rsvpEnabled={eventConfig.features.rsvp}
+>
   <SmoothScroll client:load />
 
-  <main class="relative flex min-h-screen flex-col overflow-x-hidden">
-    <!-- travel-themed backdrop -->
-    <TravelBackground />
+  <SiteHeader activeTab="welcome" overlay />
+  <main class="relative min-h-screen overflow-x-hidden">
+    <LuxuryHero />
+    <StorySection />
+    <JourneyFeature />
+    <EditorialContent class="bg-[#f2eee5]">
+      <WelcomeContent />
+    </EditorialContent>
 
-    <!-- passport is the whole experience -->
-    <section class="relative z-10 flex flex-1 items-center justify-center px-4 py-4">
-      <PassportBoardingPass client:load />
-    </section>
+    {
+      eventConfig.features.itinerary && itinerary.length > 0 ? (
+        <ItinerarySection entries={itinerary} />
+      ) : null
+    }
+
+    {
+      rsvpRuntime ? (
+        <section class="relative z-10 px-4 py-16" id="rsvp">
+          <RsvpForm
+            apiBase={rsvpRuntime.apiBase}
+            maximumPartySize={eventConfig.rsvp.maxPartySize}
+            turnstileSiteKey={rsvpRuntime.turnstileSiteKey}
+            client:load
+          />
+          <script
+            is:inline
+            src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+            async
+            defer
+          />
+        </section>
+      ) : null
+    }
   </main>
+  <SiteFooter />
 </Layout>

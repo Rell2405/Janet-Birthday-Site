@@ -1,0 +1,93 @@
+---
+import { render, type CollectionEntry } from "astro:content";
+
+import { formatCalendarDate, formatClockTime } from "@/lib/content";
+
+interface Props {
+  entries: CollectionEntry<"itinerary">[];
+}
+
+const { entries } = Astro.props;
+const renderedEntries = await Promise.all(
+  entries.map(async (entry) => ({
+    entry,
+    Content: (await render(entry)).Content,
+  })),
+);
+const dayCount = new Set(entries.map((entry) => entry.data.date)).size;
+---
+
+<section
+  aria-labelledby="itinerary-heading"
+  class="relative z-10 bg-[#e7ded0] px-5 py-24 text-emerald-950 sm:px-8 sm:py-32 lg:px-12 lg:py-40"
+  id="itinerary"
+>
+  <div class="mx-auto max-w-[1320px]">
+    <div class="mb-16 grid gap-8 lg:grid-cols-[220px_1fr] lg:gap-20">
+      <p class="luxury-kicker">{dayCount.toString().padStart(2, "0")} days, considered</p>
+      <h2
+        class="max-w-4xl font-display text-[clamp(3.5rem,7vw,7.5rem)] leading-[0.88] tracking-[-0.045em]"
+        id="itinerary-heading"
+      >
+        The birthday weekend,
+        <span class="italic text-amber-700">beautifully paced.</span>
+      </h2>
+    </div>
+
+    <ol class="border-t border-emerald-950/25">
+      {
+        renderedEntries.map(({ entry, Content }, index) => (
+          <li class="border-b border-emerald-950/25">
+            <article class="grid gap-5 py-10 md:grid-cols-[70px_1fr_190px] md:gap-8 lg:py-14">
+              <p
+                aria-hidden="true"
+                class="font-display text-4xl italic text-amber-700"
+              >
+                {(index + 1).toString().padStart(2, "0")}
+              </p>
+
+              <div class="max-w-2xl">
+                <p class="luxury-kicker text-emerald-950/75">
+                  {entry.data.category}
+                </p>
+                <h3 class="mt-3 font-display text-4xl leading-tight lg:text-5xl">
+                  {entry.data.title}
+                </h3>
+                {entry.data.summary ? (
+                  <p class="mt-4 text-lg leading-7 text-emerald-950/80">
+                    {entry.data.summary}
+                  </p>
+                ) : null}
+                <div class="content-copy mt-5">
+                  <Content />
+                </div>
+              </div>
+
+              <div class="md:text-right">
+                <p class="font-semibold">{formatCalendarDate(entry.data.date)}</p>
+                <p class="mt-2 text-sm text-emerald-950/75">
+                  {
+                    entry.data.allDay
+                      ? "At your leisure"
+                      : entry.data.startTime
+                        ? `${formatClockTime(entry.data.startTime)}${
+                            entry.data.endTime
+                              ? ` – ${formatClockTime(entry.data.endTime)}`
+                              : ""
+                          }`
+                        : "Time to be announced"
+                  }
+                </p>
+                {entry.data.locationLabel ? (
+                  <p class="mt-4 text-sm leading-6 text-emerald-950/75">
+                    {entry.data.locationLabel}
+                  </p>
+                ) : null}
+              </div>
+            </article>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
