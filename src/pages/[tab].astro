@@ -6,8 +6,8 @@ import {
 } from "astro:content";
 
 import EditorialContent from "@/components/content/EditorialContent.astro";
-import EventArtwork from "@/components/content/EventArtwork.astro";
 import RoomRates from "@/components/content/RoomRates.astro";
+import WhatToWearGuide from "@/components/content/WhatToWearGuide.astro";
 import PageHero from "@/components/home/PageHero.astro";
 import SiteFooter from "@/components/home/SiteFooter.astro";
 import SiteHeader from "@/components/home/SiteHeader.astro";
@@ -31,8 +31,6 @@ const { entry } = Astro.props as {
 };
 const { Content } = await render(entry);
 const tab = entry.data.tab as TabId;
-const showArtwork =
-  tab === "birthday-weekend" || tab === "what-to-wear";
 ---
 
 <Layout
@@ -50,11 +48,7 @@ const showArtwork =
     <EditorialContent>
       <Content />
     </EditorialContent>
-    {
-      showArtwork ? (
-        <EventArtwork page={tab as "birthday-weekend" | "what-to-wear"} />
-      ) : null
-    }
+    {tab === "what-to-wear" ? <WhatToWearGuide /> : null}
     {tab === "book-your-stay" ? <RoomRates /> : null}
   </main>
   <SiteFooter />
