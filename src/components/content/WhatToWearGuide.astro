@@ -1,0 +1,122 @@
+---
+import { Image } from "astro:assets";
+
+import islandInBloom from "@/assets/events/island-in-bloom.webp";
+import poolPartyAttire from "@/assets/events/pool-party-attire.webp";
+import whiteLights from "@/assets/events/white-lights.webp";
+---
+
+<section
+  aria-labelledby="attire-guide-heading"
+  class="bg-[#e7ded0] px-5 py-20 text-emerald-950 sm:px-8 sm:py-28 lg:px-12"
+>
+  <div class="mx-auto max-w-[1320px]">
+    <div class="mb-14 grid gap-6 lg:grid-cols-[220px_1fr] lg:gap-20">
+      <p class="luxury-kicker">Date by date</p>
+      <h2
+        class="font-display text-[clamp(3rem,6vw,6rem)] leading-[0.9] tracking-[-0.04em]"
+        id="attire-guide-heading"
+      >
+        What to wear, and when
+      </h2>
+    </div>
+
+    <div class="grid gap-16">
+      <article class="border-t border-emerald-950/25 pt-8">
+        <p class="luxury-kicker text-amber-900">Thursday, June 17</p>
+        <h3 class="mt-4 font-display text-4xl">Arrival day · Resort chic</h3>
+        <p class="mt-4 max-w-3xl text-lg leading-8 text-emerald-950/80">
+          Travel comfortably, then slip into something effortless and
+          island-ready for your first evening in paradise.
+        </p>
+      </article>
+
+      <article class="border-t border-emerald-950/25 pt-8">
+        <p class="luxury-kicker text-amber-900">
+          Friday, June 18 &amp; Saturday, June 19
+        </p>
+        <h3 class="mt-4 font-display text-4xl">Pool party attire</h3>
+        <p class="mt-4 max-w-3xl text-lg leading-8 text-emerald-950/80">
+          Friday is all about shades of blue—from sky and aqua to cobalt and
+          navy. Saturday turns up the energy with leopard, zebra, tiger,
+          snakeskin, and other confident animal prints.
+        </p>
+        <figure class="mt-8">
+          <Image
+            alt="Pool party attire guide showing shades of blue for Friday, June 18 and animal-print outfit inspiration for Saturday, June 19."
+            class="h-auto w-full bg-stone-100"
+            loading="eager"
+            quality={86}
+            sizes="(min-width: 1024px) 85vw, 100vw"
+            src={poolPartyAttire}
+            widths={[640, 960, 1280, 1536]}
+          />
+          <figcaption class="mt-4 text-sm leading-6 text-emerald-950/75">
+            Friday: Shades of Blue · Saturday: Animal Prints
+          </figcaption>
+        </figure>
+      </article>
+
+      <article class="border-t border-emerald-950/25 pt-8">
+        <p class="luxury-kicker text-amber-900">Friday, June 18</p>
+        <h3 class="mt-4 font-display text-4xl">White Lights · All white</h3>
+        <p class="mt-4 max-w-3xl text-lg leading-8 text-emerald-950/80">
+          Choose flowing dresses, elevated separates, linen, knit polos, or
+          relaxed tailored pieces. White is the statement; gold accessories are
+          welcome.
+        </p>
+        <figure class="mt-8">
+          <Image
+            alt="White Lights event board with all-white attire inspiration for women and men at the Friday evening celebration."
+            class="h-auto w-full bg-stone-100"
+            loading="lazy"
+            quality={86}
+            sizes="(min-width: 1024px) 85vw, 100vw"
+            src={whiteLights}
+            widths={[640, 960, 1280, 1536]}
+          />
+          <figcaption class="mt-4 text-sm leading-6 text-emerald-950/75">
+            Friday evening: island elegance in all white
+          </figcaption>
+        </figure>
+      </article>
+
+      <article class="border-t border-emerald-950/25 pt-8">
+        <p class="luxury-kicker text-amber-900">Saturday, June 19</p>
+        <h3 class="mt-4 font-display text-4xl">
+          Janet’s Island in Bloom · Tropical cocktail chic
+        </h3>
+        <p class="mt-4 max-w-3xl text-lg leading-8 text-emerald-950/80">
+          Think vibrant florals, flowing dresses, linen sets, bold prints,
+          colorful heels or sandals, polished shirts, and gold accessories.
+        </p>
+        <figure class="mt-8">
+          <Image
+            alt="Island in Bloom attire board with tropical floral cocktail looks for Janet’s Saturday evening 60th birthday celebration."
+            class="h-auto w-full bg-stone-100"
+            loading="lazy"
+            quality={86}
+            sizes="(min-width: 1024px) 85vw, 100vw"
+            src={islandInBloom}
+            widths={[640, 960, 1280, 1448]}
+          />
+          <figcaption class="mt-4 text-sm leading-6 text-emerald-950/75">
+            Saturday evening: tropical cocktail chic
+          </figcaption>
+        </figure>
+      </article>
+
+      <article class="border-t border-emerald-950/25 pt-8">
+        <p class="luxury-kicker text-amber-900">Sunday, June 20</p>
+        <h3 class="mt-4 font-display text-4xl">
+          Paradise, your way · Resort wear
+        </h3>
+        <p class="mt-4 max-w-3xl text-lg leading-8 text-emerald-950/80">
+          Swimwear, cover-ups, sundresses, linen, golf attire, or excursion
+          wear—whatever your perfect Jamaica day requires.
+        </p>
+      </article>
+    </div>
+  </div>
+</section>
+

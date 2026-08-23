@@ -47,6 +47,9 @@ test("renders all five navigation tabs and official weekend events", async ({
   ).toBeVisible();
 
   await page.goto("./birthday-weekend/");
+  await expect(page.getByRole("img")).toHaveCount(0);
+
+  await page.goto("./what-to-wear/");
   await expect(
     page.getByRole("img", { name: /Pool party attire guide/i }),
   ).toBeVisible();
