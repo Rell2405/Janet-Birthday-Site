@@ -15,6 +15,7 @@ into a **Jamaica boarding pass**, complete with a cabin **boarding chime** and a
 | Animation          | [Motion](https://motion.dev) + [GSAP](https://gsap.com) |
 | Smooth scrolling   | [Lenis](https://lenis.darkroom.engineering) (Smooth UI) |
 | Audio              | Web Audio API chime + SpeechSynthesis captain voice |
+| Public content     | Validated Astro Markdown content collections |
 | RSVP API foundation | Cloudflare Worker + D1 + Turnstile |
 
 ## How the experience works
@@ -43,6 +44,11 @@ Client-controlled event content and feature flags live in
 `src/config/event.ts`; visual tokens live in `src/config/theme.ts`. The RSVP
 feature is disabled until production infrastructure and client requirements are
 approved.
+
+Public itinerary, FAQ, and travel content lives in `src/content/`. Entries are
+validated at build time and remain hidden while `draft: true`. Follow
+[`CONTENT_GUIDE.md`](./CONTENT_GUIDE.md) to publish content and enable its
+feature flag. Never store private event or guest information in Markdown.
 
 For local RSVP API work:
 

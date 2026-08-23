@@ -48,6 +48,7 @@ domain is selected.
 | --- | --- | --- |
 | Static Astro frontend | Implemented | Client content and visual approval |
 | Typed event and theme configuration | Implemented | Final event values and theme |
+| Validated Markdown content collections | Implemented, draft examples only | Approved itinerary, FAQ, and travel content |
 | Feature flags | Implemented, disabled by default | Approved optional capabilities |
 | Accessible RSVP form scaffold | Implemented, disabled by default | Client fields and production enablement |
 | Worker API and validation | Implemented locally | Cloudflare account and production hostname |
@@ -77,6 +78,7 @@ until those resources exist.
 | Purpose | Technology | Policy |
 | --- | --- | --- |
 | Application framework | Astro 7 | Primary framework; static output |
+| Editorial content | Astro Markdown content collections | Public itinerary, FAQ, and travel content |
 | Interactive components | React | Use only for components that require browser state |
 | Styling | Tailwind CSS 4 | Use through documented design tokens and reusable variants |
 | UI primitives | Radix UI / shadcn-style components | Use accessible primitives rather than rebuilding controls |
@@ -86,6 +88,43 @@ until those resources exist.
 The exact installed versions are recorded in `package-lock.json`. This document
 records supported major versions and architectural intent rather than
 duplicating every locked transitive version.
+
+### Markdown content model
+
+Public editorial content is stored as plain Markdown in validated Astro
+build-time content collections:
+
+| Collection | Purpose | Source |
+| --- | --- | --- |
+| `itinerary` | Chronological schedule and activity descriptions | `src/content/itinerary/` |
+| `faq` | Frequently asked questions and public answers | `src/content/faq/` |
+| `travel` | Public transportation, lodging, packing, and local guidance | `src/content/travel/` |
+
+Frontmatter schemas enforce required titles, valid dates and times, IANA
+timezones, bounded text, supported categories, display order, draft status, and
+public visibility. Invalid content must fail type checking and the production
+build.
+
+Markdown is selected because it:
+
+- Lets approved content be updated without editing UI components
+- Keeps changes reviewable, versioned, and reversible in Git
+- Produces static HTML without adding browser JavaScript or a paid CMS
+- Allows schedule entries to be sorted and grouped from structured frontmatter
+- Keeps presentation controlled by reusable Astro components
+- Can later feed printable schedules, calendar exports, or reminder content
+
+Plain Markdown is the default. MDX is not enabled because executable components
+in editorial files increase complexity and review risk. Interactive
+requirements should be implemented as reviewed Astro or React components.
+
+All Markdown content is public. Invitation-only event details, guest data,
+dietary information, personal contacts, access codes, and credentials are
+prohibited from content collections and must remain behind the Worker/D1
+boundary.
+
+The authoring and publishing process is defined in
+[`CONTENT_GUIDE.md`](./CONTENT_GUIDE.md).
 
 ### Rendering policy
 
@@ -589,6 +628,7 @@ outside an authorized operation.
 ### Phase 1: frontend foundation
 
 - Static Astro experience
+- Validated Markdown collections for public itinerary, FAQ, and travel content
 - Tailwind design tokens and reusable components
 - Responsive optimized media
 - Accessibility and reduced-motion compliance

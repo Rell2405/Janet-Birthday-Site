@@ -6,8 +6,20 @@ import SmoothScroll from "@/components/SmoothScroll.tsx";
 import { eventConfig } from "@/config/event";
 import { publicRsvpRuntimeConfig } from "@/config/runtime";
 import RsvpForm from "@/components/RsvpForm";
+import ItinerarySection from "@/components/content/ItinerarySection.astro";
+import FaqSection from "@/components/content/FaqSection.astro";
+import TravelSection from "@/components/content/TravelSection.astro";
+import { getCollection } from "astro:content";
+import { sortFaq, sortItinerary, sortTravel } from "@/lib/content";
 
 const rsvpRuntime = publicRsvpRuntimeConfig(eventConfig.features.rsvp);
+const itinerary = (await getCollection("itinerary", ({ data }) => !data.draft)).sort(
+  sortItinerary,
+);
+const faq = (await getCollection("faq", ({ data }) => !data.draft)).sort(sortFaq);
+const travel = (await getCollection("travel", ({ data }) => !data.draft)).sort(
+  sortTravel,
+);
 ---
 
 <Layout
@@ -26,6 +38,24 @@ const rsvpRuntime = publicRsvpRuntimeConfig(eventConfig.features.rsvp);
     <section class="relative z-10 flex flex-1 items-center justify-center px-4 py-4">
       <PassportBoardingPass event={eventConfig} client:load />
     </section>
+
+    {
+      eventConfig.features.itinerary && itinerary.length > 0 ? (
+        <ItinerarySection entries={itinerary} />
+      ) : null
+    }
+
+    {
+      eventConfig.features.travel && travel.length > 0 ? (
+        <TravelSection entries={travel} />
+      ) : null
+    }
+
+    {
+      eventConfig.features.faq && faq.length > 0 ? (
+        <FaqSection entries={faq} />
+      ) : null
+    }
 
     {
       rsvpRuntime ? (

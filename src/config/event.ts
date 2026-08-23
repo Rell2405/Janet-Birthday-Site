@@ -1,6 +1,9 @@
 export type AttendanceStatus = "attending" | "not-attending" | "undecided";
 
 export interface EventFeatures {
+  itinerary: boolean;
+  faq: boolean;
+  travel: boolean;
   rsvp: boolean;
   playlist: boolean;
   photoGallery: boolean;
@@ -81,6 +84,9 @@ export const eventConfig = {
     fallbackContact: null,
   },
   features: {
+    itinerary: false,
+    faq: false,
+    travel: false,
     rsvp: false,
     playlist: false,
     photoGallery: false,

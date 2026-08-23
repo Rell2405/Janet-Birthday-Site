@@ -1,0 +1,68 @@
+---
+import { render, type CollectionEntry } from "astro:content";
+
+import { formatCalendarDate, formatClockTime } from "@/lib/content";
+
+interface Props {
+  entries: CollectionEntry<"itinerary">[];
+}
+
+const { entries } = Astro.props;
+const renderedEntries = await Promise.all(
+  entries.map(async (entry) => ({
+    entry,
+    Content: (await render(entry)).Content,
+  })),
+);
+---
+
+<section
+  aria-labelledby="itinerary-heading"
+  class="relative z-10 mx-auto w-full max-w-4xl px-4 py-16"
+  id="itinerary"
+>
+  <div class="mb-8 text-center">
+    <p class="text-sm font-semibold uppercase tracking-[0.25em] text-accent">
+      The celebration
+    </p>
+    <h2 class="mt-2 text-3xl font-bold" id="itinerary-heading">
+      Schedule &amp; itinerary
+    </h2>
+  </div>
+
+  <ol class="grid gap-5">
+    {
+      renderedEntries.map(({ entry, Content }) => (
+        <li class="rounded-xl border border-border bg-card/90 p-6 shadow-xl">
+          <article>
+            <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <p class="text-sm font-semibold text-accent">
+                  {formatCalendarDate(entry.data.date)}
+                </p>
+                <h3 class="mt-1 text-xl font-bold">{entry.data.title}</h3>
+              </div>
+              <p class="shrink-0 text-sm font-semibold text-muted-foreground">
+                {formatClockTime(entry.data.startTime)}
+                {entry.data.endTime
+                  ? ` – ${formatClockTime(entry.data.endTime)}`
+                  : ""}
+              </p>
+            </div>
+
+            {entry.data.locationLabel ? (
+              <p class="mt-3 text-sm text-muted-foreground">
+                {entry.data.locationLabel}
+              </p>
+            ) : null}
+            {entry.data.summary ? <p class="mt-3">{entry.data.summary}</p> : null}
+            <div class="content-copy mt-4">
+              <Content />
+            </div>
+          </article>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+

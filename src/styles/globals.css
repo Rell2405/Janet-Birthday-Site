@@ -144,3 +144,35 @@
   background-clip: text;
   color: transparent;
 }
+
+.content-copy {
+  color: hsl(var(--muted-foreground));
+  line-height: 1.7;
+}
+
+.content-copy > * + * {
+  margin-top: 0.75rem;
+}
+
+.content-copy ul,
+.content-copy ol {
+  padding-left: 1.25rem;
+}
+
+.content-copy ul {
+  list-style: disc;
+}
+
+.content-copy ol {
+  list-style: decimal;
+}
+
+.content-copy a {
+  color: hsl(var(--primary));
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.content-copy strong {
+  color: hsl(var(--foreground));
+}

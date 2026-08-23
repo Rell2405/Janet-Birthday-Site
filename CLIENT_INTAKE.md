@@ -27,6 +27,19 @@ data in this document if the repository remains public.
 - [ ] Public fallback contact method
 - [ ] Required languages
 
+For each schedule, FAQ, or travel item, obtain:
+
+- [ ] Final public title or question
+- [ ] Approved descriptive text
+- [ ] Display order
+- [ ] Schedule date, local start/end time, and timezone where applicable
+- [ ] Public location label where applicable
+- [ ] Content-owner approval
+
+Approved public editorial content will be stored in the Markdown collections
+described in `CONTENT_GUIDE.md`. Invitation-only or organizer-only details must
+not be supplied as Markdown.
+
 ## Venue and privacy classification
 
 Classify every item as **public**, **invitation-only**, or **organizer-only**.
@@ -123,4 +136,3 @@ channel, never through repository files or public project discussions.
 - [ ] Alternate RSVP method confirmed
 - [ ] Custom-domain HTTPS and redirects confirmed
 - [ ] Production data-retention date recorded
-

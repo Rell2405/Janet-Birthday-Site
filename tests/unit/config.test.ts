@@ -11,6 +11,9 @@ describe("site configuration", () => {
     expect(eventConfig.features.rsvp).toBe(false);
     expect(eventConfig.features.playlist).toBe(false);
     expect(eventConfig.features.invitationOnlyDetails).toBe(false);
+    expect(eventConfig.features.itinerary).toBe(false);
+    expect(eventConfig.features.faq).toBe(false);
+    expect(eventConfig.features.travel).toBe(false);
   });
 
   it("defines safe RSVP defaults", () => {
@@ -25,4 +28,3 @@ describe("site configuration", () => {
     expect(style).toContain("--radius:0.9rem");
   });
 });
-
