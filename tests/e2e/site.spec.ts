@@ -50,31 +50,33 @@ test("renders all five navigation tabs and official weekend events", async ({
   await expect(page.getByRole("img")).toHaveCount(0);
 
   await page.goto("./what-to-wear/");
-  const fridayTab = page.getByRole("tab", {
-    name: "Friday, June 18 Morning & afternoon",
+  await expect(page.getByRole("tab")).toHaveCount(0);
+  const fridayDay = page.getByRole("article", {
+    name: /Friday, June 18, Morning & afternoon/i,
   });
-  await fridayTab.focus();
-  await expect(fridayTab).toBeVisible();
+  await expect(fridayDay).toBeVisible();
+  await fridayDay.focus();
   await expect(
     page.getByRole("img", { name: /Shades of Blue pool party attire/i }),
   ).toBeVisible();
-  await page
-    .getByRole("tab", { name: "Friday, June 18 Nighttime" })
-    .click();
+  const fridayNight = page.getByRole("article", {
+    name: /Friday, June 18, Nighttime/i,
+  });
+  await fridayNight.focus();
   await expect(
     page.getByRole("img", { name: /White Lights all-white attire/i }),
   ).toBeVisible();
-  await page
-    .getByRole("tab", {
-      name: "Saturday, June 19 Morning & afternoon",
-    })
-    .click();
+  const saturdayDay = page.getByRole("article", {
+    name: /Saturday, June 19, Morning & afternoon/i,
+  });
+  await saturdayDay.focus();
   await expect(
     page.getByRole("img", { name: /Animal Prints pool party attire/i }),
   ).toBeVisible();
-  await page
-    .getByRole("tab", { name: "Saturday, June 19 Nighttime" })
-    .click();
+  const saturdayNight = page.getByRole("article", {
+    name: /Saturday, June 19, Nighttime/i,
+  });
+  await saturdayNight.focus();
   await expect(
     page.getByRole("img", { name: /Island in Bloom tropical cocktail attire/i }),
   ).toBeVisible();

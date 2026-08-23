@@ -6,7 +6,7 @@ import {
 } from "astro:content";
 
 import EditorialContent from "@/components/content/EditorialContent.astro";
-import AttireDateTabs from "@/components/content/AttireDateTabs";
+import AttireHoverSections from "@/components/content/AttireHoverSections.astro";
 import RoomRates from "@/components/content/RoomRates.astro";
 import PageHero from "@/components/home/PageHero.astro";
 import SiteFooter from "@/components/home/SiteFooter.astro";
@@ -48,7 +48,7 @@ const tab = entry.data.tab as TabId;
     />
     {
       tab === "what-to-wear" ? (
-        <AttireDateTabs client:load />
+        <AttireHoverSections />
       ) : (
         <EditorialContent>
           <Content />
