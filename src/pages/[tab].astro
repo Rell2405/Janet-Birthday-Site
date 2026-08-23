@@ -6,8 +6,8 @@ import {
 } from "astro:content";
 
 import EditorialContent from "@/components/content/EditorialContent.astro";
+import AttireDateTabs from "@/components/content/AttireDateTabs";
 import RoomRates from "@/components/content/RoomRates.astro";
-import WhatToWearGuide from "@/components/content/WhatToWearGuide.astro";
 import PageHero from "@/components/home/PageHero.astro";
 import SiteFooter from "@/components/home/SiteFooter.astro";
 import SiteHeader from "@/components/home/SiteHeader.astro";
@@ -44,11 +44,17 @@ const tab = entry.data.tab as TabId;
       title={entry.data.title}
       description={entry.data.description}
       index={entry.data.order / 10}
+      hideDescription={tab === "what-to-wear"}
     />
-    <EditorialContent>
-      <Content />
-    </EditorialContent>
-    {tab === "what-to-wear" ? <WhatToWearGuide /> : null}
+    {
+      tab === "what-to-wear" ? (
+        <AttireDateTabs client:load />
+      ) : (
+        <EditorialContent>
+          <Content />
+        </EditorialContent>
+      )
+    }
     {tab === "book-your-stay" ? <RoomRates /> : null}
   </main>
   <SiteFooter />

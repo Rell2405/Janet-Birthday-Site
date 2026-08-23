@@ -50,14 +50,33 @@ test("renders all five navigation tabs and official weekend events", async ({
   await expect(page.getByRole("img")).toHaveCount(0);
 
   await page.goto("./what-to-wear/");
+  const fridayTab = page.getByRole("tab", {
+    name: "Friday, June 18 Morning & afternoon",
+  });
+  await fridayTab.focus();
+  await expect(fridayTab).toBeVisible();
   await expect(
-    page.getByRole("img", { name: /Pool party attire guide/i }),
+    page.getByRole("img", { name: /Shades of Blue pool party attire/i }),
   ).toBeVisible();
+  await page
+    .getByRole("tab", { name: "Friday, June 18 Nighttime" })
+    .click();
   await expect(
-    page.getByRole("img", { name: /White Lights event board/i }),
+    page.getByRole("img", { name: /White Lights all-white attire/i }),
   ).toBeVisible();
+  await page
+    .getByRole("tab", {
+      name: "Saturday, June 19 Morning & afternoon",
+    })
+    .click();
   await expect(
-    page.getByRole("img", { name: /Island in Bloom attire board/i }),
+    page.getByRole("img", { name: /Animal Prints pool party attire/i }),
+  ).toBeVisible();
+  await page
+    .getByRole("tab", { name: "Saturday, June 19 Nighttime" })
+    .click();
+  await expect(
+    page.getByRole("img", { name: /Island in Bloom tropical cocktail attire/i }),
   ).toBeVisible();
 
   const dimensions = await page.evaluate(() => ({
