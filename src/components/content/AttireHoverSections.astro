@@ -1,0 +1,68 @@
+---
+import { Image } from "astro:assets";
+
+import animalPrints from "@/assets/events/animal-prints.webp";
+import islandInBloom from "@/assets/events/island-in-bloom.webp";
+import shadesOfBlue from "@/assets/events/shades-of-blue.webp";
+import whiteLights from "@/assets/events/white-lights.webp";
+
+const sections = [
+  {
+    date: "Friday, June 18",
+    period: "Morning & afternoon",
+    src: shadesOfBlue,
+    alt: "Shades of Blue pool party attire board for Friday, June 18, with blue swimwear and resort-style inspiration.",
+  },
+  {
+    date: "Friday, June 18",
+    period: "Nighttime",
+    src: whiteLights,
+    alt: "White Lights all-white attire board for the Friday, June 18 evening celebration.",
+  },
+  {
+    date: "Saturday, June 19",
+    period: "Morning & afternoon",
+    src: animalPrints,
+    alt: "Animal Prints pool party attire board for Saturday, June 19, with leopard, zebra, and other print inspiration.",
+  },
+  {
+    date: "Saturday, June 19",
+    period: "Nighttime",
+    src: islandInBloom,
+    alt: "Island in Bloom tropical cocktail attire board for Janet’s Saturday, June 19 birthday celebration.",
+  },
+];
+---
+
+<section aria-label="Attire inspiration by date" class="attire-hover-gallery">
+  <div class="mx-auto max-w-[1320px]">
+    {
+      sections.map((section, index) => (
+        <article
+          aria-label={`${section.date}, ${section.period}. Focus or hover to reveal attire inspiration.`}
+          class="attire-hover-section"
+          tabindex="0"
+        >
+          <div class="attire-hover-heading">
+            <p>{section.date}</p>
+            <p>{section.period}</p>
+          </div>
+          <div class="attire-hover-media">
+            <div>
+              <Image
+                alt={section.alt}
+                class="h-auto w-full bg-stone-100"
+                loading={index === 0 ? "eager" : "lazy"}
+                quality={86}
+                sizes="(min-width: 1024px) 85vw, 100vw"
+                src={section.src}
+                widths={[640, 960, 1280, section.src.width]}
+              />
+            </div>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
