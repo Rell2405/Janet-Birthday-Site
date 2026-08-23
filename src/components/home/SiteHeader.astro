@@ -1,15 +1,36 @@
 ---
 import { eventConfig } from "@/config/event";
+import {
+  pathWithBase,
+  siteTabs,
+  type TabId,
+} from "@/config/navigation";
+
+interface Props {
+  activeTab: TabId;
+  overlay?: boolean;
+}
+
+const { activeTab, overlay = false } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const homeHref = pathWithBase("/", base);
 ---
 
-<header class="absolute inset-x-0 top-0 z-40 text-white">
+<header
+  class:list={[
+    "inset-x-0 top-0 z-40 text-white",
+    overlay
+      ? "absolute"
+      : "sticky border-b border-white/10 bg-[#071f1b]/95 backdrop-blur-md",
+  ]}
+>
   <div
-    class="mx-auto flex max-w-[1480px] items-center justify-between px-5 py-6 sm:px-8 lg:px-12"
+    class="mx-auto flex max-w-[1480px] items-center justify-between px-5 py-5 sm:px-8 lg:px-12"
   >
     <a
       aria-label={`${eventConfig.identity.siteName} home`}
       class="group flex items-center gap-3"
-      href="#top"
+      href={homeHref}
     >
       <span
         aria-hidden="true"
@@ -22,42 +43,46 @@ import { eventConfig } from "@/config/event";
       </span>
     </a>
 
-    <nav aria-label="Primary navigation" class="hidden items-center gap-9 lg:flex">
-      <a class="luxury-nav-link" href="#story">The story</a>
-      <a class="luxury-nav-link" href="#itinerary">The week</a>
-      <a class="luxury-nav-link" href="#travel">Travel notes</a>
-      <a class="luxury-nav-link" href="#faq">Questions</a>
+    <nav aria-label="Birthday website sections" class="hidden items-center gap-7 xl:flex">
       {
-        eventConfig.features.rsvp ? (
-          <a class="luxury-outline-button" href="#rsvp">RSVP</a>
-        ) : null
+        siteTabs.map((tab) => (
+          <a
+            aria-current={tab.id === activeTab ? "page" : undefined}
+            class:list={[
+              "luxury-nav-link",
+              tab.id === activeTab && "text-amber-100",
+            ]}
+            href={pathWithBase(tab.path, base)}
+          >
+            {tab.label}
+          </a>
+        ))
       }
     </nav>
 
-    <details class="relative lg:hidden">
+    <details class="relative xl:hidden">
       <summary
         class="cursor-pointer list-none rounded-full border border-white/50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em]"
       >
         Menu
       </summary>
       <nav
-        aria-label="Mobile navigation"
+        aria-label="Birthday website sections"
         class="absolute right-0 top-12 grid min-w-56 gap-1 rounded-sm bg-stone-50 p-3 text-emerald-950 shadow-2xl"
       >
-        <a class="rounded px-4 py-3 hover:bg-stone-200" href="#story">The story</a>
-        <a class="rounded px-4 py-3 hover:bg-stone-200" href="#itinerary">
-          The week
-        </a>
-        <a class="rounded px-4 py-3 hover:bg-stone-200" href="#travel">
-          Travel notes
-        </a>
-        <a class="rounded px-4 py-3 hover:bg-stone-200" href="#faq">Questions</a>
         {
-          eventConfig.features.rsvp ? (
-            <a class="rounded px-4 py-3 hover:bg-stone-200" href="#rsvp">
-              RSVP
+          siteTabs.map((tab) => (
+            <a
+              aria-current={tab.id === activeTab ? "page" : undefined}
+              class:list={[
+                "rounded px-4 py-3 hover:bg-stone-200",
+                tab.id === activeTab && "bg-emerald-950 text-white",
+              ]}
+              href={pathWithBase(tab.path, base)}
+            >
+              {tab.label}
             </a>
-          ) : null
+          ))
         }
       </nav>
     </details>

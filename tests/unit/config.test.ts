@@ -12,8 +12,8 @@ describe("site configuration", () => {
     expect(eventConfig.features.playlist).toBe(false);
     expect(eventConfig.features.invitationOnlyDetails).toBe(false);
     expect(eventConfig.features.itinerary).toBe(true);
-    expect(eventConfig.features.faq).toBe(true);
-    expect(eventConfig.features.travel).toBe(true);
+    expect(eventConfig.features.faq).toBe(false);
+    expect(eventConfig.features.travel).toBe(false);
   });
 
   it("defines safe RSVP defaults", () => {

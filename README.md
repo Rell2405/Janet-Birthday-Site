@@ -1,9 +1,10 @@
-# Janet's Island Week — Jamaica 2027
+# Janet Turns 60 — Jamaica 2027
 
-An original luxury travel-inspired birthday website built around a seven-day
-sample itinerary. The visual direction uses oversized editorial typography,
-warm island tones, immersive abstract landscapes, generous whitespace, and
-subtle motion without copying the reference site's text or assets.
+An original luxury travel-inspired website for Janet’s 60th birthday
+celebration at Dreams Rose Hall Resort & Spa in Montego Bay, June 17–21, 2027.
+The site uses five static navigation tabs, validated Markdown content, supplied
+event artwork, immersive editorial layouts, and responsive accessible
+presentation.
 
 ## Tech stack
 
@@ -22,7 +23,8 @@ subtle motion without copying the reference site's text or assets.
 
 1. A full-screen island-inspired hero introduces Janet's celebration.
 2. Editorial story sections establish the tone and week-long format.
-3. Validated Markdown renders seven itinerary days, travel notes, and FAQs.
+3. Five static routes present the welcome, resort, birthday weekend, attire
+   guidance, and room-block information.
 4. The RSVP foundation remains feature-gated until production infrastructure
    and final client requirements are approved.
 

@@ -1,20 +1,16 @@
 ---
-title: Arrive into island time
-summary: Settle in, exhale, and let the week begin at an easy pace.
-date: "2027-05-24"
-startTime: "17:30"
-endTime: "20:00"
+title: Welcome to Jamaica
+summary: Arrive, settle in, explore the resort, and ease into island mode.
+date: "2027-06-17"
 timeZone: America/Jamaica
-locationLabel: North coast welcome terrace
+allDay: true
+locationLabel: Dreams Rose Hall Resort & Spa
 category: arrival
 order: 10
 visibility: public
 draft: false
 ---
 
-Meet the group over chilled drinks, light island bites, and a sunset view. The
-evening is intentionally relaxed so everyone can arrive in their own rhythm.
-
-- Dress: effortless resort wear
-- Mood: easy introductions and early-night energy
+There is no formal event planned for Thursday, giving everyone the flexibility
+to arrive throughout the day and enjoy the resort at their leisure.
 

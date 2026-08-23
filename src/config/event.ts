@@ -35,15 +35,15 @@ export interface EventConfig {
 
 export const eventConfig = {
   identity: {
-    siteName: "Janet's Journey",
+    siteName: "Janet Turns 60",
     honoree: "Janet",
-    title: "Janet's Island Week · Jamaica 2027",
+    title: "Janet’s Island in Bloom · Jamaica 2027",
     description:
-      "A seven-day birthday celebration shaped by island time, beautiful tables, and Jamaica's north coast.",
-    socialImageAlt: "Janet's Island Week — Jamaica 2027",
+      "Celebrate Janet’s 60th birthday at Dreams Rose Hall Resort & Spa in Montego Bay, Jamaica, June 17–21, 2027.",
+    socialImageAlt: "Janet’s Island in Bloom — celebrating 60 years in Jamaica",
   },
   schedule: {
-    startsAt: "2027-05-24T17:30:00-05:00",
+    startsAt: "2027-06-17T12:00:00-05:00",
     timeZone: "America/Jamaica",
     rsvpDeadline: null,
   },
@@ -55,8 +55,8 @@ export const eventConfig = {
   },
   features: {
     itinerary: true,
-    faq: true,
-    travel: true,
+    faq: false,
+    travel: false,
     rsvp: false,
     playlist: false,
     photoGallery: false,

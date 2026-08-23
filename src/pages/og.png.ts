@@ -18,12 +18,12 @@ export const GET: APIRoute = async () => {
       <div style="display:flex;position:absolute;left:52px;right:52px;top:45px;border-top:1px solid rgba(255,255,255,.45);"></div>
       <div style="display:flex;position:absolute;left:52px;right:52px;bottom:45px;border-top:1px solid rgba(255,255,255,.3);"></div>
       <div style="display:flex;flex-direction:column;justify-content:center;width:100%;height:100%;padding:70px 70px 80px;">
-        <div style="display:flex;font-family:Inter;font-weight:700;font-size:18px;letter-spacing:7px;color:#f5e7c6;">SEVEN DAYS · JAMAICA 2027</div>
+        <div style="display:flex;font-family:Inter;font-weight:700;font-size:18px;letter-spacing:7px;color:#f5e7c6;">CELEBRATING 60 YEARS · JAMAICA 2027</div>
         <div style="display:flex;flex-direction:column;font-family:Playfair;font-weight:700;font-size:104px;line-height:.84;letter-spacing:-5px;color:#ffffff;margin-top:35px;">
           <span style="display:flex;">Janet's</span>
-          <span style="display:flex;color:#f5e7c6;margin-left:90px;">island week.</span>
+          <span style="display:flex;color:#f5e7c6;margin-left:60px;">island in bloom.</span>
         </div>
-        <div style="display:flex;font-family:Inter;font-weight:400;font-size:22px;color:rgba(255,255,255,.72);margin-top:38px;">MAY 24–30 · A SAMPLE CELEBRATION ON ISLAND TIME</div>
+        <div style="display:flex;font-family:Inter;font-weight:400;font-size:22px;color:rgba(255,255,255,.72);margin-top:38px;">JUNE 17–21 · DREAMS ROSE HALL · MONTEGO BAY</div>
       </div>
     </div>
   `.trim());

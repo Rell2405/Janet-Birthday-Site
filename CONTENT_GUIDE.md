@@ -1,8 +1,9 @@
 # Public Content Authoring Guide
 
-The site uses validated Astro Markdown collections for public itinerary, FAQ,
-and travel content. Markdown is compiled into static HTML during the build, so
-content changes require a normal pull request and deployment.
+The site uses validated Astro Markdown collections for the five public
+navigation tabs, itinerary, FAQ, and travel content. Markdown is compiled into
+static HTML during the build, so content changes require a normal pull request
+and deployment.
 
 ## Security boundary
 
@@ -35,6 +36,27 @@ Organizer and RSVP data belongs in D1.
 
 Schema errors stop the build, preventing incomplete or malformed content from
 being deployed.
+
+## Five website tabs
+
+Location: `src/content/tabs/`
+
+The five required files are:
+
+- `welcome.md`
+- `resort.md`
+- `birthday-weekend.md`
+- `what-to-wear.md`
+- `book-your-stay.md`
+
+Each file has a validated `tab`, `title`, `eyebrow`, `description`, `order`,
+`visibility`, and `draft` value. The filenames and `tab` values correspond to
+the static routes and persistent navigation. Keep all five entries published so
+the navigation never points to a missing page.
+
+Tables are supported for public room-rate information. Event artwork is managed
+in `src/assets/events/` and rendered by reviewed Astro components rather than
+embedded directly in Markdown.
 
 ## Itinerary
 
@@ -119,4 +141,3 @@ Use plain Markdown by default:
 MDX and arbitrary embedded components are not enabled. If a future requirement
 needs interactivity, implement and review it as an Astro or React component
 rather than adding executable behavior to editorial content.
-

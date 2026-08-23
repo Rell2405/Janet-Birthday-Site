@@ -14,6 +14,7 @@ const renderedEntries = await Promise.all(
     Content: (await render(entry)).Content,
   })),
 );
+const dayCount = new Set(entries.map((entry) => entry.data.date)).size;
 ---
 
 <section
@@ -23,12 +24,12 @@ const renderedEntries = await Promise.all(
 >
   <div class="mx-auto max-w-[1320px]">
     <div class="mb-16 grid gap-8 lg:grid-cols-[220px_1fr] lg:gap-20">
-      <p class="luxury-kicker">Seven days, considered</p>
+      <p class="luxury-kicker">{dayCount.toString().padStart(2, "0")} days, considered</p>
       <h2
         class="max-w-4xl font-display text-[clamp(3.5rem,7vw,7.5rem)] leading-[0.88] tracking-[-0.045em]"
         id="itinerary-heading"
       >
-        The week,
+        The birthday weekend,
         <span class="italic text-amber-700">beautifully paced.</span>
       </h2>
     </div>
@@ -65,10 +66,17 @@ const renderedEntries = await Promise.all(
               <div class="md:text-right">
                 <p class="font-semibold">{formatCalendarDate(entry.data.date)}</p>
                 <p class="mt-2 text-sm text-emerald-950/75">
-                  {formatClockTime(entry.data.startTime)}
-                  {entry.data.endTime
-                    ? ` – ${formatClockTime(entry.data.endTime)}`
-                    : ""}
+                  {
+                    entry.data.allDay
+                      ? "At your leisure"
+                      : entry.data.startTime
+                        ? `${formatClockTime(entry.data.startTime)}${
+                            entry.data.endTime
+                              ? ` – ${formatClockTime(entry.data.endTime)}`
+                              : ""
+                          }`
+                        : "Time to be announced"
+                  }
                 </p>
                 {entry.data.locationLabel ? (
                   <p class="mt-4 text-sm leading-6 text-emerald-950/75">

@@ -6,7 +6,9 @@ export function sortItinerary(
 ): number {
   return (
     left.data.date.localeCompare(right.data.date) ||
-    left.data.startTime.localeCompare(right.data.startTime) ||
+    (left.data.startTime ?? "99:99").localeCompare(
+      right.data.startTime ?? "99:99",
+    ) ||
     left.data.order - right.data.order ||
     left.data.title.localeCompare(right.data.title)
   );
@@ -46,4 +48,3 @@ export function formatClockTime(time: string): string {
   const displayHours = hours % 12 || 12;
   return `${displayHours}:${minutes.toString().padStart(2, "0")} ${suffix}`;
 }
-

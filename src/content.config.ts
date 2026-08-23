@@ -30,12 +30,16 @@ const itinerary = defineCollection({
     title: z.string().trim().min(1).max(100),
     summary: z.string().trim().max(240).optional(),
     date: z.string().regex(datePattern, "Use a YYYY-MM-DD date."),
-    startTime: z.string().regex(timePattern, "Use a 24-hour HH:mm time."),
+    startTime: z
+      .string()
+      .regex(timePattern, "Use a 24-hour HH:mm time.")
+      .optional(),
     endTime: z
       .string()
       .regex(timePattern, "Use a 24-hour HH:mm time.")
       .optional(),
     timeZone,
+    allDay: z.boolean().default(false),
     locationLabel: z.string().trim().max(120).optional(),
     category: z
       .enum([
@@ -87,5 +91,24 @@ const travel = defineCollection({
   }),
 });
 
-export const collections = { itinerary, faq, travel };
+const tabPages = defineCollection({
+  loader: glob({
+    base: "./src/content/tabs",
+    pattern: "**/*.md",
+  }),
+  schema: z.object({
+    ...publicEntry,
+    tab: z.enum([
+      "welcome",
+      "resort",
+      "birthday-weekend",
+      "what-to-wear",
+      "book-your-stay",
+    ]),
+    title: z.string().trim().min(1).max(120),
+    eyebrow: z.string().trim().min(1).max(80),
+    description: z.string().trim().min(1).max(260),
+  }),
+});
 
+export const collections = { itinerary, faq, travel, tabPages };

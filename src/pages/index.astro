@@ -5,24 +5,22 @@ import { eventConfig } from "@/config/event";
 import { publicRsvpRuntimeConfig } from "@/config/runtime";
 import RsvpForm from "@/components/RsvpForm";
 import ItinerarySection from "@/components/content/ItinerarySection.astro";
-import FaqSection from "@/components/content/FaqSection.astro";
-import TravelSection from "@/components/content/TravelSection.astro";
-import { getCollection } from "astro:content";
-import { sortFaq, sortItinerary, sortTravel } from "@/lib/content";
+import { getCollection, getEntry, render } from "astro:content";
+import { sortItinerary } from "@/lib/content";
 import SiteHeader from "@/components/home/SiteHeader.astro";
 import LuxuryHero from "@/components/home/LuxuryHero.astro";
 import StorySection from "@/components/home/StorySection.astro";
 import JourneyFeature from "@/components/home/JourneyFeature.astro";
 import SiteFooter from "@/components/home/SiteFooter.astro";
+import EditorialContent from "@/components/content/EditorialContent.astro";
 
 const rsvpRuntime = publicRsvpRuntimeConfig(eventConfig.features.rsvp);
 const itinerary = (await getCollection("itinerary", ({ data }) => !data.draft)).sort(
   sortItinerary,
 );
-const faq = (await getCollection("faq", ({ data }) => !data.draft)).sort(sortFaq);
-const travel = (await getCollection("travel", ({ data }) => !data.draft)).sort(
-  sortTravel,
-);
+const welcomeEntry = await getEntry("tabPages", "welcome");
+if (!welcomeEntry) throw new Error("Welcome tab content is missing.");
+const { Content: WelcomeContent } = await render(welcomeEntry);
 ---
 
 <Layout
@@ -33,27 +31,18 @@ const travel = (await getCollection("travel", ({ data }) => !data.draft)).sort(
 >
   <SmoothScroll client:load />
 
-  <SiteHeader />
+  <SiteHeader activeTab="welcome" overlay />
   <main class="relative min-h-screen overflow-x-hidden">
     <LuxuryHero />
     <StorySection />
     <JourneyFeature />
+    <EditorialContent class="bg-[#f2eee5]">
+      <WelcomeContent />
+    </EditorialContent>
 
     {
       eventConfig.features.itinerary && itinerary.length > 0 ? (
         <ItinerarySection entries={itinerary} />
-      ) : null
-    }
-
-    {
-      eventConfig.features.travel && travel.length > 0 ? (
-        <TravelSection entries={travel} />
-      ) : null
-    }
-
-    {
-      eventConfig.features.faq && faq.length > 0 ? (
-        <FaqSection entries={faq} />
       ) : null
     }
 
