@@ -1,0 +1,29 @@
+---
+import { eventConfig } from "@/config/event";
+---
+
+<footer class="bg-[#071f1b] px-5 pb-10 pt-20 text-stone-100 sm:px-8 lg:px-12">
+  <div class="mx-auto max-w-[1480px]">
+    <div class="grid gap-14 border-b border-white/15 pb-16 lg:grid-cols-[1fr_auto]">
+      <div>
+        <p class="luxury-kicker text-amber-100">Jamaica · 2027</p>
+        <p class="mt-5 max-w-4xl font-display text-[clamp(3.6rem,8vw,8.5rem)] leading-[0.85] tracking-[-0.05em]">
+          Come for Janet.
+          <span class="block italic text-amber-100">Stay for the story.</span>
+        </p>
+      </div>
+      <nav aria-label="Footer navigation" class="grid content-end gap-3 text-sm">
+        <a class="hover:text-amber-100" href="#top">Back to top</a>
+        <a class="hover:text-amber-100" href="#itinerary">The week</a>
+        <a class="hover:text-amber-100" href="#travel">Travel notes</a>
+        <a class="hover:text-amber-100" href="#faq">Questions</a>
+      </nav>
+    </div>
+
+    <div class="flex flex-col gap-3 pt-8 text-xs uppercase tracking-[0.2em] text-white/50 sm:flex-row sm:items-center sm:justify-between">
+      <p>{eventConfig.identity.siteName}</p>
+      <p>Sample celebration concept · Details subject to client approval</p>
+    </div>
+  </div>
+</footer>
+

@@ -14,6 +14,10 @@ export default defineConfig({
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
     },
+    {
+      name: "mobile-chromium",
+      use: { ...devices["Pixel 5"] },
+    },
   ],
   webServer: {
     command: "npm run preview -- --host 127.0.0.1",
@@ -21,4 +25,3 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
   },
 });
-

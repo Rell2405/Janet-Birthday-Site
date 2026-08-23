@@ -11,9 +11,9 @@ describe("site configuration", () => {
     expect(eventConfig.features.rsvp).toBe(false);
     expect(eventConfig.features.playlist).toBe(false);
     expect(eventConfig.features.invitationOnlyDetails).toBe(false);
-    expect(eventConfig.features.itinerary).toBe(false);
-    expect(eventConfig.features.faq).toBe(false);
-    expect(eventConfig.features.travel).toBe(false);
+    expect(eventConfig.features.itinerary).toBe(true);
+    expect(eventConfig.features.faq).toBe(true);
+    expect(eventConfig.features.travel).toBe(true);
   });
 
   it("defines safe RSVP defaults", () => {
@@ -24,7 +24,7 @@ describe("site configuration", () => {
 
   it("serializes approved theme variables", () => {
     const style = serializeThemeVariables(themeConfig);
-    expect(style).toContain("--background:222 47% 6%");
-    expect(style).toContain("--radius:0.9rem");
+    expect(style).toContain("--background:42 31% 92%");
+    expect(style).toContain("--radius:0.35rem");
   });
 });

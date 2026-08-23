@@ -28,8 +28,8 @@ const apiOrigin = rsvpEnabled
 const csp = [
   "default-src 'self'",
   "img-src 'self' data:",
-  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-  "font-src 'self' data: https://fonts.gstatic.com",
+  "style-src 'self' 'unsafe-inline'",
+  "font-src 'self' data:",
   `script-src 'self' 'unsafe-inline'${rsvpEnabled ? " https://challenges.cloudflare.com" : ""}`,
   `connect-src 'self'${apiOrigin ? ` ${apiOrigin}` : ""}`,
   `frame-src 'self'${rsvpEnabled ? " https://challenges.cloudflare.com" : ""}`,
@@ -43,7 +43,7 @@ const csp = [
 <!doctype html>
 <html
   lang="en"
-  class:list={{ dark: themeConfig.colorScheme === "dark" }}
+  class={themeConfig.colorScheme}
   style={themeVariables}
 >
   <head>
@@ -83,12 +83,6 @@ const csp = [
 
     <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-    />
   </head>
   <body class="min-h-screen antialiased">
     <slot />

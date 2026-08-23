@@ -19,21 +19,6 @@ export interface EventConfig {
     description: string;
     socialImageAlt: string;
   };
-  experience: {
-    passportTitle: string;
-    passportCountry: string;
-    authority: string;
-    passenger: string;
-    origin: string;
-    destination: string;
-    destinationShort: string;
-    dateLabel: string;
-    boardingTime: string;
-    flight: string;
-    gate: string;
-    seat: string;
-    cabin: string;
-  };
   schedule: {
     startsAt: string | null;
     timeZone: string | null;
@@ -52,29 +37,14 @@ export const eventConfig = {
   identity: {
     siteName: "Janet's Journey",
     honoree: "Janet",
-    title: "Janet's Journey · First Class to Jamaica",
+    title: "Janet's Island Week · Jamaica 2027",
     description:
-      "A modern, secure boarding experience — open the passport and prepare for takeoff to Jamaica.",
-    socialImageAlt: "US passport — Janet's Journey, First Class to Jamaica",
-  },
-  experience: {
-    passportTitle: "PASSPORT",
-    passportCountry: "United States of America",
-    authority: "Ministry of Wanderlust",
-    passenger: "JANET",
-    origin: "ATL · Atlanta",
-    destination: "MBJ · Montego Bay",
-    destinationShort: "Jamaica",
-    dateLabel: "24 MAY",
-    boardingTime: "10:45 AM",
-    flight: "JB 246",
-    gate: "B7",
-    seat: "1A",
-    cabin: "FIRST CLASS",
+      "A seven-day birthday celebration shaped by island time, beautiful tables, and Jamaica's north coast.",
+    socialImageAlt: "Janet's Island Week — Jamaica 2027",
   },
   schedule: {
-    startsAt: null,
-    timeZone: null,
+    startsAt: "2027-05-24T17:30:00-05:00",
+    timeZone: "America/Jamaica",
     rsvpDeadline: null,
   },
   rsvp: {
@@ -84,9 +54,9 @@ export const eventConfig = {
     fallbackContact: null,
   },
   features: {
-    itinerary: false,
-    faq: false,
-    travel: false,
+    itinerary: true,
+    faq: true,
+    travel: true,
     rsvp: false,
     playlist: false,
     photoGallery: false,

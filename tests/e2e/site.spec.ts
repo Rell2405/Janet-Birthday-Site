@@ -1,16 +1,24 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-test("renders and opens the configured birthday experience", async ({
-  page,
-}) => {
+test("renders the luxury birthday week and seven-day itinerary", async ({ page }) => {
   await page.goto("./");
 
-  await expect(page).toHaveTitle(/Janet's Journey/);
-  const passport = page.getByRole("button", { name: "Open passport" });
-  await expect(passport).toBeVisible();
-  await passport.press("Enter");
-  await expect(page.getByText("JANET", { exact: true })).toBeVisible();
+  await expect(page).toHaveTitle(/Janet's Island Week/);
+  await expect(
+    page.getByRole("heading", { name: /Janet's island week/i }),
+  ).toBeVisible();
+  await expect(page.locator("#itinerary > div > ol > li")).toHaveCount(7);
+  await expect(
+    page.getByRole("heading", { name: "Janet's golden celebration" }),
+  ).toBeVisible();
+  await expect(page.getByText("Sample celebration concept")).toBeVisible();
+
+  const dimensions = await page.evaluate(() => ({
+    clientWidth: document.documentElement.clientWidth,
+    scrollWidth: document.documentElement.scrollWidth,
+  }));
+  expect(dimensions.scrollWidth).toBeLessThanOrEqual(dimensions.clientWidth + 1);
 });
 
 test("has no serious or critical automated accessibility violations", async ({

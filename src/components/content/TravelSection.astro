@@ -16,30 +16,39 @@ const renderedEntries = await Promise.all(
 
 <section
   aria-labelledby="travel-heading"
-  class="relative z-10 mx-auto w-full max-w-5xl px-4 py-16"
+  class="relative z-10 bg-[#123d35] px-5 py-24 text-stone-50 sm:px-8 sm:py-32 lg:px-12 lg:py-40"
   id="travel"
 >
-  <div class="mb-8 text-center">
-    <p class="text-sm font-semibold uppercase tracking-[0.25em] text-accent">
-      Plan your journey
-    </p>
-    <h2 class="mt-2 text-3xl font-bold" id="travel-heading">Travel notes</h2>
-  </div>
+  <div class="mx-auto max-w-[1320px]">
+    <div class="mb-14 grid gap-8 lg:grid-cols-[220px_1fr] lg:gap-20">
+      <p class="luxury-kicker text-amber-100">Before you go</p>
+      <h2
+        class="font-display text-[clamp(3.5rem,7vw,7rem)] leading-[0.9] tracking-[-0.045em]"
+        id="travel-heading"
+      >
+        Arrive ready.
+        <span class="italic text-amber-100">Leave lighter.</span>
+      </h2>
+    </div>
 
-  <div class="grid gap-5 md:grid-cols-2">
-    {
-      renderedEntries.map(({ entry, Content }) => (
-        <article class="rounded-xl border border-border bg-card/90 p-6 shadow-xl">
-          <h3 class="text-xl font-bold">{entry.data.title}</h3>
-          {entry.data.summary ? (
-            <p class="mt-2 text-muted-foreground">{entry.data.summary}</p>
-          ) : null}
-          <div class="content-copy mt-4">
-            <Content />
-          </div>
-        </article>
-      ))
-    }
+    <div class="grid border-l border-t border-white/20 md:grid-cols-2">
+      {
+        renderedEntries.map(({ entry, Content }, index) => (
+          <article class="min-h-80 border-b border-r border-white/20 p-7 sm:p-10">
+            <p class="flex items-center justify-between text-xs uppercase tracking-[0.24em] text-white/75">
+              <span>{entry.data.category}</span>
+              <span>{(index + 1).toString().padStart(2, "0")}</span>
+            </p>
+            <h3 class="mt-10 font-display text-4xl">{entry.data.title}</h3>
+            {entry.data.summary ? (
+              <p class="mt-4 leading-7 text-white/80">{entry.data.summary}</p>
+            ) : null}
+            <div class="content-copy content-copy-inverse mt-6">
+              <Content />
+            </div>
+          </article>
+        ))
+      }
+    </div>
   </div>
 </section>
-

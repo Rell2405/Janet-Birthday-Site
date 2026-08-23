@@ -1,8 +1,9 @@
-# Janet's Journey — First Class to Jamaica ✈️
+# Janet's Island Week — Jamaica 2027
 
-A modern, secure static landing page. Tap the animated **US passport** to open it
-into a **Jamaica boarding pass**, complete with a cabin **boarding chime** and a
-**captain "prepare for takeoff"** announcement.
+An original luxury travel-inspired birthday website built around a seven-day
+sample itinerary. The visual direction uses oversized editorial typography,
+warm island tones, immersive abstract landscapes, generous whitespace, and
+subtle motion without copying the reference site's text or assets.
 
 ## Tech stack
 
@@ -12,20 +13,18 @@ into a **Jamaica boarding pass**, complete with a cabin **boarding chime** and a
 | Interactivity      | [React](https://react.dev) islands     |
 | Styling            | [Tailwind CSS v4](https://tailwindcss.com) |
 | Components          | [shadcn/ui](https://ui.shadcn.com) primitives |
-| Animation          | [Motion](https://motion.dev) + [GSAP](https://gsap.com) |
-| Smooth scrolling   | [Lenis](https://lenis.darkroom.engineering) (Smooth UI) |
-| Audio              | Web Audio API chime + SpeechSynthesis captain voice |
+| Motion             | CSS transitions and reduced-motion-safe reveals |
+| Smooth scrolling   | [Lenis](https://lenis.darkroom.engineering) |
 | Public content     | Validated Astro Markdown content collections |
 | RSVP API foundation | Cloudflare Worker + D1 + Turnstile |
 
-## How the experience works
+## Experience structure
 
-1. The passport floats with a GSAP idle animation and a repeating gold shine sweep.
-2. Clicking (or pressing Enter/Space on) the passport flips the cover open with a
-   Motion 3D animation, revealing the boarding pass.
-3. The click is the user gesture that unlocks audio, so the boarding chime plays
-   immediately, followed by the captain's announcement — no autoplay blocking, and
-   no external/copyrighted audio files.
+1. A full-screen island-inspired hero introduces Janet's celebration.
+2. Editorial story sections establish the tone and week-long format.
+3. Validated Markdown renders seven itinerary days, travel notes, and FAQs.
+4. The RSVP foundation remains feature-gated until production infrastructure
+   and final client requirements are approved.
 
 ## Local development
 

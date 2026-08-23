@@ -1,7 +1,5 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import PassportBoardingPass from "@/components/PassportBoardingPass.tsx";
-import TravelBackground from "@/components/TravelBackground.astro";
 import SmoothScroll from "@/components/SmoothScroll.tsx";
 import { eventConfig } from "@/config/event";
 import { publicRsvpRuntimeConfig } from "@/config/runtime";
@@ -11,6 +9,11 @@ import FaqSection from "@/components/content/FaqSection.astro";
 import TravelSection from "@/components/content/TravelSection.astro";
 import { getCollection } from "astro:content";
 import { sortFaq, sortItinerary, sortTravel } from "@/lib/content";
+import SiteHeader from "@/components/home/SiteHeader.astro";
+import LuxuryHero from "@/components/home/LuxuryHero.astro";
+import StorySection from "@/components/home/StorySection.astro";
+import JourneyFeature from "@/components/home/JourneyFeature.astro";
+import SiteFooter from "@/components/home/SiteFooter.astro";
 
 const rsvpRuntime = publicRsvpRuntimeConfig(eventConfig.features.rsvp);
 const itinerary = (await getCollection("itinerary", ({ data }) => !data.draft)).sort(
@@ -30,14 +33,11 @@ const travel = (await getCollection("travel", ({ data }) => !data.draft)).sort(
 >
   <SmoothScroll client:load />
 
-  <main class="relative flex min-h-screen flex-col overflow-x-hidden">
-    <!-- travel-themed backdrop -->
-    <TravelBackground />
-
-    <!-- passport is the whole experience -->
-    <section class="relative z-10 flex flex-1 items-center justify-center px-4 py-4">
-      <PassportBoardingPass event={eventConfig} client:load />
-    </section>
+  <SiteHeader />
+  <main class="relative min-h-screen overflow-x-hidden">
+    <LuxuryHero />
+    <StorySection />
+    <JourneyFeature />
 
     {
       eventConfig.features.itinerary && itinerary.length > 0 ? (
@@ -76,4 +76,5 @@ const travel = (await getCollection("travel", ({ data }) => !data.draft)).sort(
       ) : null
     }
   </main>
+  <SiteFooter />
 </Layout>

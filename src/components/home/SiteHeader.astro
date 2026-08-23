@@ -1,0 +1,65 @@
+---
+import { eventConfig } from "@/config/event";
+---
+
+<header class="absolute inset-x-0 top-0 z-40 text-white">
+  <div
+    class="mx-auto flex max-w-[1480px] items-center justify-between px-5 py-6 sm:px-8 lg:px-12"
+  >
+    <a
+      aria-label={`${eventConfig.identity.siteName} home`}
+      class="group flex items-center gap-3"
+      href="#top"
+    >
+      <span
+        aria-hidden="true"
+        class="grid h-9 w-9 place-items-center rounded-full border border-white/50 font-display text-lg italic transition-colors group-hover:bg-white group-hover:text-emerald-950"
+      >
+        J
+      </span>
+      <span class="text-xs font-semibold uppercase tracking-[0.3em]">
+        Janet · Jamaica
+      </span>
+    </a>
+
+    <nav aria-label="Primary navigation" class="hidden items-center gap-9 lg:flex">
+      <a class="luxury-nav-link" href="#story">The story</a>
+      <a class="luxury-nav-link" href="#itinerary">The week</a>
+      <a class="luxury-nav-link" href="#travel">Travel notes</a>
+      <a class="luxury-nav-link" href="#faq">Questions</a>
+      {
+        eventConfig.features.rsvp ? (
+          <a class="luxury-outline-button" href="#rsvp">RSVP</a>
+        ) : null
+      }
+    </nav>
+
+    <details class="relative lg:hidden">
+      <summary
+        class="cursor-pointer list-none rounded-full border border-white/50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em]"
+      >
+        Menu
+      </summary>
+      <nav
+        aria-label="Mobile navigation"
+        class="absolute right-0 top-12 grid min-w-56 gap-1 rounded-sm bg-stone-50 p-3 text-emerald-950 shadow-2xl"
+      >
+        <a class="rounded px-4 py-3 hover:bg-stone-200" href="#story">The story</a>
+        <a class="rounded px-4 py-3 hover:bg-stone-200" href="#itinerary">
+          The week
+        </a>
+        <a class="rounded px-4 py-3 hover:bg-stone-200" href="#travel">
+          Travel notes
+        </a>
+        <a class="rounded px-4 py-3 hover:bg-stone-200" href="#faq">Questions</a>
+        {
+          eventConfig.features.rsvp ? (
+            <a class="rounded px-4 py-3 hover:bg-stone-200" href="#rsvp">
+              RSVP
+            </a>
+          ) : null
+        }
+      </nav>
+    </details>
+  </div>
+</header>

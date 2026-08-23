@@ -5,27 +5,27 @@ export interface ThemeConfig {
 }
 
 export const themeConfig = {
-  colorScheme: "dark",
-  themeColor: "#0a2317",
+  colorScheme: "light",
+  themeColor: "#123d35",
   cssVariables: {
-    "--background": "222 47% 6%",
-    "--foreground": "210 40% 98%",
-    "--card": "222 47% 9%",
-    "--card-foreground": "210 40% 98%",
-    "--primary": "210 90% 56%",
-    "--primary-foreground": "222 47% 8%",
-    "--secondary": "217 33% 17%",
-    "--secondary-foreground": "210 40% 98%",
-    "--muted": "217 33% 17%",
-    "--muted-foreground": "215 20% 65%",
-    "--accent": "43 96% 56%",
-    "--accent-foreground": "222 47% 8%",
+    "--background": "42 31% 92%",
+    "--foreground": "164 47% 12%",
+    "--card": "42 38% 96%",
+    "--card-foreground": "164 47% 12%",
+    "--primary": "164 55% 22%",
+    "--primary-foreground": "42 38% 96%",
+    "--secondary": "38 24% 84%",
+    "--secondary-foreground": "164 47% 12%",
+    "--muted": "38 20% 86%",
+    "--muted-foreground": "164 15% 35%",
+    "--accent": "36 61% 49%",
+    "--accent-foreground": "164 47% 12%",
     "--destructive": "0 84% 60%",
     "--destructive-foreground": "210 40% 98%",
-    "--border": "217 33% 20%",
-    "--input": "217 33% 20%",
-    "--ring": "210 90% 56%",
-    "--radius": "0.9rem",
+    "--border": "164 16% 72%",
+    "--input": "164 16% 72%",
+    "--ring": "36 61% 49%",
+    "--radius": "0.35rem",
   },
 } satisfies ThemeConfig;
 
@@ -34,4 +34,3 @@ export function serializeThemeVariables(theme: ThemeConfig): string {
     .map(([name, value]) => `${name}:${value}`)
     .join(";");
 }
-
