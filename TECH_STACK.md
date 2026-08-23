@@ -1,172 +1,597 @@
-# Technology Requirements & Versions
+# Janet Birthday Site Technology Stack
 
-This document lists the technologies, tools, and external services the Fourth of
-July Bash website depends on, along with the versions in use.
+## Document purpose
 
-- **Repository:** `Rell2405/birthday-party-site`
-- **Live site:** https://rell2405.github.io/birthday-party-site/
-- **Last updated:** 2026-07-04
+This document defines the approved target architecture and engineering standards
+for the Janet Birthday Site. It is both a technology decision record and an
+implementation guide. Items marked **Target** are approved but may not yet be
+implemented in the repository.
 
-Two independently deployed pieces make up the project:
+- **Repository:** `Rell2405/Janet-Birthday-Site`
+- **Current site:** `https://rell2405.github.io/Janet-Birthday-Site/`
+- **Target site:** a verified custom domain purchased through Namecheap and
+  hosted by GitHub Pages
+- **Last reviewed:** 2026-08-22
 
-1. **Static site** — an Astro + React + Tailwind front end, built to static
-   files and hosted on **GitHub Pages**.
-2. **API Worker** — an optional Cloudflare Worker backend that persists RSVPs
-   and playlist entries and proxies YouTube search. When it is not configured,
-   the site automatically falls back to a browser-only "demo mode"
-   (`localStorage`).
+## Executive architecture
 
----
+The site uses a static-first frontend and a separately deployed RSVP API:
 
-## Local development requirements
+1. **Website:** Astro generates static HTML and assets. GitHub Actions deploys
+   them to GitHub Pages.
+2. **Public domain:** Namecheap is the domain registrar. Cloudflare manages
+   authoritative DNS and proxies the website hostname to GitHub Pages so edge
+   security controls can be applied.
+3. **RSVP API:** A Cloudflare Worker runs on a separate API hostname, validates
+   and rate-limits submissions, verifies Turnstile tokens, and stores RSVP data
+   in Cloudflare D1.
+4. **Optional music feature:** A curated playlist is the default. Interactive
+   song search or guest submissions may be enabled later as a separately
+   approved capability.
 
-| Requirement | Version | Notes |
+```text
+Guest browser
+  |-- https://www.example.com --> Cloudflare edge --> GitHub Pages
+  |-- https://api.example.com --> Cloudflare Worker --> D1
+  |                                      |
+  |                                      +--> Turnstile Siteverify
+  |
+  +-- optional approved playlist provider
+```
+
+`www.example.com` and `api.example.com` are placeholders until the production
+domain is selected.
+
+## 1. Static-first frontend
+
+### Approved technologies
+
+| Purpose | Technology | Policy |
 | --- | --- | --- |
-| **Node.js** | `>= 22.12.0` | Enforced via `engines.node` in `package.json`. Development/CI uses **Node 22**. |
-| **npm** | `>= 10` | Ships with Node 22 (developed against npm 10.9.2). |
-| **Git** | any recent | Source control + triggers the Pages deploy on push to `main`. |
-| **Wrangler** *(API only)* | `^4.107.0` | Cloudflare CLI; only needed to run/deploy the Worker. |
+| Application framework | Astro 7 | Primary framework; static output |
+| Interactive components | React | Use only for components that require browser state |
+| Styling | Tailwind CSS 4 | Use through documented design tokens and reusable variants |
+| UI primitives | Radix UI / shadcn-style components | Use accessible primitives rather than rebuilding controls |
+| Type checking | TypeScript strict mode | Required for site and Worker code |
+| Build tool | Vite through Astro | Managed as an Astro dependency |
 
----
+The exact installed versions are recorded in `package-lock.json`. This document
+records supported major versions and architectural intent rather than
+duplicating every locked transitive version.
 
-## Front-end stack (site)
+### Rendering policy
 
-Defined in the root [`package.json`](./package.json). The **Range** column is the
-declared semver range; the **Locked** column is the exact version currently
-resolved in `package-lock.json`.
+Event details, schedule, location guidance, attire, FAQs, registry information,
+and contact instructions must render as static HTML. The site must remain useful
+when JavaScript is unavailable or fails.
 
-### Runtime dependencies
+React islands are appropriate for:
 
-| Package | Range | Locked | Purpose |
-| --- | --- | --- | --- |
-| `astro` | `^7.0.6` | `7.0.6` | Static-site framework / build tool. |
-| `react` | `^19.2.7` | `19.2.7` | Interactive UI islands. |
-| `react-dom` | `^19.2.7` | `19.2.7` | React DOM renderer / hydration. |
-| `@astrojs/react` | `^6.0.1` | `6.0.1` | Astro integration for React islands. |
-| `tailwindcss` | `^4.3.2` | `4.3.2` | Utility-first CSS (Tailwind v4). |
-| `@tailwindcss/vite` | `^4.3.2` | `4.3.2` | Tailwind v4 Vite plugin (no `tailwind.config.js`; theme is defined in `src/styles/global.css`). |
-| `@types/react` | `^19.2.17` | `19.2.17` | React type definitions. |
-| `@types/react-dom` | `^19.2.3` | `19.2.3` | React DOM type definitions. |
+- RSVP form state and confirmation
+- Countdown
+- Playlist controls
+- Photo carousel
+- Deliberate interactive effects
 
-### Dev / tooling dependencies
+Islands must use the least eager Astro hydration directive that still provides
+the intended experience. Decorative components must not delay core content or
+form controls.
 
-| Package | Range | Locked | Purpose |
-| --- | --- | --- | --- |
-| `typescript` | `^6.0.3` | `6.0.3` | Type checking for `.ts`/`.tsx`/`.astro`. |
-| `@astrojs/check` | `^0.9.9` | `0.9.9` | `astro check` diagnostics. |
-| `@playwright/test` | `^1.61.1` | `1.61.1` | End-to-end + security tests (Chromium). |
-| `@types/node` | `^26.1.0` | `26.1.0` | Node type definitions. |
-| `satori` | `^0.26.0` | `0.26.0` | Build-time: renders the social-share card (HTML/CSS → SVG). |
-| `satori-html` | `^0.3.2` | `0.3.2` | Build-time: converts an HTML template string into the VNode satori expects. |
-| `@resvg/resvg-js` | `^2.6.2` | `2.6.2` | Build-time: rasterizes satori's SVG to the final `og.png`. |
+### Performance objectives
 
-### Transitive tooling of note
+- Optimize for mobile devices and variable network quality.
+- Target Lighthouse scores of at least 90 for performance, accessibility, and
+  best practices on representative production pages.
+- Avoid shipping JavaScript for static content.
+- Define width and height for media to prevent layout shifts.
+- Lazy-load below-the-fold media.
+- Treat performance budgets as release criteria rather than optional cleanup.
 
-| Tool | Version | Notes |
-| --- | --- | --- |
-| **Vite** | `8.1.3` | Bundler/dev server used by Astro (pulled in transitively). |
-| **Playwright Chromium** | bundled with `@playwright/test 1.61.1` | Browser used for the test suite. |
+## 2. Visual system, media, and motion
 
-### Social share image (Open Graph)
+### Design system
 
-The 1200×630 link-preview card is generated **at build time** — no external
-image service — by the `src/pages/og.png.ts` endpoint, which is prerendered to
-`dist/og.png` during `astro build` and referenced from `og:image` /
-`twitter:image` in `src/layouts/Layout.astro`.
+Tailwind is the styling foundation. Theme values must be centralized rather
+than repeated as arbitrary values throughout components.
 
-| Item | Detail |
+The design system must define:
+
+- Brand and semantic colors with accessible contrast
+- Typography families, sizes, weights, and line heights
+- Spacing and responsive breakpoints
+- Borders, radii, elevation, and focus treatments
+- Button, link, card, dialog, and form-control variants
+- Motion durations and easing
+- Error, warning, success, disabled, loading, and empty states
+
+Reusable variants should use the existing component utilities where
+appropriate. Visual consistency and accessibility take priority over one-off
+effects.
+
+### Images and fonts
+
+- Keep local content images in `src/` and render them with Astro's `<Image />`
+  or `<Picture />` components so they can be resized and optimized at build
+  time.
+- Use responsive image sizes and modern formats while retaining a compatible
+  fallback.
+- Reserve `public/` for assets that must be copied without transformation, such
+  as favicons or explicitly pre-optimized files.
+- Provide meaningful alternative text, or an empty `alt` value for decorative
+  images.
+- Self-host WOFF2 web fonts when licensing permits. Preload only fonts required
+  for initial rendering.
+- Generate the Open Graph image at build time from the same event-data source
+  used by the website.
+
+### Motion
+
+Use CSS transitions for simple effects and **Motion** as the default component
+animation library. GSAP is permitted only for complex sequences that cannot be
+implemented clearly with CSS or Motion. Lenis or another custom smooth-scroll
+implementation is optional and should be retained only when usability testing
+shows a meaningful benefit.
+
+All motion must:
+
+- Honor `prefers-reduced-motion`
+- Preserve keyboard and screen-reader operation
+- Never block access to event details or RSVP controls
+- Avoid unexpected audio or motion before a user gesture
+- Remain usable on low-power mobile devices
+
+## 3. RSVP capability: approved Option C
+
+The approved RSVP model is a custom, branded form backed by a Cloudflare Worker
+and D1. The backend is a required production dependency once the RSVP form is
+enabled.
+
+### RSVP responsibilities
+
+The Worker will:
+
+1. Accept only documented API routes and HTTP methods.
+2. Enforce request content type and a small maximum request size.
+3. Validate Turnstile before processing a submission.
+4. Rate-limit submission and update routes.
+5. Validate and normalize all fields on the server.
+6. Write parameterized queries through the D1 binding.
+7. Return a generic success or error response without exposing internals.
+8. Avoid logging guest names, messages, contact details, or Turnstile tokens.
+
+Suggested minimum RSVP fields:
+
+| Field | Requirement |
 | --- | --- |
-| Pipeline | `satori-html` (template → VNode) → `satori` (VNode → SVG) → `@resvg/resvg-js` (SVG → PNG). |
-| Fonts | Vendored **WOFF** files in `src/assets/og-fonts/` (`inter-400`, `inter-700`, `fraunces-700`), read at build via `process.cwd()`. |
-| Font format note | satori accepts `ttf`/`otf`/`woff` but **not** `woff2`; satori converts text to vector paths, so resvg needs no fonts. |
-| Content source | Event details come from `src/data/party.ts` (single source of truth). |
+| RSVP ID | Server-generated opaque identifier |
+| Guest or household name | Required, length limited |
+| Attendance status | Required, allowlisted value |
+| Party size | Required, bounded integer |
+| Dietary restrictions | Optional, length limited |
+| Guest message | Optional, length limited |
+| Created and updated timestamps | Server generated |
 
----
+Email addresses and telephone numbers should not be collected unless an
+approved guest-communication workflow requires them.
 
-## Backend stack (Cloudflare Worker API)
+### Guest changes
 
-Defined in [`worker/package.json`](./worker/package.json) and
-[`worker/wrangler.toml`](./worker/wrangler.toml).
+If guests may update an RSVP, use an unguessable, revocable update token. Do not
+expose sequential database identifiers. Security-sensitive identifiers must use
+Web Crypto, such as `crypto.randomUUID()` or `crypto.getRandomValues()`, rather
+than `Math.random()`.
 
-| Package / setting | Value | Purpose |
+### Production availability
+
+Browser-only demo storage may be used during local development, but it must not
+be presented as a successful production RSVP.
+
+If the API is unavailable:
+
+- Tell the guest that the RSVP could not be submitted.
+- Preserve entered values for retry when practical.
+- Provide an alternate contact method.
+- Do not silently downgrade to `localStorage`.
+
+## 4. Cloudflare D1 data layer
+
+D1 replaces GitHub repository files as the RSVP datastore. The Worker accesses
+D1 through a binding; browsers never connect directly to the database.
+
+### Database standards
+
+- Store schema migrations in version control.
+- Use SQLite `STRICT` tables where compatible with the schema.
+- Define primary keys, uniqueness constraints, foreign keys where needed, and
+  indexes for actual lookup patterns.
+- Use prepared statements with bound values for every guest-supplied value.
+- Generate Worker binding types with `wrangler types`.
+- Maintain separate development, staging, and production databases.
+- Test migrations against local and staging databases before production.
+- Document export, recovery, and post-event deletion procedures.
+- Do not use D1 or rate limiting as a substitute for input authorization and
+  validation.
+
+### Administrative access
+
+The public API must not expose a guest-list endpoint. Organizer access should
+use a separate protected workflow, such as a Cloudflare Access-protected
+administrative endpoint or an authenticated export process. Administrative
+authorization must not rely on a hidden URL.
+
+## 5. RSVP security controls
+
+### Input and request controls
+
+- Validate every field on the server using explicit allowlists, types, ranges,
+  and maximum lengths.
+- Use a shared TypeScript schema where it can safely keep client and server
+  validation consistent. Client validation improves usability; server
+  validation is authoritative.
+- Reject unsupported methods and content types.
+- Enforce a maximum body size before fully consuming a request.
+- Encode all guest-provided content when displayed.
+- Never render guest input as raw HTML.
+
+### Bot and abuse protection
+
+- Protect public write routes with Cloudflare Turnstile.
+- Always verify Turnstile tokens through Siteverify on the Worker; the browser
+  widget alone is not security.
+- Treat tokens as short-lived and single-use.
+- Add a Cloudflare Rate Limiting binding for RSVP writes and updates.
+- Choose a rate-limit key that minimizes harm to legitimate guests sharing
+  mobile networks or household connections.
+- Return HTTP `429` for limited requests and provide a usable retry message.
+- Monitor aggregate rejected-request counts without recording RSVP content.
+
+### Origin and transport controls
+
+- Allow only the exact production site origin and documented local-development
+  origins through CORS.
+- Do not use `Access-Control-Allow-Origin: *` for RSVP endpoints.
+- Remember that CORS is not authentication and does not prevent direct API
+  requests.
+- Serve the site and API only over HTTPS.
+- Return `Cache-Control: no-store` for RSVP submissions, lookups, and
+  administrative responses.
+
+### Secrets and errors
+
+- Store Turnstile and other secrets with Wrangler secret management.
+- Never place secrets in source, `wrangler.jsonc`, client environment
+  variables, build output, or logs.
+- Use structured internal errors and generic public responses.
+- Do not silently swallow D1, Turnstile, or upstream failures.
+- Configure secret rotation and emergency revocation procedures.
+
+## 6. Public and invitation-only content
+
+The team must classify every event field before launch.
+
+| Classification | Examples | Delivery |
 | --- | --- | --- |
-| **Runtime** | Cloudflare Workers (V8 isolates) | Serverless API host. |
-| `wrangler` | `^4.107.0` | Build/dev/deploy CLI for the Worker. |
-| `@cloudflare/workers-types` | `^4.20241106.0` | Workers type definitions. |
-| `typescript` | `^5.6.3` | Type checking for the Worker (`tsc --noEmit`). |
-| `compatibility_date` | `2024-11-01` | Cloudflare runtime compatibility date. |
-| `DATA_REPO` | `Rell2405/birthday-party-data` | Private repo used as a JSON datastore. |
-| `DATA_BRANCH` | `main` | Branch the Worker commits data to. |
-| `ALLOWED_ORIGIN` | `https://rell2405.github.io,http://localhost:4321` | CORS allowlist (comma-separated). |
+| Public | Theme, general description, non-sensitive schedule | Static HTML |
+| Invitation-only | Exact private address, access instructions, private contact details | Authorized API response |
+| Private organizer data | Guest list, RSVP status, dietary notes, internal notes | Protected administrative access only |
 
-**Worker secrets** (set with `wrangler secret put`, never committed):
+An obscure URL is not access control. Sensitive event details must not be
+embedded in generated HTML, source maps, JavaScript bundles, public JSON, image
+metadata, or repository content.
 
-- `GITHUB_TOKEN` — fine-grained PAT with Contents read/write on the data repo.
-- `YOUTUBE_API_KEY` — key for the YouTube Data API v3.
+If invitation-only details are required, the Worker should validate an
+invitation credential before returning them. Invitation credentials must be
+unguessable and revocable. The site must not reveal whether a specific person
+is invited through distinguishable public errors.
 
----
+## 7. Privacy and retention
 
-## External services & APIs
+The site will follow data minimization:
 
-| Service | Used for | Auth |
+- Collect only information needed to plan the party.
+- Explain what is collected and how it will be used near the RSVP form.
+- Limit access to designated organizers.
+- Do not sell or share RSVP information for advertising.
+- Do not place personal information in analytics, traces, or error reports.
+- Provide an organizer-supported process to correct or remove an RSVP.
+- Define a deletion date before opening RSVPs.
+- Delete or anonymize RSVP records after the event and its reconciliation
+  period.
+- Obtain appropriate permission before publishing identifiable guest photos.
+
+The final retention interval is a product decision and must be recorded before
+production RSVP collection begins.
+
+## 8. Optional music and playlist capability
+
+Music is optional and must not delay the core site or RSVP launch.
+
+### Default recommendation
+
+Embed a host-curated playlist using the provider's privacy-enhanced option when
+available. Alternatively, collect a bounded text song suggestion with the RSVP
+and require organizer approval before adding it to a playlist.
+
+### Optional interactive search
+
+Live YouTube search and playlist submission may be enabled only after approval
+of:
+
+- API key restrictions and secret storage
+- Daily quota and failure behavior
+- Server-side query validation and length limits
+- Rate limiting
+- Content moderation and organizer removal workflow
+- Safe output encoding for third-party titles and thumbnails
+- A CSP allowlist for the required provider domains
+- A graceful experience when the provider is unavailable
+
+The API key must remain in the Worker. It must never be exposed in browser code
+or a public build variable.
+
+## 9. Hosting, custom domains, and DNS
+
+### Selected topology
+
+GitHub Pages can be used with a Cloudflare D1 backend because D1 is accessed by
+the Cloudflare Worker, not by GitHub Pages or browser code.
+
+The domain will be purchased and retained at Namecheap. After purchase, the
+domain will be added to Cloudflare and its Namecheap nameserver settings will be
+changed to the authoritative nameservers assigned by Cloudflare. A registrar
+transfer is not required.
+
+Recommended hostnames:
+
+| Hostname | Service | Purpose |
 | --- | --- | --- |
-| **GitHub Pages** | Hosting the static site. | GitHub Actions OIDC (`id-token`). |
-| **GitHub Contents API** | Storing `rsvps.json` / `playlist.json` in a private repo. | `GITHUB_TOKEN` secret (Worker). |
-| **YouTube Data API v3** | Song search + video IDs for the playlist player. | `YOUTUBE_API_KEY` secret (Worker). |
-| **Cloudflare Workers** | Hosting the API backend. | Cloudflare account (Wrangler). |
-| **Google Fonts** | `Fraunces` + `Inter` web fonts. | None (public CDN). |
+| `www.example.com` | GitHub Pages, proxied through Cloudflare | Static website |
+| `api.example.com` | Cloudflare Worker Custom Domain | RSVP API |
+| `example.com` | Redirect to `www.example.com` | Canonical entry point |
 
----
+### Domain configuration requirements
 
-## Deployment & CI
+1. Enable Namecheap account multi-factor authentication, registrar lock,
+   contact privacy, and automatic renewal. Store recovery information with the
+   designated site owner.
+2. Add the domain as a Cloudflare DNS zone and replace the Namecheap default
+   nameservers with the exact nameservers assigned by Cloudflare.
+3. Verify ownership of the domain with GitHub before attaching it to the
+   repository.
+4. Configure the custom domain in GitHub Pages before publishing its DNS record
+   to reduce domain-takeover risk.
+5. Point the website hostname at `Rell2405.github.io` as GitHub documents; do
+   not include the repository name in the CNAME target.
+6. Avoid wildcard DNS records.
+7. Enable and verify HTTPS on GitHub Pages.
+8. Proxy the production website hostname through Cloudflare when Cloudflare
+   response-header or edge controls are required.
+9. Configure `api.example.com` as the Worker's Custom Domain. It must be a
+   distinct hostname and cannot retain a conflicting CNAME record.
+10. Set Astro's `site` to the canonical custom-domain URL and use `/` as the
+   production base path after migration.
+11. Configure the Worker CORS allowlist with the exact canonical origin.
+12. Verify the GitHub Pages default URL redirects to the custom domain and do
+    not advertise the fallback URL.
 
-Site deploys automatically via GitHub Actions on every push to `main`
-([`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml)).
+### Architectural boundary
 
-| Component | Version |
+GitHub Pages serves only static files. It cannot access D1 directly. All
+database operations, Turnstile validation, secret use, and privileged logic
+must remain in the Worker.
+
+## 10. Reproducible development and builds
+
+### Runtime policy
+
+| Requirement | Policy |
 | --- | --- |
-| Runner | `ubuntu-latest` |
-| `actions/checkout` | `v4` |
-| `actions/configure-pages` | `v5` |
-| `actions/setup-node` | `v4` (Node `22`, npm cache) |
-| `actions/upload-pages-artifact` | `v3` |
-| `actions/deploy-pages` | `v4` |
+| Node.js | Node 22, declared in `engines` and `.nvmrc` or `.node-version` |
+| npm | Version compatible with the approved Node release |
+| Lockfile | `package-lock.json` committed and reviewed |
+| Clean install | `npm ci` for CI and documented reproducible setup |
+| TypeScript | Strict configuration for frontend and Worker |
+| Wrangler | Locked development dependency in the Worker workspace |
 
-Build-time environment variables:
+Use `npm install` only when intentionally changing dependencies. Dependabot or
+Renovate should propose scheduled dependency and GitHub Actions updates.
 
-- `BASE_PATH` — injected from Pages so the site builds under
-  `/birthday-party-site/` (local dev stays at `/`).
-- `PUBLIC_API_BASE` — Actions **variable** pointing at the deployed Worker URL.
-  When unset, the site builds in demo mode.
+### Required commands
 
-The Worker is deployed separately with `wrangler deploy` from the `worker/`
-directory.
-
----
-
-## Browser support & progressive enhancement
-
-- Targets modern evergreen browsers (Chrome, Edge, Firefox, Safari).
-- Core content (event details, schedule, FAQ) is static HTML and works without
-  JavaScript. Interactive islands (countdown, RSVP form, playlist, and the
-  decorative fireworks / grill / sparkler-cursor motion graphics) are hydrated
-  progressively with Astro's `client:*` directives.
-- All motion graphics honour the `prefers-reduced-motion` user setting.
-
----
-
-## Quick reference — key commands
+The repository should expose stable scripts for:
 
 ```bash
-# Site (run from repo root)
-npm install            # install dependencies
-npm run dev            # local dev server (http://localhost:4321)
-npm run build          # production build -> dist/
-npm run preview        # serve the production build locally
-npm test               # Playwright e2e + security suite
-
-# Worker (run from ./worker)
-npm install
-npm run dev            # local Worker (wrangler dev)
-npm run deploy         # deploy to Cloudflare
+npm ci
+npm run dev
+npm run check
+npm run test
+npm run build
+npm run preview
 ```
+
+The Worker workspace should expose corresponding development, type-check,
+test, migration, and deployment commands.
+
+### Configuration policy
+
+- Commit safe defaults and examples.
+- Keep local secrets in ignored development-secret files.
+- Validate required public configuration during the build.
+- Fail production builds when required API settings are absent.
+- Do not use success-shaped configuration fallbacks in production.
+
+## 11. CI/CD and operational controls
+
+### Pull request checks
+
+Every pull request must run:
+
+1. Reproducible install with `npm ci`
+2. Astro and TypeScript checks
+3. Production build
+4. Unit tests for validation and authorization logic
+5. Browser tests for critical navigation and RSVP flows
+6. Automated accessibility checks
+7. Dependency and workflow security checks
+
+### Deployment workflow
+
+- Deploy the site to GitHub Pages only after required checks pass.
+- Deploy the Worker through an automated, independently observable job.
+- Apply D1 migrations as an explicit reviewed deployment step.
+- Maintain separate staging and production Worker environments and D1
+  databases.
+- Require approval for the production environment where practical.
+- Grant each job only the GitHub token permissions it needs.
+- Pin third-party GitHub Actions to full commit SHAs and retain version comments
+  for maintainability.
+- Use a narrowly scoped Cloudflare API token unless a supported short-lived
+  workload identity is configured.
+- Protect workflow and infrastructure files with `CODEOWNERS`.
+- Prevent overlapping production deployments with concurrency controls.
+
+### Worker configuration
+
+- Use `wrangler.jsonc` for new Worker configuration.
+- Set a current `compatibility_date` when the Worker is created and review it
+  periodically with tests before updating.
+- Enable `nodejs_compat` only as required by the selected dependencies; document
+  why it is enabled.
+- Generate environment and binding types with `wrangler types`.
+- Declare bindings separately for staging and production.
+- Enable structured Workers logs and traces with an intentional sampling rate.
+- Treat all promises explicitly: await them, return them, or pass non-critical
+  post-response work to `ctx.waitUntil()`.
+- Keep request-specific mutable state out of module scope.
+
+### Recovery
+
+Document how to:
+
+- Roll back the static deployment
+- Roll back the Worker
+- Recover or export D1 data
+- Revoke compromised secrets
+- Disable RSVP writes without taking down event information
+- Provide guests with an alternate RSVP method during an incident
+
+## 12. Browser and API security headers
+
+The production website hostname should be proxied through Cloudflare so
+Response Header Transform Rules, or an equivalent reviewed edge configuration,
+can add headers that GitHub Pages does not directly expose for repository
+configuration.
+
+### Website policy
+
+At minimum, configure and test:
+
+```text
+Content-Security-Policy:
+  default-src 'self';
+  base-uri 'self';
+  object-src 'none';
+  frame-ancestors 'none';
+  form-action 'self' https://api.example.com;
+  upgrade-insecure-requests
+
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+Permissions-Policy: geolocation=(), camera=(), microphone=()
+```
+
+The final CSP must also enumerate the exact script, frame, image, font, style,
+and connection origins required by Turnstile and any approved playlist
+provider. Avoid broad wildcards and remove allowances when integrations are
+retired.
+
+Use an HTTP response header for CSP in production. A CSP meta element may
+provide defense in depth for static content, but directives such as
+`frame-ancestors` are not effective when delivered through a meta element.
+
+HSTS should be enabled only after HTTPS is confirmed across every included
+hostname. Cache rules must distinguish immutable static assets from HTML.
+
+### API policy
+
+Worker responses must include:
+
+- Explicit content types
+- Exact-origin CORS headers only on approved routes
+- `Vary: Origin` when responses vary by origin
+- `Cache-Control: no-store` for RSVP and administrative data
+- `X-Content-Type-Options: nosniff`
+
+Preflight responses must allow only required methods and headers. API responses
+must not include secrets, stack traces, database details, or guest information
+outside an authorized operation.
+
+## Accessibility and browser support
+
+- Target current evergreen Chrome, Edge, Firefox, and Safari releases.
+- Meet WCAG 2.2 AA for the RSVP journey and core event information.
+- Support keyboard navigation, visible focus, semantic landmarks, appropriate
+  labels, status announcements, and sufficient contrast.
+- Test at common mobile viewport sizes and at 200% zoom.
+- Do not rely on color, animation, hover, audio, or drag gestures as the only
+  way to communicate or complete an action.
+
+## Delivery phases
+
+### Phase 1: frontend foundation
+
+- Static Astro experience
+- Tailwind design tokens and reusable components
+- Responsive optimized media
+- Accessibility and reduced-motion compliance
+- Reproducible CI checks
+- Custom domain, HTTPS, and browser security headers
+- Public versus invitation-only content classification
+
+### Phase 2: RSVP service
+
+- Worker project and environment configuration
+- D1 schema and version-controlled migrations
+- Server-side validation
+- Turnstile and rate limiting
+- Privacy notice and retention period
+- Staging and production deployment
+- Recovery and alternate RSVP procedure
+
+### Phase 3: optional capabilities
+
+- Curated playlist or approved song-request workflow
+- Protected organizer export or dashboard
+- Privacy-conscious analytics and operational alerts
+
+## Approval status
+
+The following decisions are approved for incorporation:
+
+- Astro static-first frontend
+- Tailwind-based documented visual system
+- Minimal React islands
+- Custom RSVP Option C
+- Cloudflare Worker with D1
+- Turnstile, rate limiting, server validation, and production-safe failures
+- Public/invitation-only/private content classification
+- Data-minimization and retention policy
+- GitHub Pages with a Cloudflare-managed custom domain
+- Separate Worker API custom domain
+- Reproducible builds and hardened CI/CD
+- Browser and API security headers
+
+The music and playlist capability remains optional.
+
+## References
+
+- [Astro image guidance](https://docs.astro.build/en/guides/images/)
+- [GitHub Pages custom domains](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages)
+- [GitHub Actions secure use](https://docs.github.com/en/actions/reference/security/secure-use)
+- [Cloudflare Workers best practices](https://developers.cloudflare.com/workers/best-practices/workers-best-practices/)
+- [Cloudflare Worker Custom Domains](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/)
+- [Cloudflare D1 Worker Binding API](https://developers.cloudflare.com/d1/worker-api/)
+- [Cloudflare Rate Limiting binding](https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/)
+- [Cloudflare Turnstile server-side validation](https://developers.cloudflare.com/turnstile/get-started/server-side-validation/)
+- [Cloudflare Response Header Transform Rules](https://developers.cloudflare.com/rules/transform/response-header-modification/)
+- [OWASP HTTP Headers Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html)
