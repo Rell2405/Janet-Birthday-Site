@@ -13,11 +13,6 @@ const tabs = [
     heading: "Dreams Rose Hall Resort & Spa",
   },
   {
-    path: "./birthday-weekend/",
-    title: /The celebration/,
-    heading: "The celebration",
-  },
-  {
     path: "./what-to-wear/",
     title: /birthday weekend style guide/i,
     heading: "The birthday weekend style guide",
@@ -29,7 +24,7 @@ const tabs = [
   },
 ] as const;
 
-test("renders all five navigation tabs and official weekend events", async ({
+test("renders all four navigation tabs and official weekend events", async ({
   page,
 }) => {
   for (const tab of tabs) {
@@ -45,9 +40,6 @@ test("renders all five navigation tabs and official weekend events", async ({
   await expect(
     page.getByRole("heading", { name: "Janet’s Island in Bloom" }),
   ).toBeVisible();
-
-  await page.goto("./birthday-weekend/");
-  await expect(page.getByRole("img")).toHaveCount(0);
 
   await page.goto("./what-to-wear/");
   await expect(page.getByRole("tab")).toHaveCount(0);
@@ -98,7 +90,12 @@ test("renders all five navigation tabs and official weekend events", async ({
   expect(dimensions.scrollWidth).toBeLessThanOrEqual(dimensions.clientWidth + 1);
 });
 
-test("all five tabs have no serious or critical accessibility violations", async ({
+test("removed Birthday Weekend route is not published", async ({ page }) => {
+  const response = await page.goto("./birthday-weekend/");
+  expect(response?.status()).toBe(404);
+});
+
+test("all four tabs have no serious or critical accessibility violations", async ({
   page,
 }) => {
   for (const tab of tabs) {

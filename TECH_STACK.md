@@ -49,7 +49,7 @@ domain is selected.
 | Static Astro frontend | Implemented | Client content and visual approval |
 | Typed event and theme configuration | Implemented | Final event values and theme |
 | Validated Markdown content collections | Implemented with client tab copy and event schedule | Final timing, location, and booking updates |
-| Five-tab static navigation | Implemented | Final booking link and remaining event timing |
+| Four-tab static navigation | Implemented | Final booking link and remaining event timing |
 | Responsive event artwork | Implemented | Supplied event imagery and approved alt text |
 | Feature flags | Implemented, disabled by default | Approved optional capabilities |
 | Accessible RSVP form scaffold | Implemented, disabled by default | Client fields and production enablement |
