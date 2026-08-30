@@ -131,12 +131,18 @@ test("removed Birthday Weekend route is not published", async ({ page }) => {
   expect(response?.status()).toBe(404);
 });
 
-test("before-you-go page includes the communication placeholder and attire link", async ({
+test("before-you-go page includes WhatsApp community and attire links", async ({
   page,
 }) => {
   await page.goto("./things-to-know/");
 
-  await expect(page.getByText("[COMMUNICATION APP]").first()).toBeVisible();
+  await expect(page.getByText("[COMMUNICATION APP]")).toHaveCount(0);
+  await expect(
+    page.getByRole("link", { name: "Join the WhatsApp community" }),
+  ).toHaveAttribute(
+    "href",
+    "https://chat.whatsapp.com/J05JDBlC1umADP7IWZykan",
+  );
   await expect(
     page.getByRole("link", { name: "What to Wear" }).first(),
   ).toHaveAttribute("href", "../what-to-wear/");
