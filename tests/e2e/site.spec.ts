@@ -61,13 +61,14 @@ test("renders all four navigation tabs and official weekend events", async ({
   }
 
   await page.goto("./");
-  await expect(page.locator("#itinerary > div > ol > li")).toHaveCount(7);
   await expect(
-    page.getByRole("heading", { name: "Janet’s Island in Bloom" }),
-  ).toBeVisible();
+    page.getByRole("heading", { name: "Celebration dates" }),
+  ).toHaveCount(0);
+  await expect(page.locator("#itinerary")).toHaveCount(0);
 
   await page.goto("./what-to-wear/");
   await expect(page.getByRole("tab")).toHaveCount(0);
+  await expect(page.locator(".attire-hover-gallery img")).toHaveCount(6);
   const fridayDay = page.getByRole("article", {
     name: /Friday, June 18, Daytime/i,
   });
@@ -101,12 +102,16 @@ test("renders all four navigation tabs and official weekend events", async ({
     name: /Thursday, June 17, Arrival day/i,
   });
   await thursday.focus();
-  await expect(page.getByText("Resort chic", { exact: true })).toBeVisible();
+  await expect(
+    page.getByRole("img", { name: /Arrival Day attire board/i }),
+  ).toBeVisible();
   const sunday = page.getByRole("article", {
     name: /Sunday, June 20, Daytime/i,
   });
   await sunday.focus();
-  await expect(page.getByText("Resort wear", { exact: true })).toBeVisible();
+  await expect(
+    page.getByRole("img", { name: /Free Day to Explore board/i }),
+  ).toBeVisible();
 
   const dimensions = await page.evaluate(() => ({
     clientWidth: document.documentElement.clientWidth,
@@ -151,6 +156,8 @@ test("Resort page keeps the hotel link and shows the supplied gallery", async ({
   await expect(
     page.getByRole("heading", { name: "Your island escape" }),
   ).toHaveCount(0);
+  await expect(page.getByText("P.O. Box 999")).toHaveCount(0);
+  await expect(page.getByText("Rose Hall Road")).toHaveCount(0);
   await expect(
     page.getByRole("link", { name: "Explore Dreams Rose Hall Resort & Spa" }),
   ).toBeVisible();

@@ -36,10 +36,13 @@ const homeHref = pathWithBase("/", base);
       </span>
     </a>
 
-    <details class="group/menu pointer-events-auto relative" data-site-menu>
-      <summary
+    <div class="pointer-events-auto relative" data-site-menu>
+      <button
+        aria-controls="site-menu-panel"
+        aria-expanded="false"
         class="flex cursor-pointer list-none items-center gap-3 rounded-full border border-white/15 bg-[#071f1b]/70 px-5 py-3 text-xs font-semibold uppercase tracking-[0.22em] shadow-[0_12px_40px_rgba(4,30,26,0.22)] backdrop-blur-xl transition-colors hover:bg-[#071f1b]/85"
         data-header-menu
+        type="button"
       >
         Menu
         <span aria-hidden="true" class="grid grid-cols-2 gap-[3px]">
@@ -48,11 +51,13 @@ const homeHref = pathWithBase("/", base);
           <span class="h-[3px] w-[3px] rounded-full bg-current"></span>
           <span class="h-[3px] w-[3px] rounded-full bg-current"></span>
         </span>
-      </summary>
+      </button>
       <nav
         aria-label="Birthday website sections"
         class="absolute right-0 top-14 grid min-w-64 gap-1 rounded-3xl border border-white/15 bg-[#071f1b]/85 p-2 text-white shadow-2xl backdrop-blur-xl"
         data-menu-panel
+        hidden
+        id="site-menu-panel"
       >
         {
           siteTabs.map((tab) => (
@@ -69,33 +74,41 @@ const homeHref = pathWithBase("/", base);
           ))
         }
       </nav>
-    </details>
+    </div>
   </div>
 </header>
 
 <script>
-  const menus = document.querySelectorAll<HTMLDetailsElement>(
-    "[data-site-menu]",
-  );
+  const menus = document.querySelectorAll<HTMLElement>("[data-site-menu]");
 
   for (const menu of menus) {
-    const summary = menu.querySelector("summary");
+    const trigger = menu.querySelector<HTMLButtonElement>("[data-header-menu]");
+    const panel = menu.querySelector<HTMLElement>("[data-menu-panel]");
     const supportsHover = window.matchMedia("(hover: hover)").matches;
+    let pointerInside = false;
+    const isOpen = () => trigger?.getAttribute("aria-expanded") === "true";
+    const setOpen = (open: boolean) => {
+      trigger?.setAttribute("aria-expanded", String(open));
+      if (panel) panel.hidden = !open;
+    };
     const close = () => {
-      menu.open = false;
+      setOpen(false);
     };
 
     menu.addEventListener("pointerenter", (event) => {
-      if (supportsHover && event.pointerType === "mouse") menu.open = true;
+      if (supportsHover && event.pointerType === "mouse") {
+        pointerInside = true;
+        setOpen(true);
+      }
     });
     menu.addEventListener("pointerleave", (event) => {
-      if (supportsHover && event.pointerType === "mouse") close();
-    });
-    summary?.addEventListener("click", (event) => {
-      if (supportsHover && event.detail > 0) {
-        event.preventDefault();
-        menu.open = true;
+      if (supportsHover && event.pointerType === "mouse") {
+        pointerInside = false;
+        close();
       }
+    });
+    trigger?.addEventListener("click", () => {
+      setOpen(supportsHover && pointerInside ? true : !isOpen());
     });
     menu.addEventListener("focusout", () => {
       window.setTimeout(() => {
@@ -105,7 +118,7 @@ const homeHref = pathWithBase("/", base);
     menu.addEventListener("keydown", (event) => {
       if (event.key === "Escape") {
         close();
-        summary?.focus();
+        trigger?.focus();
       }
     });
     document.addEventListener("pointerdown", (event) => {
