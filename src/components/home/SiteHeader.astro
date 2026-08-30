@@ -8,28 +8,21 @@ import {
 
 interface Props {
   activeTab: TabId;
-  overlay?: boolean;
 }
 
-const { activeTab, overlay = false } = Astro.props;
+const { activeTab } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const homeHref = pathWithBase("/", base);
 ---
 
-<header
-  class:list={[
-    "inset-x-0 top-0 z-40 text-white",
-    overlay
-      ? "absolute"
-      : "sticky border-b border-white/10 bg-[#071f1b]/95 backdrop-blur-md",
-  ]}
->
+<header class="pointer-events-none fixed inset-x-0 top-0 z-50 text-white">
   <div
-    class="mx-auto flex max-w-[1480px] items-center justify-between px-5 py-5 sm:px-8 lg:px-12"
+    class="mx-auto flex max-w-[1480px] items-center justify-between gap-4 px-4 py-4 sm:px-8 lg:px-12"
   >
     <a
       aria-label={`${eventConfig.identity.siteName} home`}
-      class="group flex items-center gap-3"
+      class="group pointer-events-auto flex items-center gap-3 rounded-full border border-white/15 bg-[#071f1b]/70 py-2 pl-2 pr-5 shadow-[0_12px_40px_rgba(4,30,26,0.22)] backdrop-blur-xl transition-colors hover:bg-[#071f1b]/85"
+      data-header-home
       href={homeHref}
     >
       <span
@@ -43,14 +36,18 @@ const homeHref = pathWithBase("/", base);
       </span>
     </a>
 
-    <nav aria-label="Birthday website sections" class="hidden items-center gap-7 xl:flex">
+    <nav
+      aria-label="Birthday website sections"
+      class="pointer-events-auto hidden items-center gap-1 rounded-full border border-white/15 bg-[#071f1b]/70 p-1.5 shadow-[0_12px_40px_rgba(4,30,26,0.22)] backdrop-blur-xl xl:flex"
+      data-header-menu
+    >
       {
         siteTabs.map((tab) => (
           <a
             aria-current={tab.id === activeTab ? "page" : undefined}
             class:list={[
               "luxury-nav-link",
-              tab.id === activeTab && "text-amber-100",
+              tab.id === activeTab && "bg-white/15 text-amber-100",
             ]}
             href={pathWithBase(tab.path, base)}
           >
@@ -60,23 +57,24 @@ const homeHref = pathWithBase("/", base);
       }
     </nav>
 
-    <details class="relative xl:hidden">
+    <details class="pointer-events-auto relative xl:hidden">
       <summary
-        class="cursor-pointer list-none rounded-full border border-white/50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em]"
+        class="cursor-pointer list-none rounded-full border border-white/15 bg-[#071f1b]/70 px-5 py-3 text-xs font-semibold uppercase tracking-[0.22em] shadow-[0_12px_40px_rgba(4,30,26,0.22)] backdrop-blur-xl transition-colors hover:bg-[#071f1b]/85"
+        data-header-menu
       >
         Menu
       </summary>
       <nav
         aria-label="Birthday website sections"
-        class="absolute right-0 top-12 grid min-w-56 gap-1 rounded-sm bg-stone-50 p-3 text-emerald-950 shadow-2xl"
+        class="absolute right-0 top-14 grid min-w-60 gap-1 rounded-3xl border border-white/15 bg-[#071f1b]/90 p-2 text-white shadow-2xl backdrop-blur-xl"
       >
         {
           siteTabs.map((tab) => (
             <a
               aria-current={tab.id === activeTab ? "page" : undefined}
               class:list={[
-                "rounded px-4 py-3 hover:bg-stone-200",
-                tab.id === activeTab && "bg-emerald-950 text-white",
+                "rounded-full px-4 py-3 hover:bg-white/10",
+                tab.id === activeTab && "bg-white/15 text-amber-100",
               ]}
               href={pathWithBase(tab.path, base)}
             >

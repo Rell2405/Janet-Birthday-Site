@@ -33,6 +33,31 @@ test("renders all four navigation tabs and official weekend events", async ({
     await expect(
       page.getByRole("heading", { level: 1, name: tab.heading }),
     ).toBeVisible();
+
+    const header = page.locator("header");
+    await expect(header).toHaveCSS("position", "fixed");
+    const homeSurface = page.locator("[data-header-home]");
+    const homeRadius = await homeSurface.evaluate((element) =>
+      Number.parseFloat(getComputedStyle(element).borderRadius),
+    );
+    expect(homeRadius).toBeGreaterThan(100);
+    const menuSurface = page.locator("[data-header-menu]:visible");
+    const menuAlpha = await menuSurface.evaluate((element) => {
+      const color = getComputedStyle(element).backgroundColor;
+      const modernAlpha = color.match(/\/\s*([\d.]+)\)$/)?.[1];
+      const legacyAlpha = color.match(/rgba\(.+,\s*([\d.]+)\)$/)?.[1];
+      return Number(modernAlpha ?? legacyAlpha ?? 1);
+    });
+    expect(menuAlpha).toBeGreaterThan(0);
+    expect(menuAlpha).toBeLessThan(1);
+
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await expect
+      .poll(async () => (await header.boundingBox())?.y ?? -1)
+      .toBeGreaterThanOrEqual(0);
+    await expect
+      .poll(async () => (await header.boundingBox())?.y ?? 99)
+      .toBeLessThan(2);
   }
 
   await page.goto("./");
