@@ -3,7 +3,7 @@ tab: book-your-stay
 title: Secure your spot in paradise
 eyebrow: Book your stay
 description: Group accommodations coordinated by VIP Vacations for June 16–22, 2027.
-order: 50
+order: 40
 visibility: public
 draft: false
 ---
@@ -99,20 +99,6 @@ Group benefits include:
 - Welcome amenity for one designated room
 - Complimentary room and room-upgrade opportunities earned by the group based
   on qualifying room bookings
-
-### Group concessions
-
-- One complimentary room for every ten paid rooms—the 11th room is
-  complimentary—awarded for the group’s peak nights only, in the lowest room
-  category indicated in the Room Night Commitment, based on double occupancy,
-  up to a maximum of five complimentary rooms.
-- One complimentary upgrade to the next highest room category, based on
-  availability at check-in, excluding higher specialty categories and based on
-  double occupancy.
-- Guest room rates applicable for three nights before and after the held group
-  dates, subject to availability.
-- Welcome drink upon arrival.
-- Welcome amenity for one designated room.
 
 ## Travel agent
 
