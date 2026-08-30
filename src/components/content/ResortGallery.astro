@@ -1,0 +1,66 @@
+---
+import { Image } from "astro:assets";
+
+import aerialOcean from "@/assets/resort/aerial-ocean.webp";
+import oceanPool from "@/assets/resort/ocean-pool.webp";
+import swimUpBar from "@/assets/resort/swim-up-bar.webp";
+---
+
+<section
+  aria-labelledby="resort-gallery-heading"
+  class="bg-[#e7ded0] px-5 py-20 text-emerald-950 sm:px-8 sm:py-28 lg:px-12"
+>
+  <div class="mx-auto max-w-[1320px]">
+    <div class="mb-12 grid gap-6 lg:grid-cols-[220px_1fr] lg:gap-20">
+      <p class="luxury-kicker">Dreams Rose Hall</p>
+      <h2
+        class="font-display text-[clamp(3rem,6vw,6rem)] leading-[0.9] tracking-[-0.04em]"
+        id="resort-gallery-heading"
+      >
+        A closer look at paradise
+      </h2>
+    </div>
+
+    <div class="resort-gallery">
+      <figure class="resort-gallery-primary">
+        <Image
+          alt="Oceanfront pool at Dreams Rose Hall surrounded by palm trees, lounge chairs, and white umbrellas."
+          class="h-full w-full object-cover"
+          loading="eager"
+          quality={88}
+          sizes="(min-width: 1024px) 60vw, 100vw"
+          src={oceanPool}
+          widths={[640, 960, 1280, 1360]}
+        />
+        <figcaption>Poolside, with the Caribbean just beyond</figcaption>
+      </figure>
+
+      <figure>
+        <Image
+          alt="Aerial view of Dreams Rose Hall Resort with landscaped grounds and the Caribbean Sea."
+          class="h-full w-full object-cover"
+          loading="lazy"
+          quality={86}
+          sizes="(min-width: 1024px) 40vw, 100vw"
+          src={aerialOcean}
+          widths={[480, 768, 1023]}
+        />
+        <figcaption>Where the gardens meet the sea</figcaption>
+      </figure>
+
+      <figure>
+        <Image
+          alt="Swim-up bar set within a tropical resort pool at Dreams Rose Hall."
+          class="h-full w-full object-cover"
+          loading="lazy"
+          quality={86}
+          sizes="(min-width: 1024px) 40vw, 100vw"
+          src={swimUpBar}
+          widths={[480, 768, 1023]}
+        />
+        <figcaption>Refreshments without leaving the water</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
