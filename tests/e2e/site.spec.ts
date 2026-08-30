@@ -179,7 +179,7 @@ test("menu opens on hover or click and closes when exited", async ({
   ).toBeVisible();
 });
 
-test("room options reveal details without publishing pricing", async ({
+test("room options reveal details without publishing prices", async ({
   page,
 }) => {
   await page.goto("./book-your-stay/");
@@ -199,6 +199,32 @@ test("room options reveal details without publishing pricing", async ({
     page.getByText(/private balcony or terrace overlooking the resort/i).first(),
   ).toBeVisible();
   await expect(page.getByText("Occupancy").first()).toBeVisible();
+});
+
+test("booking page shows updated group guidance and booking placeholder", async ({
+  page,
+}) => {
+  await page.goto("./book-your-stay/");
+
+  await expect(
+    page.getByRole("heading", { name: "Travel window" }),
+  ).toHaveCount(0);
+  await expect(
+    page.getByRole("heading", { name: "Travel agent" }),
+  ).toHaveCount(0);
+  await expect(
+    page.getByText(/Booking within our official room block ensures/i),
+  ).toBeVisible();
+  await expect(
+    page.getByText(/Guests who choose to book accommodations outside/i),
+  ).toBeVisible();
+  await expect(page.getByText("[BOOK YOUR STAY HERE]")).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "BOOK YOUR STAY HERE" }),
+  ).toHaveCount(0);
+  await expect(
+    page.getByRole("heading", { name: "Easy Payment Options" }),
+  ).toBeVisible();
 });
 
 test("Resort page keeps the hotel link and shows the supplied gallery", async ({
