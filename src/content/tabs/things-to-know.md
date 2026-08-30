@@ -57,16 +57,15 @@ Consider packing a small travel health kit with:
 
 ## 📱 Stay connected
 
-We’ll use **[COMMUNICATION APP]** to share important updates, reminders,
+We’ll use our **WhatsApp community** to share important updates, reminders,
 schedule changes, photos, and other information throughout the trip.
 
-Please download the app before traveling to Jamaica.
+Please download WhatsApp before traveling to Jamaica and join the community
+using the official invitation below.
 
-Group information and instructions for joining will be shared closer to the
-celebration.
+[Join the WhatsApp community](https://chat.whatsapp.com/J05JDBlC1umADP7IWZykan)
 
-> **Planning note:** `[COMMUNICATION APP]` is a placeholder and will be replaced
-> when the group communication platform is selected.
+Additional group information will be shared closer to the celebration.
 
 ## 📶 Cell phone & Wi-Fi
 
@@ -138,4 +137,3 @@ This is a vacation—come ready to celebrate, relax, explore, and make memories!
 
 - We’ll continue updating this page as we get closer to Jamaica, so check back
   periodically for important travel information and final details.
-
