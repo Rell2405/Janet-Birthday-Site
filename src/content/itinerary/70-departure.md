@@ -12,5 +12,4 @@ draft: false
 ---
 
 Guests may work with VIP Vacations to extend their stay, subject to resort
-availability and applicable group rates.
-
+availability and the group booking window.

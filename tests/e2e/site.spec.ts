@@ -69,7 +69,7 @@ test("renders all four navigation tabs and official weekend events", async ({
 
   await page.goto("./what-to-wear/");
   await expect(page.getByRole("tab")).toHaveCount(0);
-  await expect(page.locator(".attire-hover-gallery img")).toHaveCount(6);
+  await expect(page.locator("[aria-label='Attire inspiration by date'] img")).toHaveCount(6);
   const fridayDay = page.getByRole("article", {
     name: /Friday, June 18, Daytime/i,
   });
@@ -155,6 +155,28 @@ test("menu opens on hover or click and closes when exited", async ({
       name: "Secure your spot in paradise",
     }),
   ).toBeVisible();
+});
+
+test("room options reveal details without publishing pricing", async ({
+  page,
+}) => {
+  await page.goto("./book-your-stay/");
+
+  await expect(
+    page.getByRole("heading", { name: "Room rates at a glance" }),
+  ).toHaveCount(0);
+  await expect(page.locator("table")).toHaveCount(0);
+  await expect(page.locator("[data-room-option]")).toHaveCount(4);
+  await expect(page.getByText(/\$\d/)).toHaveCount(0);
+
+  const room = page.getByRole("article", {
+    name: /Resort View, 2 Queen Beds/i,
+  });
+  await room.focus();
+  await expect(
+    page.getByText(/private balcony or terrace overlooking the resort/i).first(),
+  ).toBeVisible();
+  await expect(page.getByText("Occupancy").first()).toBeVisible();
 });
 
 test("Resort page keeps the hotel link and shows the supplied gallery", async ({

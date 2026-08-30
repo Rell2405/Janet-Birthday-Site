@@ -1,0 +1,81 @@
+---
+const rooms = [
+  {
+    view: "Resort View",
+    bedding: "2 Queen Beds",
+    description:
+      "A spacious room of approximately 370 square feet in the east or west wing, with a private balcony or terrace overlooking the resort’s courtyard or grounds.",
+    occupancy:
+      "Up to 4 adults / 4 total guests, with 1 infant allowed above total occupancy.",
+  },
+  {
+    view: "Resort View",
+    bedding: "1 King Bed",
+    description:
+      "A spacious room of approximately 370 square feet in the east or west wing, with a private balcony or terrace overlooking the resort’s courtyard or grounds.",
+    occupancy:
+      "1 king bed plus pull-out sofa; up to 4 adults / 4 total guests, with 1 infant allowed above total occupancy.",
+  },
+  {
+    view: "Partial Ocean View",
+    bedding: "2 Queen Beds",
+    description:
+      "A spacious room of approximately 370 square feet with a private balcony or terrace and partial views of the Caribbean Sea, golf course, pools, or water park.",
+    occupancy:
+      "Up to 4 adults / 4 total guests, with 1 infant allowed above total occupancy.",
+  },
+  {
+    view: "Partial Ocean View",
+    bedding: "1 King Bed",
+    description:
+      "A spacious room of approximately 370 square feet with a private balcony or terrace and partial views of the Caribbean Sea, golf course, pools, or water park.",
+    occupancy:
+      "1 king bed plus pull-out sofa; up to 4 adults / 4 total guests, with 1 infant allowed above total occupancy.",
+  },
+];
+---
+
+<section
+  aria-labelledby="room-options-heading"
+  class="hover-reveal-gallery"
+>
+  <div class="mx-auto max-w-[1320px]">
+    <div class="mb-14 grid gap-6 lg:grid-cols-[220px_1fr] lg:gap-20">
+      <p class="luxury-kicker">Dreams Rose Hall</p>
+      <h2
+        class="font-display text-[clamp(3rem,6vw,6rem)] leading-[0.9] tracking-[-0.04em]"
+        id="room-options-heading"
+      >
+        Choose your room
+      </h2>
+    </div>
+
+    {
+      rooms.map((room) => (
+        <article
+          aria-label={`${room.view}, ${room.bedding}. Focus or hover to reveal room details.`}
+          class="hover-reveal-section"
+          data-room-option
+          tabindex="0"
+        >
+          <div class="hover-reveal-heading">
+            <p>{room.view}</p>
+            <p>{room.bedding}</p>
+          </div>
+          <div class="hover-reveal-panel">
+            <div>
+              <div class="room-detail-card">
+                <p>{room.description}</p>
+                <div>
+                  <p>Occupancy</p>
+                  <p>{room.occupancy}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</section>
+

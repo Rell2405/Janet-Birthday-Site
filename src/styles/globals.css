@@ -477,27 +477,27 @@
   }
 }
 
-.attire-hover-gallery {
+.hover-reveal-gallery {
   padding: 6rem clamp(1rem, 4vw, 4rem);
   background: #e7ded0;
 }
 
-.attire-hover-section {
+.hover-reveal-section {
   border-top: 1px solid rgb(6 78 59 / 0.28);
   padding-block: 2rem;
   outline: none;
 }
 
-.attire-hover-section:last-child {
+.hover-reveal-section:last-child {
   border-bottom: 1px solid rgb(6 78 59 / 0.28);
 }
 
-.attire-hover-section:focus-visible {
+.hover-reveal-section:focus-visible {
   outline: 3px solid #9a5d16;
   outline-offset: 4px;
 }
 
-.attire-hover-heading {
+.hover-reveal-heading {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -505,14 +505,14 @@
   color: #123d35;
 }
 
-.attire-hover-heading p:first-child {
+.hover-reveal-heading p:first-child {
   font-family: var(--font-display);
   font-size: clamp(2.2rem, 5vw, 5.4rem);
   line-height: 0.95;
   letter-spacing: -0.035em;
 }
 
-.attire-hover-heading p:last-child {
+.hover-reveal-heading p:last-child {
   font-size: clamp(1.05rem, 2vw, 1.45rem);
   font-weight: 700;
   line-height: 1.1;
@@ -521,7 +521,7 @@
   text-transform: uppercase;
 }
 
-.attire-hover-media {
+.hover-reveal-panel {
   display: grid;
   grid-template-rows: 0fr;
   margin-top: 0;
@@ -534,35 +534,76 @@
     transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.attire-hover-media > div {
+.hover-reveal-panel > div {
   min-height: 0;
   overflow: hidden;
 }
 
-.attire-hover-section:hover .attire-hover-media,
-.attire-hover-section:focus .attire-hover-media,
-.attire-hover-section:focus-within .attire-hover-media {
+.hover-reveal-section:hover .hover-reveal-panel,
+.hover-reveal-section:focus .hover-reveal-panel,
+.hover-reveal-section:focus-within .hover-reveal-panel {
   grid-template-rows: 1fr;
   margin-top: 2rem;
   opacity: 1;
   transform: translateY(0);
 }
 
+.room-detail-card {
+  display: grid;
+  gap: 2.5rem;
+  min-height: 22rem;
+  padding: clamp(2rem, 6vw, 6rem);
+  background:
+    radial-gradient(circle at 85% 18%, rgb(201 153 79 / 0.28), transparent 28%),
+    linear-gradient(145deg, #123d35, #082c27);
+  color: white;
+  box-shadow: 0 2rem 5rem rgb(6 45 39 / 0.14);
+}
+
+.room-detail-card > p {
+  max-width: 58rem;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 4.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.room-detail-card > div {
+  max-width: 42rem;
+  border-top: 1px solid rgb(255 255 255 / 0.25);
+  padding-top: 1.25rem;
+}
+
+.room-detail-card > div p:first-child {
+  color: #f5e7c6;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.room-detail-card > div p:last-child {
+  margin-top: 0.75rem;
+  color: rgb(255 255 255 / 0.78);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
 @media (hover: none), (max-width: 767px) {
-  .attire-hover-gallery {
+  .hover-reveal-gallery {
     padding-top: 3rem;
   }
 
-  .attire-hover-heading {
+  .hover-reveal-heading {
     display: grid;
     gap: 0.6rem;
   }
 
-  .attire-hover-heading p:last-child {
+  .hover-reveal-heading p:last-child {
     text-align: left;
   }
 
-  .attire-hover-media {
+  .hover-reveal-panel {
     grid-template-rows: 1fr;
     margin-top: 1.5rem;
     opacity: 1;

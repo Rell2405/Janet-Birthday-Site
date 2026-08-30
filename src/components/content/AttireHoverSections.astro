@@ -48,20 +48,20 @@ const sections = [
 ];
 ---
 
-<section aria-label="Attire inspiration by date" class="attire-hover-gallery">
+<section aria-label="Attire inspiration by date" class="hover-reveal-gallery">
   <div class="mx-auto max-w-[1320px]">
     {
       sections.map((section, index) => (
         <article
           aria-label={`${section.date}, ${section.period}. Focus or hover to reveal attire inspiration.`}
-          class="attire-hover-section"
+          class="hover-reveal-section"
           tabindex="0"
         >
-          <div class="attire-hover-heading">
+          <div class="hover-reveal-heading">
             <p>{section.date}</p>
             <p>{section.period}</p>
           </div>
-          <div class="attire-hover-media">
+          <div class="hover-reveal-panel">
             <div>
               <Image
                 alt={section.alt}
