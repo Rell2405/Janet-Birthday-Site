@@ -2,6 +2,8 @@
 import { Image } from "astro:assets";
 
 import animalPrints from "@/assets/events/animal-prints.webp";
+import arrivalDay from "@/assets/events/arrival-day.webp";
+import freeDay from "@/assets/events/free-day.webp";
 import islandInBloom from "@/assets/events/island-in-bloom.webp";
 import shadesOfBlue from "@/assets/events/shades-of-blue.webp";
 import whiteLights from "@/assets/events/white-lights.webp";
@@ -10,52 +12,38 @@ const sections = [
   {
     date: "Thursday, June 17",
     period: "Arrival day",
-    details: {
-      title: "Resort chic",
-      copy: "Travel comfortably, then slip into something effortless and island-ready for your first evening in paradise.",
-      palette: ["#f2eee5", "#c9994f", "#527064"],
-    },
-    src: null,
-    alt: null,
+    src: arrivalDay,
+    alt: "Arrival Day attire board with relaxed resort looks for Thursday, June 17.",
   },
   {
     date: "Friday, June 18",
     period: "Daytime",
-    details: null,
     src: shadesOfBlue,
     alt: "Shades of Blue pool party attire board for Friday, June 18, with blue swimwear and resort-style inspiration.",
   },
   {
     date: "Friday, June 18",
     period: "Nighttime",
-    details: null,
     src: whiteLights,
     alt: "White Lights all-white attire board for the Friday, June 18 evening celebration.",
   },
   {
     date: "Saturday, June 19",
     period: "Daytime",
-    details: null,
     src: animalPrints,
     alt: "Animal Prints pool party attire board for Saturday, June 19, with leopard, zebra, and other print inspiration.",
   },
   {
     date: "Saturday, June 19",
     period: "Nighttime",
-    details: null,
     src: islandInBloom,
     alt: "Island in Bloom tropical cocktail attire board for Janet’s Saturday, June 19 birthday celebration.",
   },
   {
     date: "Sunday, June 20",
     period: "Daytime",
-    details: {
-      title: "Resort wear",
-      copy: "Swimwear, cover-ups, sundresses, linen, golf attire, or excursion wear—whatever your perfect Jamaica day requires.",
-      palette: ["#d9eff5", "#f2eee5", "#dc775f"],
-    },
-    src: null,
-    alt: null,
+    src: freeDay,
+    alt: "Free Day to Explore board with resort, excursion, spa, pool, and beach ideas for Sunday, June 20.",
   },
 ];
 ---
@@ -65,11 +53,7 @@ const sections = [
     {
       sections.map((section, index) => (
         <article
-          aria-label={
-            section.src
-              ? `${section.date}, ${section.period}. Focus or hover to reveal attire inspiration.`
-              : `${section.date}, ${section.period}. ${section.details}`
-          }
+          aria-label={`${section.date}, ${section.period}. Focus or hover to reveal attire inspiration.`}
           class="attire-hover-section"
           tabindex="0"
         >
@@ -79,29 +63,15 @@ const sections = [
           </div>
           <div class="attire-hover-media">
             <div>
-              {section.src && section.alt ? (
-                <Image
-                  alt={section.alt}
-                  class="h-auto w-full bg-stone-100"
-                  loading={index === 1 ? "eager" : "lazy"}
-                  quality={86}
-                  sizes="(min-width: 1024px) 85vw, 100vw"
-                  src={section.src}
-                  widths={[640, 960, 1280, section.src.width]}
-                />
-              ) : section.details ? (
-                <div class="attire-detail-card">
-                  <div>
-                    <p>{section.details.title}</p>
-                    <p>{section.details.copy}</p>
-                  </div>
-                  <div aria-hidden="true" class="attire-detail-palette">
-                    {section.details.palette.map((color) => (
-                      <span style={{ backgroundColor: color }} />
-                    ))}
-                  </div>
-                </div>
-              ) : null}
+              <Image
+                alt={section.alt}
+                class="h-auto w-full bg-stone-100"
+                loading={index === 0 ? "eager" : "lazy"}
+                quality={86}
+                sizes="(min-width: 1024px) 85vw, 100vw"
+                src={section.src}
+                widths={[640, 960, 1280, section.src.width]}
+              />
             </div>
           </div>
         </article>

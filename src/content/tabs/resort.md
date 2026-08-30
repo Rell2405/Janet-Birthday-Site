@@ -15,11 +15,6 @@ Welcome to paradise.
 Our birthday celebration will take place at the beautiful **Dreams Rose Hall
 Resort & Spa**, an all-inclusive beachfront resort in Montego Bay, Jamaica.
 
-**Dreams Rose Hall Resort & Spa**  
-P.O. Box 999  
-Rose Hall Road  
-Montego Bay, Jamaica, West Indies
-
 **Distance from Sangster International Airport (MBJ):** Approximately 4.5 miles
 / 20-minute drive  
 **Distance from Downtown Montego Bay:** Approximately 25 minutes
