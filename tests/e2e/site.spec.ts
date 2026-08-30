@@ -129,7 +129,7 @@ test("menu opens on hover or click and closes when exited", async ({
   page,
 }, testInfo) => {
   test.skip(testInfo.project.name !== "chromium");
-  await page.goto("./resort/");
+  await page.goto("./");
 
   const menu = page.locator("[data-site-menu]");
   const panel = page.locator("[data-menu-panel]");
@@ -138,14 +138,22 @@ test("menu opens on hover or click and closes when exited", async ({
   await expect(panel).toBeHidden();
   await menu.hover();
   await expect(panel).toBeVisible();
+  await panel.hover();
+  await expect(panel).toBeVisible();
 
   await page.mouse.move(0, 300);
   await expect(panel).toBeHidden();
 
   await summary.click();
   await expect(panel).toBeVisible();
-  await page.locator("main").click({ position: { x: 10, y: 200 } });
-  await expect(panel).toBeHidden();
+  await panel.getByRole("link", { name: "Book Your Stay" }).click();
+  await expect(page).toHaveURL(/\/book-your-stay\/$/);
+  await expect(
+    page.getByRole("heading", {
+      level: 1,
+      name: "Secure your spot in paradise",
+    }),
+  ).toBeVisible();
 });
 
 test("Resort page keeps the hotel link and shows the supplied gallery", async ({
