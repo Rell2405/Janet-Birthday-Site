@@ -65,6 +65,7 @@ test("renders all four navigation tabs and official weekend events", async ({
     page.getByRole("heading", { name: "Celebration dates" }),
   ).toHaveCount(0);
   await expect(page.locator("#itinerary")).toHaveCount(0);
+  await expect(page.getByRole("link", { name: /View the full weekend/i })).toHaveCount(0);
 
   await page.goto("./what-to-wear/");
   await expect(page.getByRole("tab")).toHaveCount(0);
