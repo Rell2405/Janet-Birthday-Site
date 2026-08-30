@@ -37,20 +37,21 @@ Organizer and RSVP data belongs in D1.
 Schema errors stop the build, preventing incomplete or malformed content from
 being deployed.
 
-## Four website tabs
+## Five website tabs
 
 Location: `src/content/tabs/`
 
-The four required files are:
+The five required files are:
 
 - `welcome.md`
 - `resort.md`
+- `things-to-know.md`
 - `what-to-wear.md`
 - `book-your-stay.md`
 
 Each file has a validated `tab`, `title`, `eyebrow`, `description`, `order`,
 `visibility`, and `draft` value. The filenames and `tab` values correspond to
-the static routes and persistent navigation. Keep all four entries published so
+the static routes and persistent navigation. Keep all five entries published so
 the navigation never points to a missing page.
 
 Tables are supported for public room-rate information. Event artwork is managed

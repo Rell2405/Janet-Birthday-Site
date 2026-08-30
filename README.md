@@ -2,7 +2,7 @@
 
 An original luxury travel-inspired website for Janet’s 60th birthday
 celebration at Dreams Rose Hall Resort & Spa in Montego Bay, June 17–21, 2027.
-The site uses four static navigation tabs, validated Markdown content, supplied
+The site uses five static navigation tabs, validated Markdown content, supplied
 event artwork, immersive editorial layouts, and responsive accessible
 presentation.
 
@@ -23,8 +23,8 @@ presentation.
 
 1. A full-screen island-inspired hero introduces Janet's celebration.
 2. Editorial story sections establish the tone and week-long format.
-3. Four static routes present the welcome, resort, attire guidance, and
-   room-block information.
+3. Five static routes present the welcome, resort, pre-travel guidance, attire
+   guidance, and room-block information.
 4. The RSVP foundation remains feature-gated until production infrastructure
    and final client requirements are approved.
 
