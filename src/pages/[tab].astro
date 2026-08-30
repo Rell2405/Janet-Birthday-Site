@@ -8,6 +8,7 @@ import {
 import EditorialContent from "@/components/content/EditorialContent.astro";
 import AttireHoverSections from "@/components/content/AttireHoverSections.astro";
 import RoomRates from "@/components/content/RoomRates.astro";
+import ResortGallery from "@/components/content/ResortGallery.astro";
 import PageHero from "@/components/home/PageHero.astro";
 import SiteFooter from "@/components/home/SiteFooter.astro";
 import SiteHeader from "@/components/home/SiteHeader.astro";
@@ -55,6 +56,7 @@ const tab = entry.data.tab as TabId;
         </EditorialContent>
       )
     }
+    {tab === "resort" ? <ResortGallery /> : null}
     {tab === "book-your-stay" ? <RoomRates /> : null}
   </main>
   <SiteFooter />

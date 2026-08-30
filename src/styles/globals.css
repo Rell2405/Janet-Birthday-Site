@@ -250,6 +250,14 @@
   background: rgb(255 255 255 / 0.1);
 }
 
+[data-site-menu] > summary::-webkit-details-marker {
+  display: none;
+}
+
+[data-site-menu] > summary::marker {
+  content: "";
+}
+
 .luxury-outline-button {
   border: 1px solid rgb(255 255 255 / 0.5);
   border-radius: 999px;
@@ -433,6 +441,48 @@
   font-family: var(--font-display);
   font-size: 1.6rem;
   font-style: italic;
+}
+
+.resort-gallery {
+  display: grid;
+  gap: 1rem;
+}
+
+.resort-gallery figure {
+  position: relative;
+  min-height: 22rem;
+  overflow: hidden;
+  background: #123d35;
+}
+
+.resort-gallery figcaption {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  left: 1rem;
+  width: fit-content;
+  max-width: calc(100% - 2rem);
+  border: 1px solid rgb(255 255 255 / 0.18);
+  border-radius: 999px;
+  padding: 0.7rem 1rem;
+  background: rgb(7 31 27 / 0.68);
+  color: white;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  backdrop-filter: blur(10px);
+}
+
+@media (min-width: 1024px) {
+  .resort-gallery {
+    grid-template-columns: 1.35fr 0.85fr;
+    grid-template-rows: repeat(2, 22rem);
+  }
+
+  .resort-gallery-primary {
+    grid-row: 1 / span 2;
+  }
 }
 
 .attire-hover-gallery {

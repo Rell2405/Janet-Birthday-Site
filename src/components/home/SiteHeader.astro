@@ -36,37 +36,23 @@ const homeHref = pathWithBase("/", base);
       </span>
     </a>
 
-    <nav
-      aria-label="Birthday website sections"
-      class="pointer-events-auto hidden items-center gap-1 rounded-full border border-white/15 bg-[#071f1b]/70 p-1.5 shadow-[0_12px_40px_rgba(4,30,26,0.22)] backdrop-blur-xl xl:flex"
-      data-header-menu
-    >
-      {
-        siteTabs.map((tab) => (
-          <a
-            aria-current={tab.id === activeTab ? "page" : undefined}
-            class:list={[
-              "luxury-nav-link",
-              tab.id === activeTab && "bg-white/15 text-amber-100",
-            ]}
-            href={pathWithBase(tab.path, base)}
-          >
-            {tab.label}
-          </a>
-        ))
-      }
-    </nav>
-
-    <details class="pointer-events-auto relative xl:hidden">
+    <details class="group/menu pointer-events-auto relative" data-site-menu>
       <summary
-        class="cursor-pointer list-none rounded-full border border-white/15 bg-[#071f1b]/70 px-5 py-3 text-xs font-semibold uppercase tracking-[0.22em] shadow-[0_12px_40px_rgba(4,30,26,0.22)] backdrop-blur-xl transition-colors hover:bg-[#071f1b]/85"
+        class="flex cursor-pointer list-none items-center gap-3 rounded-full border border-white/15 bg-[#071f1b]/70 px-5 py-3 text-xs font-semibold uppercase tracking-[0.22em] shadow-[0_12px_40px_rgba(4,30,26,0.22)] backdrop-blur-xl transition-colors hover:bg-[#071f1b]/85"
         data-header-menu
       >
         Menu
+        <span aria-hidden="true" class="grid grid-cols-2 gap-[3px]">
+          <span class="h-[3px] w-[3px] rounded-full bg-current"></span>
+          <span class="h-[3px] w-[3px] rounded-full bg-current"></span>
+          <span class="h-[3px] w-[3px] rounded-full bg-current"></span>
+          <span class="h-[3px] w-[3px] rounded-full bg-current"></span>
+        </span>
       </summary>
       <nav
         aria-label="Birthday website sections"
-        class="absolute right-0 top-14 grid min-w-60 gap-1 rounded-3xl border border-white/15 bg-[#071f1b]/90 p-2 text-white shadow-2xl backdrop-blur-xl"
+        class="absolute right-0 top-14 grid min-w-64 gap-1 rounded-3xl border border-white/15 bg-[#071f1b]/85 p-2 text-white shadow-2xl backdrop-blur-xl"
+        data-menu-panel
       >
         {
           siteTabs.map((tab) => (
@@ -86,3 +72,44 @@ const homeHref = pathWithBase("/", base);
     </details>
   </div>
 </header>
+
+<script>
+  const menus = document.querySelectorAll<HTMLDetailsElement>(
+    "[data-site-menu]",
+  );
+
+  for (const menu of menus) {
+    const summary = menu.querySelector("summary");
+    const supportsHover = window.matchMedia("(hover: hover)").matches;
+    const close = () => {
+      menu.open = false;
+    };
+
+    menu.addEventListener("pointerenter", (event) => {
+      if (supportsHover && event.pointerType === "mouse") menu.open = true;
+    });
+    menu.addEventListener("pointerleave", (event) => {
+      if (supportsHover && event.pointerType === "mouse") close();
+    });
+    summary?.addEventListener("click", (event) => {
+      if (supportsHover && event.detail > 0) {
+        event.preventDefault();
+        menu.open = true;
+      }
+    });
+    menu.addEventListener("focusout", () => {
+      window.setTimeout(() => {
+        if (!menu.contains(document.activeElement)) close();
+      });
+    });
+    menu.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        close();
+        summary?.focus();
+      }
+    });
+    document.addEventListener("pointerdown", (event) => {
+      if (!menu.contains(event.target as Node)) close();
+    });
+  }
+</script>

@@ -24,29 +24,4 @@ Montego Bay, Jamaica, West Indies
 / 20-minute drive  
 **Distance from Downtown Montego Bay:** Approximately 25 minutes
 
-## Your island escape
-
-Nestled along Jamaica’s Caribbean coast, the resort offers plenty of ways to
-relax, play, and enjoy your vacation between our birthday festivities.
-
-Resort highlights include:
-
-- Sugar Mill Falls Water Park
-- Expansive swimming pools
-- Beautiful Caribbean beachfront
-- Beachfront cabanas
-- Cinnamon Hill Golf Course
-- Tennis courts
-- Soothe Spa and beauty salon
-- Kids Klub
-- Teen Zone
-- Shopping nearby at the Shoppes at Rose Hall
-
-Whether you want to spend your vacation poolside with a cocktail, book a spa
-treatment, hit the golf course, explore Montego Bay, or simply enjoy the
-Caribbean Sea, there is something for everyone.
-
-**This is your vacation too — enjoy it!**
-
 [Explore Dreams Rose Hall Resort & Spa](https://www.resortsbyhyatt.com/dreams/dreams-rose-hall)
-

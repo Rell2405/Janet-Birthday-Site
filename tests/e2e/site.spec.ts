@@ -120,6 +120,46 @@ test("removed Birthday Weekend route is not published", async ({ page }) => {
   expect(response?.status()).toBe(404);
 });
 
+test("menu opens on hover or click and closes when exited", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "chromium");
+  await page.goto("./resort/");
+
+  const menu = page.locator("[data-site-menu]");
+  const panel = page.locator("[data-menu-panel]");
+  const summary = page.locator("[data-header-menu]");
+
+  await expect(panel).toBeHidden();
+  await menu.hover();
+  await expect(panel).toBeVisible();
+
+  await page.mouse.move(0, 300);
+  await expect(panel).toBeHidden();
+
+  await summary.click();
+  await expect(panel).toBeVisible();
+  await page.locator("main").click({ position: { x: 10, y: 200 } });
+  await expect(panel).toBeHidden();
+});
+
+test("Resort page keeps the hotel link and shows the supplied gallery", async ({
+  page,
+}) => {
+  await page.goto("./resort/");
+
+  await expect(
+    page.getByRole("heading", { name: "Your island escape" }),
+  ).toHaveCount(0);
+  await expect(
+    page.getByRole("link", { name: "Explore Dreams Rose Hall Resort & Spa" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "A closer look at paradise" }),
+  ).toBeVisible();
+  await expect(page.locator(".resort-gallery img")).toHaveCount(3);
+});
+
 test("all four tabs have no serious or critical accessibility violations", async ({
   page,
 }) => {
