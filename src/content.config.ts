@@ -101,6 +101,7 @@ const tabPages = defineCollection({
     tab: z.enum([
       "welcome",
       "resort",
+      "things-to-know",
       "what-to-wear",
       "book-your-stay",
     ]),

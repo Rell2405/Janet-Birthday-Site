@@ -13,6 +13,11 @@ const tabs = [
     heading: "Dreams Rose Hall Resort & Spa",
   },
   {
+    path: "./things-to-know/",
+    title: /Things to Know, Before You Go/,
+    heading: "Things to Know, Before You Go",
+  },
+  {
     path: "./what-to-wear/",
     title: /birthday weekend style guide/i,
     heading: "The birthday weekend style guide",
@@ -24,7 +29,7 @@ const tabs = [
   },
 ] as const;
 
-test("renders all four navigation tabs and official weekend events", async ({
+test("renders all five navigation tabs and official weekend events", async ({
   page,
 }) => {
   for (const tab of tabs) {
@@ -126,6 +131,23 @@ test("removed Birthday Weekend route is not published", async ({ page }) => {
   expect(response?.status()).toBe(404);
 });
 
+test("before-you-go page includes the communication placeholder and attire link", async ({
+  page,
+}) => {
+  await page.goto("./things-to-know/");
+
+  await expect(page.getByText("[COMMUNICATION APP]").first()).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "What to Wear" }).first(),
+  ).toHaveAttribute("href", "../what-to-wear/");
+  await expect(
+    page.getByRole("heading", { name: /Passport & travel documents/ }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: /Excursions & free time/ }),
+  ).toBeVisible();
+});
+
 test("menu opens on hover or click and closes when exited", async ({
   page,
 }, testInfo) => {
@@ -198,7 +220,7 @@ test("Resort page keeps the hotel link and shows the supplied gallery", async ({
   await expect(page.locator(".resort-gallery img")).toHaveCount(3);
 });
 
-test("all four tabs have no serious or critical accessibility violations", async ({
+test("all five tabs have no serious or critical accessibility violations", async ({
   page,
 }) => {
   for (const tab of tabs) {
