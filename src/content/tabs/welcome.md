@@ -22,9 +22,8 @@ We have planned an unforgettable weekend filled with beautiful moments,
 fabulous events, island sunshine, and plenty of time to simply enjoy Jamaica.
 
 Want even more Jamaica? Guests are welcome to **arrive early or extend their
-vacation** through our travel agent. Current group pricing is available for
-travel dates **June 16–22, 2027**, subject to availability and the terms of the
-group block.
+vacation** through our travel agent during the group booking window of
+**June 16–22, 2027**, subject to availability and the terms of the group block.
 
 We hope you’ll join us as we celebrate **60 years of an amazing woman and the
 beginning of an even more incredible chapter.**
