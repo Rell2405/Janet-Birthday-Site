@@ -45,9 +45,9 @@ The five required files are:
 
 - `welcome.md`
 - `resort.md`
-- `things-to-know.md`
-- `what-to-wear.md`
+- `birthday-weekend.md`
 - `book-your-stay.md`
+- `things-to-know.md`
 
 Each file has a validated `tab`, `title`, `eyebrow`, `description`, `order`,
 `visibility`, and `draft` value. The filenames and `tab` values correspond to

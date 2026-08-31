@@ -13,19 +13,19 @@ const tabs = [
     heading: "Dreams Rose Hall Resort & Spa",
   },
   {
-    path: "./things-to-know/",
-    title: /Things to Know, Before You Go/,
-    heading: "Things to Know, Before You Go",
-  },
-  {
-    path: "./what-to-wear/",
-    title: /birthday weekend style guide/i,
-    heading: "The birthday weekend style guide",
+    path: "./birthday-weekend/",
+    title: /Birthday Weekend/,
+    heading: "Birthday Weekend",
   },
   {
     path: "./book-your-stay/",
     title: /Secure your spot in paradise/,
     heading: "Secure your spot in paradise",
+  },
+  {
+    path: "./things-to-know/",
+    title: /Things to Know, Before You Go/,
+    heading: "Things to Know, Before You Go",
   },
 ] as const;
 
@@ -77,7 +77,7 @@ test("renders all five navigation tabs and official weekend events", async ({
     }),
   ).toBeVisible();
 
-  await page.goto("./what-to-wear/");
+  await page.goto("./birthday-weekend/");
   await expect(page.getByRole("tab")).toHaveCount(0);
   await expect(page.locator("[aria-label='Attire inspiration by date'] img")).toHaveCount(6);
   const fridayDay = page.getByRole("article", {
@@ -131,8 +131,8 @@ test("renders all five navigation tabs and official weekend events", async ({
   expect(dimensions.scrollWidth).toBeLessThanOrEqual(dimensions.clientWidth + 1);
 });
 
-test("removed Birthday Weekend route is not published", async ({ page }) => {
-  const response = await page.goto("./birthday-weekend/");
+test("retired What to Wear route is not published", async ({ page }) => {
+  const response = await page.goto("./what-to-wear/");
   expect(response?.status()).toBe(404);
 });
 
@@ -149,8 +149,8 @@ test("before-you-go page includes WhatsApp community and attire links", async ({
     "https://chat.whatsapp.com/J05JDBlC1umADP7IWZykan",
   );
   await expect(
-    page.getByRole("link", { name: "What to Wear" }).first(),
-  ).toHaveAttribute("href", "../what-to-wear/");
+    page.getByRole("link", { name: "Birthday Weekend" }).first(),
+  ).toHaveAttribute("href", "../birthday-weekend/");
   await expect(
     page.getByRole("heading", { name: /Passport & travel documents/ }),
   ).toBeVisible();

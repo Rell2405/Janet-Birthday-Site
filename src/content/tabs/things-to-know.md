@@ -3,7 +3,7 @@ tab: things-to-know
 title: Things to Know, Before You Go
 eyebrow: Prepare for Jamaica
 description: Important travel reminders to help you prepare for a smooth, stress-free getaway.
-order: 30
+order: 50
 visibility: public
 draft: false
 ---
@@ -111,8 +111,8 @@ In addition to your fabulous vacation wardrobe, don’t forget:
 - Personal toiletries
 - Any items needed for our themed events
 
-Be sure to check the [What to Wear](../what-to-wear/) page before packing so
-you’re ready for each celebration!
+Be sure to check the [Birthday Weekend](../birthday-weekend/) page before
+packing so you’re ready for each celebration!
 
 ## 🌦️ Island weather
 

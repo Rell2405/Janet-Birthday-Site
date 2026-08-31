@@ -101,9 +101,9 @@ const tabPages = defineCollection({
     tab: z.enum([
       "welcome",
       "resort",
-      "things-to-know",
-      "what-to-wear",
+      "birthday-weekend",
       "book-your-stay",
+      "things-to-know",
     ]),
     title: z.string().trim().min(1).max(120),
     eyebrow: z.string().trim().min(1).max(80),
