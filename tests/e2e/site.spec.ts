@@ -38,6 +38,13 @@ test("renders all five navigation tabs and official weekend events", async ({
     await expect(
       page.getByRole("heading", { level: 1, name: tab.heading }),
     ).toBeVisible();
+    await expect(page.locator("link[rel='canonical']")).toHaveAttribute(
+      "href",
+      new URL(
+        tab.path === "./" ? "/" : `/${tab.path.replace(/^\.\/|\/$/g, "")}/`,
+        "https://www.janetsislandbloom.com",
+      ).href,
+    );
 
     const header = page.locator("header");
     await expect(header).toHaveCSS("position", "fixed");
