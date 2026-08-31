@@ -12,6 +12,7 @@ implemented in the repository.
 - **Domain registrar:** Namecheap
 - **DNS provider:** Cloudflare
 - **Hosting:** GitHub Pages
+- **DNSSEC:** enabled and validated
 - **Last reviewed:** 2026-08-22
 
 ## Executive architecture
@@ -32,7 +33,7 @@ The site uses a static-first frontend and a separately deployed RSVP API:
 
 ```text
 Guest browser
-  |-- https://www.janetsislandbloom.com --> Cloudflare DNS --> GitHub Pages
+  |-- https://www.janetsislandbloom.com --> Cloudflare edge --> GitHub Pages
   |-- https://api.janetsislandbloom.com --> Cloudflare Worker --> D1
   |                                      |
   |                                      +--> Turnstile Siteverify
@@ -59,9 +60,9 @@ RSVP Worker deployment.
 | Turnstile verification | Implemented with public local test keys | Production widget and secret provisioning |
 | Rate limiting | Configured | Production thresholds and namespace confirmation |
 | Type, unit, browser, accessibility, and build checks | Implemented | Branch-protection enforcement |
-| GitHub Pages deployment | Implemented | Custom domain |
+| GitHub Pages deployment | Implemented | Custom domain active; HTTPS enforced |
 | Worker production deployment | Workflow scaffold implemented | Domain, D1 resources, secrets, and environment approval |
-| Security response headers | Defined | Cloudflare zone and production CSP domains |
+| Security response headers | Implemented through Cloudflare Transform Rules | Review CSP when integrations change |
 
 Client requirements are collected through [`CLIENT_INTAKE.md`](./CLIENT_INTAKE.md).
 Production RSVP and invitation-only features remain disabled until the required
@@ -415,7 +416,7 @@ Recommended hostnames:
 
 | Hostname | Service | Purpose |
 | --- | --- | --- |
-| `www.janetsislandbloom.com` | GitHub Pages, with Cloudflare DNS | Static website |
+| `www.janetsislandbloom.com` | GitHub Pages, proxied through Cloudflare | Static website |
 | `api.janetsislandbloom.com` | Cloudflare Worker Custom Domain | RSVP API |
 | `janetsislandbloom.com` | Redirect to `www.janetsislandbloom.com` | Canonical entry point |
 
