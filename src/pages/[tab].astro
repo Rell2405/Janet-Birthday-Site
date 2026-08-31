@@ -45,10 +45,10 @@ const tab = entry.data.tab as TabId;
       title={entry.data.title}
       description={entry.data.description}
       index={entry.data.order / 10}
-      hideDescription={tab === "what-to-wear"}
+      hideDescription={tab === "birthday-weekend"}
     />
     {
-      tab === "what-to-wear" ? (
+      tab === "birthday-weekend" ? (
         <AttireHoverSections />
       ) : (
         <EditorialContent>

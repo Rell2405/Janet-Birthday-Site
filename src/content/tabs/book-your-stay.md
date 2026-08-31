@@ -3,7 +3,7 @@ tab: book-your-stay
 title: Secure your spot in paradise
 eyebrow: Book your stay
 description: Group accommodations coordinated by VIP Vacations for June 16–22, 2027.
-order: 50
+order: 40
 visibility: public
 draft: false
 ---
