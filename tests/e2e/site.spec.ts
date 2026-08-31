@@ -269,7 +269,13 @@ test("Resort page keeps the hotel link and shows the supplied gallery", async ({
   await expect(
     page.getByRole("heading", { name: "A closer look at paradise" }),
   ).toBeVisible();
-  await expect(page.locator(".resort-gallery img")).toHaveCount(3);
+  await expect(page.locator(".resort-gallery img")).toHaveCount(5);
+  await expect(
+    page.getByRole("img", { name: /sailboat gliding along the turquoise/i }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("img", { name: /Caribbean shoreline and private pier/i }),
+  ).toBeVisible();
 });
 
 test("all five tabs have no serious or critical accessibility violations", async ({

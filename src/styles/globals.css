@@ -469,7 +469,7 @@
 @media (min-width: 1024px) {
   .resort-gallery {
     grid-template-columns: 1.35fr 0.85fr;
-    grid-template-rows: repeat(2, 22rem);
+    grid-template-rows: repeat(3, 22rem);
   }
 
   .resort-gallery-primary {
