@@ -42,7 +42,7 @@
     "satori": "^0.33.4",
     "satori-html": "^0.3.2",
     "tailwindcss": "^4.3.3",
-    "typescript": "^7.0.2",
+    "typescript": "^6.0.3",
     "vitest": "^4.1.11"
   }
 }
