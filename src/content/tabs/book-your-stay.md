@@ -38,7 +38,7 @@ VIP Vacations using our designated group booking link.
 
 ### Secure Your Spot
 
-> **[BOOK YOUR STAY HERE]**
+> **[BOOK YOUR STAY HERE](https://www.vacationsbyvip.com/elder-green-birthday-group/)**
 
 Room pricing will vary based on your party size, room selection, and length of
 stay. Rates and room categories are subject to availability, so we encourage

@@ -227,7 +227,7 @@ test("room options reveal details without publishing prices", async ({
   await expect(page.getByText("Occupancy").first()).toBeVisible();
 });
 
-test("booking page shows updated group guidance and booking placeholder", async ({
+test("booking page shows updated group guidance and booking link", async ({
   page,
 }) => {
   await page.goto("./book-your-stay/");
@@ -244,10 +244,12 @@ test("booking page shows updated group guidance and booking placeholder", async 
   await expect(
     page.getByText(/Guests who choose to book accommodations outside/i),
   ).toBeVisible();
-  await expect(page.getByText("[BOOK YOUR STAY HERE]")).toBeVisible();
   await expect(
     page.getByRole("link", { name: "BOOK YOUR STAY HERE" }),
-  ).toHaveCount(0);
+  ).toHaveAttribute(
+    "href",
+    "https://www.vacationsbyvip.com/elder-green-birthday-group/",
+  );
   await expect(
     page.getByRole("heading", { name: "Easy Payment Options" }),
   ).toBeVisible();
