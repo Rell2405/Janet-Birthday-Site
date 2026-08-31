@@ -70,6 +70,10 @@ test("renders all five navigation tabs and official weekend events", async ({
     "href",
     "https://www.janetsislandbloom.com/",
   );
+  await expect(page.locator("link[rel='icon']")).toHaveAttribute(
+    "href",
+    "/favicon.svg",
+  );
   await expect(
     page.getByRole("heading", { name: "Celebration dates" }),
   ).toHaveCount(0);
