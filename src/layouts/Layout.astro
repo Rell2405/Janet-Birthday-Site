@@ -19,8 +19,9 @@ const {
 
 const base = import.meta.env.BASE_URL;
 const basePath = base.replace(/\/$/, "");
-const ogImage = new URL(`${basePath}/og.png`, Astro.site ?? "https://rell2405.github.io").href;
-const canonical = new URL(base, Astro.site ?? "https://rell2405.github.io").href;
+const site = Astro.site ?? new URL("https://www.janetsislandbloom.com");
+const ogImage = new URL(`${basePath}/og.png`, site).href;
+const canonical = new URL(base, site).href;
 const themeVariables = serializeThemeVariables(themeConfig);
 const apiOrigin = rsvpEnabled
   ? new URL(import.meta.env.PUBLIC_API_BASE).origin

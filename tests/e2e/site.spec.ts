@@ -66,6 +66,10 @@ test("renders all five navigation tabs and official weekend events", async ({
   }
 
   await page.goto("./");
+  await expect(page.locator("link[rel='canonical']")).toHaveAttribute(
+    "href",
+    "https://www.janetsislandbloom.com/",
+  );
   await expect(
     page.getByRole("heading", { name: "Celebration dates" }),
   ).toHaveCount(0);
