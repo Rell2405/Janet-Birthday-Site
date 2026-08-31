@@ -1,3 +1,9 @@
+---
+import { Image } from "astro:assets";
+
+import janetPortrait from "@/assets/portraits/janet-60.webp";
+---
+
 <section
   aria-labelledby="story-title"
   class="bg-[#f2eee5] px-5 py-24 text-emerald-950 sm:px-8 sm:py-32 lg:px-12 lg:py-40"
@@ -21,25 +27,51 @@
           <span class="italic text-amber-700">A life well celebrated.</span>
         </h2>
 
-        <div class="mt-14 grid gap-8 border-t border-emerald-950/20 pt-8 sm:grid-cols-3">
-          <div>
-            <p class="font-display text-4xl italic">60</p>
-            <p class="mt-2 text-xs uppercase tracking-[0.22em] text-emerald-950/75">
-              Fabulous years
-            </p>
+        <div class="mt-14 grid gap-12 border-t border-emerald-950/20 pt-8 lg:grid-cols-[1fr_minmax(260px,380px)] lg:items-end">
+          <div class="grid gap-8 sm:grid-cols-3">
+            <div>
+              <p class="font-display text-4xl italic">60</p>
+              <p class="mt-2 text-xs uppercase tracking-[0.22em] text-emerald-950/75">
+                Fabulous years
+              </p>
+            </div>
+            <div>
+              <p class="font-display text-4xl italic">05</p>
+              <p class="mt-2 text-xs uppercase tracking-[0.22em] text-emerald-950/75">
+                Days in paradise
+              </p>
+            </div>
+            <div>
+              <p class="font-display text-4xl italic">∞</p>
+              <p class="mt-2 text-xs uppercase tracking-[0.22em] text-emerald-950/75">
+                Reasons to celebrate
+              </p>
+            </div>
           </div>
-          <div>
-            <p class="font-display text-4xl italic">05</p>
-            <p class="mt-2 text-xs uppercase tracking-[0.22em] text-emerald-950/75">
-              Days in paradise
-            </p>
-          </div>
-          <div>
-            <p class="font-display text-4xl italic">∞</p>
-            <p class="mt-2 text-xs uppercase tracking-[0.22em] text-emerald-950/75">
-              Reasons to celebrate
-            </p>
-          </div>
+
+          <figure class="relative mx-auto w-full max-w-sm">
+            <div
+              aria-hidden="true"
+              class="absolute -bottom-3 -right-3 h-full w-full rounded-t-[10rem] border border-amber-700/35"
+            >
+            </div>
+            <div class="relative overflow-hidden rounded-t-[10rem] bg-stone-50">
+              <Image
+                alt="Portrait of Janet wearing an elegant silver dress for her 60th birthday celebration."
+                class="h-auto w-full"
+                loading="lazy"
+                quality={88}
+                sizes="(min-width: 1024px) 380px, 90vw"
+                src={janetPortrait}
+                widths={[320, 480, 640, 820]}
+              />
+            </div>
+            <figcaption
+              class="relative mt-5 text-center text-xs font-semibold uppercase tracking-[0.24em] text-emerald-950/70"
+            >
+              Janet · Celebrating 60
+            </figcaption>
+          </figure>
         </div>
       </div>
     </div>

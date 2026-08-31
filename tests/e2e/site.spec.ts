@@ -71,6 +71,11 @@ test("renders all five navigation tabs and official weekend events", async ({
   ).toHaveCount(0);
   await expect(page.locator("#itinerary")).toHaveCount(0);
   await expect(page.getByRole("link", { name: /View the full weekend/i })).toHaveCount(0);
+  await expect(
+    page.getByRole("img", {
+      name: /Portrait of Janet wearing an elegant silver dress/i,
+    }),
+  ).toBeVisible();
 
   await page.goto("./what-to-wear/");
   await expect(page.getByRole("tab")).toHaveCount(0);
