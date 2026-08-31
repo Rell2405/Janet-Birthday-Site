@@ -2,7 +2,9 @@
 import { Image } from "astro:assets";
 
 import aerialOcean from "@/assets/resort/aerial-ocean.webp";
+import hobieCatAerial from "@/assets/resort/hobie-cat-aerial.webp";
 import oceanPool from "@/assets/resort/ocean-pool.webp";
+import resortCoastlineAerial from "@/assets/resort/resort-coastline-aerial.webp";
 import swimUpBar from "@/assets/resort/swim-up-bar.webp";
 ---
 
@@ -60,7 +62,32 @@ import swimUpBar from "@/assets/resort/swim-up-bar.webp";
         />
         <figcaption>Refreshments without leaving the water</figcaption>
       </figure>
+
+      <figure>
+        <Image
+          alt="Aerial view of a sailboat gliding along the turquoise Caribbean coastline near Dreams Rose Hall."
+          class="h-full w-full object-cover"
+          loading="lazy"
+          quality={86}
+          sizes="(min-width: 1024px) 60vw, 100vw"
+          src={hobieCatAerial}
+          widths={[640, 960, 1280, 1600]}
+        />
+        <figcaption>Set sail along the Caribbean coast</figcaption>
+      </figure>
+
+      <figure>
+        <Image
+          alt="Aerial view of Dreams Rose Hall Resort beside the Caribbean shoreline and private pier."
+          class="h-full w-full object-cover"
+          loading="lazy"
+          quality={86}
+          sizes="(min-width: 1024px) 40vw, 100vw"
+          src={resortCoastlineAerial}
+          widths={[480, 768, 1023]}
+        />
+        <figcaption>Paradise from a new perspective</figcaption>
+      </figure>
     </div>
   </div>
 </section>
-
