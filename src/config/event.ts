@@ -4,7 +4,6 @@ export interface EventFeatures {
   itinerary: boolean;
   faq: boolean;
   travel: boolean;
-  rsvp: boolean;
   playlist: boolean;
   photoGallery: boolean;
   countdown: boolean;
@@ -22,13 +21,6 @@ export interface EventConfig {
   schedule: {
     startsAt: string | null;
     timeZone: string | null;
-    rsvpDeadline: string | null;
-  };
-  rsvp: {
-    maxPartySize: number;
-    allowUpdates: boolean;
-    retentionDaysAfterEvent: number;
-    fallbackContact: string | null;
   };
   features: EventFeatures;
 }
@@ -45,19 +37,11 @@ export const eventConfig = {
   schedule: {
     startsAt: "2027-06-17T12:00:00-05:00",
     timeZone: "America/Jamaica",
-    rsvpDeadline: null,
-  },
-  rsvp: {
-    maxPartySize: 10,
-    allowUpdates: true,
-    retentionDaysAfterEvent: 30,
-    fallbackContact: null,
   },
   features: {
     itinerary: true,
     faq: false,
     travel: false,
-    rsvp: false,
     playlist: false,
     photoGallery: false,
     countdown: false,

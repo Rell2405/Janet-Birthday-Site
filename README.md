@@ -17,7 +17,6 @@ presentation.
 | Motion             | CSS transitions and reduced-motion-safe reveals |
 | Smooth scrolling   | [Lenis](https://lenis.darkroom.engineering) |
 | Public content     | Validated Astro Markdown content collections |
-| RSVP API foundation | Cloudflare Worker + D1 + Turnstile |
 
 ## Experience structure
 
@@ -25,8 +24,7 @@ presentation.
 2. Editorial story sections establish the tone and week-long format.
 3. Five static routes present the welcome, resort, pre-travel guidance, attire
    guidance, and room-block information.
-4. The RSVP foundation remains feature-gated until production infrastructure
-   and final client requirements are approved.
+4. Reservations and payment plans are handled externally by VIP Vacations.
 
 ## Local development
 
@@ -35,34 +33,19 @@ Requires Node.js 22.12 or later in the Node 22 release line.
 ```bash
 npm ci
 npm run dev      # start the dev server
-npm run check    # Astro, TypeScript, and Worker configuration checks
+npm run check    # Astro and TypeScript checks
 npm run test     # unit tests
 npm run build    # build the static site to dist/
 npm run preview  # preview the production build
 ```
 
 Client-controlled event content and feature flags live in
-`src/config/event.ts`; visual tokens live in `src/config/theme.ts`. The RSVP
-feature is disabled until production infrastructure and client requirements are
-approved.
+`src/config/event.ts`; visual tokens live in `src/config/theme.ts`.
 
 Public itinerary, FAQ, and travel content lives in `src/content/`. Entries are
 validated at build time and remain hidden while `draft: true`. Follow
 [`CONTENT_GUIDE.md`](./CONTENT_GUIDE.md) to publish content and enable its
 feature flag. Never store private event or guest information in Markdown.
-
-For local RSVP API work:
-
-```bash
-cp .env.example .env
-cp worker/.dev.vars.example worker/.dev.vars
-npm run worker:types
-npm run worker:migrate:local
-npm run worker:dev
-```
-
-The committed Turnstile values are Cloudflare's public test keys. Production
-secrets must be set with Wrangler and must never be committed.
 
 ## Deployment (GitHub Pages)
 
@@ -82,11 +65,11 @@ The live URL is: `https://www.janetsislandbloom.com/`
 
 ## Security notes
 
-- The deployed frontend remains static. RSVP processing is isolated in a
-  separately deployed Worker and is disabled by default.
+- The deployed website is fully static and does not collect guest or payment
+  information.
 - Hardened response via a Content-Security-Policy meta tag (`object-src 'none'`,
   `base-uri 'self'`, `upgrade-insecure-requests`) plus a strict referrer policy.
 - Production response headers will be applied through Cloudflare after the
   custom domain is configured.
-- D1 migrations, request limits, server-side validation, Turnstile verification,
-  and no-store API responses are included in the Worker foundation.
+- Reservations and payment plans are handled by VIP Vacations through the
+  approved external booking process.

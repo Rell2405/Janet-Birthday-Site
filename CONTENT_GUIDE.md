@@ -14,13 +14,13 @@ Never add:
 
 - Private street addresses or entry codes
 - Private contact information
-- Guest names or RSVP responses
+- Guest names or reservation records
 - Dietary information
 - Invitation credentials
 - Secrets or API keys
 
-Invitation-only content belongs behind the Worker authorization boundary.
-Organizer and RSVP data belongs in D1.
+Invitation-only content must use an approved private communication channel.
+Reservation and payment data belongs with VIP Vacations, not this repository.
 
 ## Publishing workflow
 

@@ -14,9 +14,6 @@ concurrency:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    env:
-      PUBLIC_API_BASE: http://127.0.0.1:8787
-      PUBLIC_TURNSTILE_SITE_KEY: 1x00000000000000000000AA
     steps:
       - name: Checkout
         uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
@@ -44,9 +41,3 @@ jobs:
 
       - name: Run browser and accessibility tests
         run: npm run test:e2e
-
-      - name: Apply local D1 migrations
-        run: npm run worker:migrate:local
-
-      - name: Validate Worker bundle
-        run: npm run worker:dry-run
