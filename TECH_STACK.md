@@ -8,9 +8,10 @@ implementation guide. Items marked **Target** are approved but may not yet be
 implemented in the repository.
 
 - **Repository:** `Rell2405/Janet-Birthday-Site`
-- **Current site:** `https://rell2405.github.io/Janet-Birthday-Site/`
-- **Target site:** a verified custom domain purchased through Namecheap and
-  hosted by GitHub Pages
+- **Current site:** `https://www.janetsislandbloom.com/`
+- **Domain registrar:** Namecheap
+- **DNS provider:** Cloudflare
+- **Hosting:** GitHub Pages
 - **Last reviewed:** 2026-08-22
 
 ## Executive architecture
@@ -31,16 +32,16 @@ The site uses a static-first frontend and a separately deployed RSVP API:
 
 ```text
 Guest browser
-  |-- https://www.example.com --> Cloudflare edge --> GitHub Pages
-  |-- https://api.example.com --> Cloudflare Worker --> D1
+  |-- https://www.janetsislandbloom.com --> Cloudflare DNS --> GitHub Pages
+  |-- https://api.janetsislandbloom.com --> Cloudflare Worker --> D1
   |                                      |
   |                                      +--> Turnstile Siteverify
   |
   +-- optional approved playlist provider
 ```
 
-`www.example.com` and `api.example.com` are placeholders until the production
-domain is selected.
+The website domain is active. The API hostname remains reserved for the future
+RSVP Worker deployment.
 
 ## Implementation status
 
@@ -414,9 +415,9 @@ Recommended hostnames:
 
 | Hostname | Service | Purpose |
 | --- | --- | --- |
-| `www.example.com` | GitHub Pages, proxied through Cloudflare | Static website |
-| `api.example.com` | Cloudflare Worker Custom Domain | RSVP API |
-| `example.com` | Redirect to `www.example.com` | Canonical entry point |
+| `www.janetsislandbloom.com` | GitHub Pages, with Cloudflare DNS | Static website |
+| `api.janetsislandbloom.com` | Cloudflare Worker Custom Domain | RSVP API |
+| `janetsislandbloom.com` | Redirect to `www.janetsislandbloom.com` | Canonical entry point |
 
 ### Domain configuration requirements
 
@@ -435,7 +436,7 @@ Recommended hostnames:
 7. Enable and verify HTTPS on GitHub Pages.
 8. Proxy the production website hostname through Cloudflare when Cloudflare
    response-header or edge controls are required.
-9. Configure `api.example.com` as the Worker's Custom Domain. It must be a
+9. Configure `api.janetsislandbloom.com` as the Worker's Custom Domain. It must be a
    distinct hostname and cannot retain a conflicting CNAME record.
 10. Set Astro's `site` to the canonical custom-domain URL and use `/` as the
    production base path after migration.
@@ -581,7 +582,7 @@ Content-Security-Policy:
   base-uri 'self';
   object-src 'none';
   frame-ancestors 'none';
-  form-action 'self' https://api.example.com;
+  form-action 'self' https://api.janetsislandbloom.com;
   upgrade-insecure-requests
 
 X-Content-Type-Options: nosniff

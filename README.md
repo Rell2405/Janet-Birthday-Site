@@ -69,16 +69,16 @@ secrets must be set with Wrangler and must never be committed.
 Pushing to `main` triggers `.github/workflows/deploy.yml`, which builds the site and
 publishes `dist/` to GitHub Pages.
 
-The site is served from a sub-path, so `astro.config.mjs` sets:
+The site is served from its custom-domain root, so `astro.config.mjs` sets:
 
 ```js
-site: "https://rell2405.github.io",
-base: "/Janet-Birthday-Site",
+site: "https://www.janetsislandbloom.com",
+base: "/",
 ```
 
 One-time repo setup: **Settings → Pages → Build and deployment → Source: GitHub Actions.**
 
-The live URL will be: `https://rell2405.github.io/Janet-Birthday-Site/`
+The live URL is: `https://www.janetsislandbloom.com/`
 
 ## Security notes
 

@@ -36,9 +36,9 @@
       "name": "janet-birthday-rsvp-staging",
       "vars": {
         "ENVIRONMENT": "staging",
-        "ALLOWED_ORIGINS": "https://staging.example.com",
+        "ALLOWED_ORIGINS": "https://staging.janetsislandbloom.com",
         "TURNSTILE_EXPECTED_ACTION": "turnstile-spin-v1",
-        "TURNSTILE_EXPECTED_HOSTNAME": "staging.example.com",
+        "TURNSTILE_EXPECTED_HOSTNAME": "staging.janetsislandbloom.com",
         "RSVP_MAX_PARTY_SIZE": "10"
       },
       "d1_databases": [
@@ -63,9 +63,9 @@
       "name": "janet-birthday-rsvp-production",
       "vars": {
         "ENVIRONMENT": "production",
-        "ALLOWED_ORIGINS": "https://www.example.com",
+        "ALLOWED_ORIGINS": "https://www.janetsislandbloom.com",
         "TURNSTILE_EXPECTED_ACTION": "turnstile-spin-v1",
-        "TURNSTILE_EXPECTED_HOSTNAME": "www.example.com",
+        "TURNSTILE_EXPECTED_HOSTNAME": "www.janetsislandbloom.com",
         "RSVP_MAX_PARTY_SIZE": "10"
       },
       "d1_databases": [
