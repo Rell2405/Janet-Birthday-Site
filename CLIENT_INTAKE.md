@@ -11,8 +11,6 @@ data in this document if the repository remains public.
 - [ ] Target launch date
 - [ ] Event date and local start/end times
 - [ ] Event timezone
-- [ ] RSVP deadline
-- [ ] Date RSVP records should be deleted or anonymized
 
 ## Event identity and content
 
@@ -49,37 +47,24 @@ Classify every item as **public**, **invitation-only**, or **organizer-only**.
 - [ ] Parking or transportation instructions
 - [ ] Building or gate access instructions
 - [ ] Host contact information
-- [ ] Guest list and RSVP information
 - [ ] Photo-sharing permissions
-- [ ] Decision on invitation credentials
 
-Invitation-only information must be delivered by the Worker after authorization;
+Invitation-only information must use an approved private communication channel;
 it must not be committed to this public repository or generated into static
 assets.
 
-## RSVP decisions
+## Booking decisions
 
-- [ ] Maximum total attendance
-- [ ] Maximum party size per household
-- [ ] Allowed attendance responses
-- [ ] Required guest fields
-- [ ] Whether dietary restrictions are collected
-- [ ] Whether guest messages are collected
-- [ ] Whether email or telephone information is genuinely required
-- [ ] Whether guests may update a response
-- [ ] Organizer export owners
-- [ ] Alternate RSVP process during an outage
-- [ ] Approved privacy notice
+- [ ] Official VIP Vacations booking URL
+- [ ] Approved travel-agent contact information
+- [ ] Available room categories and occupancy limits
+- [ ] Approved room-block benefits and eligibility language
+- [ ] Payment-plan language
+- [ ] Booking deadline
+- [ ] Support contact for booking questions
 
-Default unless the client approves otherwise:
-
-- No public guest list
-- Household name, attendance, party size, dietary restrictions, and optional
-  message only
-- Guest updates use a private opaque token
-- RSVP records are deleted 30 days after the event
-- Organizer exports are protected with Cloudflare Access
-- Production never reports browser-only storage as a successful RSVP
+The website does not collect reservation, guest, payment, passport, or health
+data. VIP Vacations owns the booking workflow.
 
 ## Visual design and assets
 
@@ -103,13 +88,10 @@ assets through a public issue or commit.
 - [ ] Guest song suggestions
 - [ ] Photo gallery
 - [ ] Invitation-only details
-- [ ] Organizer dashboard
 - [ ] Privacy-conscious analytics
-- [ ] Email confirmations
-- [ ] SMS reminders
 
 Optional capabilities require explicit approval and must not delay the core
-event information and RSVP launch.
+event information and website launch.
 
 ## Domain and accounts
 
@@ -118,7 +100,7 @@ event information and RSVP launch.
 - [ ] Cloudflare account owner
 - [ ] GitHub repository owner
 - [ ] Domain auto-renewal and registrar lock enabled
-- [ ] Production `www` and `api` hostnames approved
+- [ ] Canonical `www` hostname and apex redirect approved
 
 Credentials and recovery codes must be exchanged through an approved secure
 channel, never through repository files or public project discussions.
@@ -127,12 +109,10 @@ channel, never through repository files or public project discussions.
 
 - [ ] Content and spelling approved
 - [ ] Mobile and desktop layouts approved
-- [ ] Keyboard and screen-reader RSVP flow approved
+- [ ] Keyboard and screen-reader navigation approved
 - [ ] Reduced-motion behavior approved
 - [ ] Social preview approved
 - [ ] Privacy notice approved
-- [ ] Test RSVP successfully created and updated in staging
-- [ ] Organizer export successfully completed in staging
-- [ ] Alternate RSVP method confirmed
+- [ ] Official booking link and support contact confirmed
 - [ ] Custom-domain HTTPS and redirects confirmed
-- [ ] Production data-retention date recorded
+- [ ] Public WhatsApp invite reviewed and approved

@@ -7,14 +7,12 @@ interface Props {
   title?: string;
   description?: string;
   socialImageAlt?: string;
-  rsvpEnabled?: boolean;
 }
 
 const {
   title = eventConfig.identity.title,
   description = eventConfig.identity.description,
   socialImageAlt = eventConfig.identity.socialImageAlt,
-  rsvpEnabled = false,
 } = Astro.props;
 
 const base = import.meta.env.BASE_URL;
@@ -23,17 +21,14 @@ const site = Astro.site ?? new URL("https://www.janetsislandbloom.com");
 const ogImage = new URL(`${basePath}/og.png`, site).href;
 const canonical = new URL(Astro.url.pathname, site).href;
 const themeVariables = serializeThemeVariables(themeConfig);
-const apiOrigin = rsvpEnabled
-  ? new URL(import.meta.env.PUBLIC_API_BASE).origin
-  : null;
 const csp = [
   "default-src 'self'",
   "img-src 'self' data:",
   "style-src 'self' 'unsafe-inline'",
   "font-src 'self' data:",
-  `script-src 'self' 'unsafe-inline'${rsvpEnabled ? " https://challenges.cloudflare.com" : ""}`,
-  `connect-src 'self'${apiOrigin ? ` ${apiOrigin}` : ""}`,
-  `frame-src 'self'${rsvpEnabled ? " https://challenges.cloudflare.com" : ""}`,
+  "script-src 'self' 'unsafe-inline'",
+  "connect-src 'self'",
+  "frame-src 'self'",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",

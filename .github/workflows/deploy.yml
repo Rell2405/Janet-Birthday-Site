@@ -15,9 +15,6 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      PUBLIC_API_BASE: ${{ vars.PUBLIC_API_BASE }}
-      PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.PUBLIC_TURNSTILE_SITE_KEY }}
     permissions:
       contents: read
     steps:

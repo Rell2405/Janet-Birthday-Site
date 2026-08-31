@@ -2,8 +2,6 @@
 import Layout from "@/layouts/Layout.astro";
 import SmoothScroll from "@/components/SmoothScroll.tsx";
 import { eventConfig } from "@/config/event";
-import { publicRsvpRuntimeConfig } from "@/config/runtime";
-import RsvpForm from "@/components/RsvpForm";
 import { getEntry, render } from "astro:content";
 import SiteHeader from "@/components/home/SiteHeader.astro";
 import LuxuryHero from "@/components/home/LuxuryHero.astro";
@@ -11,7 +9,6 @@ import StorySection from "@/components/home/StorySection.astro";
 import SiteFooter from "@/components/home/SiteFooter.astro";
 import EditorialContent from "@/components/content/EditorialContent.astro";
 
-const rsvpRuntime = publicRsvpRuntimeConfig(eventConfig.features.rsvp);
 const welcomeEntry = await getEntry("tabPages", "welcome");
 if (!welcomeEntry) throw new Error("Welcome tab content is missing.");
 const { Content: WelcomeContent } = await render(welcomeEntry);
@@ -21,7 +18,6 @@ const { Content: WelcomeContent } = await render(welcomeEntry);
   title={eventConfig.identity.title}
   description={eventConfig.identity.description}
   socialImageAlt={eventConfig.identity.socialImageAlt}
-  rsvpEnabled={eventConfig.features.rsvp}
 >
   <SmoothScroll client:load />
 
@@ -32,25 +28,6 @@ const { Content: WelcomeContent } = await render(welcomeEntry);
     <EditorialContent class="bg-[#f2eee5]">
       <WelcomeContent />
     </EditorialContent>
-
-    {
-      rsvpRuntime ? (
-        <section class="relative z-10 px-4 py-16" id="rsvp">
-          <RsvpForm
-            apiBase={rsvpRuntime.apiBase}
-            maximumPartySize={eventConfig.rsvp.maxPartySize}
-            turnstileSiteKey={rsvpRuntime.turnstileSiteKey}
-            client:load
-          />
-          <script
-            is:inline
-            src="https://challenges.cloudflare.com/turnstile/v0/api.js"
-            async
-            defer
-          />
-        </section>
-      ) : null
-    }
   </main>
   <SiteFooter />
 </Layout>

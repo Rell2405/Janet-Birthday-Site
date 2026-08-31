@@ -7,19 +7,12 @@ import {
 } from "../../src/config/theme";
 
 describe("site configuration", () => {
-  it("keeps production features disabled until client decisions are complete", () => {
-    expect(eventConfig.features.rsvp).toBe(false);
+  it("keeps optional production features disabled until client decisions are complete", () => {
     expect(eventConfig.features.playlist).toBe(false);
     expect(eventConfig.features.invitationOnlyDetails).toBe(false);
     expect(eventConfig.features.itinerary).toBe(true);
     expect(eventConfig.features.faq).toBe(false);
     expect(eventConfig.features.travel).toBe(false);
-  });
-
-  it("defines safe RSVP defaults", () => {
-    expect(eventConfig.rsvp.maxPartySize).toBeGreaterThan(0);
-    expect(eventConfig.rsvp.maxPartySize).toBeLessThanOrEqual(20);
-    expect(eventConfig.rsvp.retentionDaysAfterEvent).toBe(30);
   });
 
   it("serializes approved theme variables", () => {
